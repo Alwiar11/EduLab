@@ -46,24 +46,3 @@ class Button extends StatelessWidget {
     );
   }
 }
-
-
-              // Padding(
-              //   padding: const EdgeInsets.only(left: 35, top: 10),
-              //   child: Row(
-              //     children: [
-              //       const Icon(
-              //         Icons.warning,
-              //         size: 23,
-              //       ),
-              //       SizedBox(
-              //         width: width * 1,
-              //       ),
-              //       const Text(
-              //         "Kami akan mengirimkan SMS untuk Verifikasi Akun \nke nomor yang anda masukkan",
-              //         style:
-              //             TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
-              //       )
-              //     ],
-              //   ),
-              // ),
