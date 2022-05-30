@@ -152,7 +152,7 @@ class _KelasScreenState extends State<KelasScreen> {
                             style: TextStyle(
                                 fontFamily: "Inter",
                                 fontSize: 12,
-                                fontWeight: FontWeight.w300,
+                                fontWeight: FontWeight.w400,
                                 color: Colors.grey)),
                       ],
                     )

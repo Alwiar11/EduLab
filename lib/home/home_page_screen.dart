@@ -1,3 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:edulab/list_pkl/listPkl.dart';
+import 'package:edulab/list_sv/listSv.dart';
 import 'package:flutter/material.dart';
 import '../contents.dart';
 import 'card.dart';
@@ -35,10 +38,22 @@ class HomePageScreen extends StatelessWidget {
                   SizedBox(
                     width: width * 2,
                   ),
-                  const Text(
-                    "Hi, Alwi \nHow Are You?",
-                    style: TextStyle(fontSize: 18, fontFamily: "Inter"),
-                  ),
+                  FutureBuilder<DocumentSnapshot>(
+                      future: FirebaseFirestore.instance
+                          .collection('users')
+                          .doc("W3lpN3fdXfAhAXFJgy31")
+                          .get(),
+                      builder: (_, snapshot) {
+                        if (snapshot.hasData) {
+                          return Text(
+                            "Hi, " +
+                                snapshot.data!.get("nama") +
+                                "\nHow Are You?",
+                            style: TextStyle(fontSize: 18, fontFamily: "Inter"),
+                          );
+                        }
+                        return Text("Loading");
+                      }),
                 ],
               ),
               SizedBox(
@@ -58,12 +73,21 @@ class HomePageScreen extends StatelessWidget {
                     ),
                     InkWell(
                       onTap: () {},
-                      child: const Text(
-                        "Selengkapnya",
-                        style: TextStyle(
-                            fontWeight: FontWeight.w500,
-                            fontSize: 14,
-                            color: Color.fromARGB(255, 40, 119, 255)),
+                      child: InkWell(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const ListSv()),
+                          );
+                        },
+                        child: const Text(
+                          "Selengkapnya",
+                          style: TextStyle(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 14,
+                              color: Color.fromARGB(255, 40, 119, 255)),
+                        ),
                       ),
                     ),
                   ],
@@ -127,12 +151,21 @@ class HomePageScreen extends StatelessWidget {
                     ),
                     InkWell(
                       onTap: () {},
-                      child: const Text(
-                        "Selengkapnya",
-                        style: TextStyle(
-                            fontWeight: FontWeight.w500,
-                            fontSize: 14,
-                            color: Color.fromARGB(255, 40, 119, 255)),
+                      child: InkWell(
+                        onTap: (() {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const ListPkl()),
+                          );
+                        }),
+                        child: const Text(
+                          "Selengkapnya",
+                          style: TextStyle(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 14,
+                              color: Color.fromARGB(255, 40, 119, 255)),
+                        ),
                       ),
                     ),
                   ],

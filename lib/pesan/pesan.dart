@@ -20,9 +20,14 @@ class _PesanState extends State<Pesan> {
       appBar: AppBar(
         shadowColor: Colors.white,
         backgroundColor: Colors.white,
-        title: Text(
-          "Pesan",
-          style: TextStyle(color: Colors.black),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Text(
+              "Pesan",
+              style: TextStyle(color: Colors.black),
+            ),
+          ],
         ),
         centerTitle: true,
         actions: [

@@ -1,18 +1,13 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:edulab/contents.dart';
-import 'package:edulab/pesan/pesan.dart';
-import 'package:edulab/pesan/pesan_screen.dart';
+
 import 'package:flutter/material.dart';
 
 import 'card_profile.dart';
 
-class ProfileScreen extends StatefulWidget {
+class ProfileScreen extends StatelessWidget {
   const ProfileScreen({Key? key}) : super(key: key);
 
-  @override
-  State<ProfileScreen> createState() => _ProfileScreenState();
-}
-
-class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
@@ -41,9 +36,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    Icon(
-                      Icons.logout_outlined,
-                      size: 30,
+                    InkWell(
+                      onTap: () {},
+                      child: Icon(
+                        Icons.logout_outlined,
+                        size: 30,
+                      ),
                     ),
                     SizedBox(
                       width: width * 3,
@@ -90,68 +88,61 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ],
             ),
           ),
-          Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(top: 5),
-                child: Text("Alwi Aulia Rachman",
-                    style: TextStyle(
-                        fontFamily: "Inter",
-                        fontSize: 22,
-                        fontWeight: FontWeight.w600)),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 3),
-                child: Text(
-                  "0821XXXXXXXXX",
-                  style: TextStyle(
-                      fontFamily: "Inter",
-                      color: Color.fromARGB(255, 129, 129, 129)),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 3),
-                child: Text(
-                  "User ID : 12345",
-                  style: TextStyle(
-                      fontFamily: "Inter",
-                      color: Color.fromARGB(255, 129, 129, 129)),
-                ),
-              ),
-              SizedBox(
-                height: height * 3,
-              ),
-              Column(
-                children: [
-                  CardProfile(
-                      height: height,
-                      width: width,
-                      title: "Asal Sekolah",
-                      desc: "SMKN 1 Katapang"),
-                  CardProfile(
-                      height: height,
-                      width: width,
-                      title: "Asal Sekolah",
-                      desc: "SMKN 1 Katapang"),
-                  CardProfile(
-                      height: height,
-                      width: width,
-                      title: "Asal Sekolah",
-                      desc: "SMKN 1 Katapang"),
-                  CardProfile(
-                      height: height,
-                      width: width,
-                      title: "Asal Sekolah",
-                      desc: "SMKN 1 Katapang"),
-                  CardProfile(
-                      height: height,
-                      width: width,
-                      title: "Asal Sekolah",
-                      desc: "SMKN 1 Katapang"),
-                ],
-              )
-            ],
-          )
+          FutureBuilder<DocumentSnapshot>(
+              future: FirebaseFirestore.instance
+                  .collection('users')
+                  .doc("W3lpN3fdXfAhAXFJgy31")
+                  .get(),
+              builder: (_, snapshot) {
+                if (snapshot.hasData) {
+                  return Column(
+                    children: [
+                      SizedBox(
+                        height: height * 1,
+                      ),
+                      Text(snapshot.data!.get("nama"),
+                          style: TextStyle(
+                            fontFamily: "Inter",
+                            fontSize: 22,
+                            fontWeight: FontWeight.w600,
+                          )),
+                      Text(snapshot.data!.get("noHp"),
+                          style: TextStyle(color: Colors.grey, fontSize: 14)),
+                      Text("User Id : " + snapshot.data!.get("id"),
+                          style: TextStyle(color: Colors.grey, fontSize: 14)),
+                      SizedBox(
+                        height: height * 2,
+                      ),
+                      CardProfile(
+                          height: height,
+                          width: width,
+                          title: 'Asal Sekolah',
+                          desc: snapshot.data!.get("asal sekolah")),
+                      CardProfile(
+                          height: height,
+                          width: width,
+                          title: 'Jurusan',
+                          desc: snapshot.data!.get("jurusan")),
+                      CardProfile(
+                          height: height,
+                          width: width,
+                          title: 'Alamat',
+                          desc: snapshot.data!.get("alamat")),
+                      CardProfile(
+                          height: height,
+                          width: width,
+                          title: 'Umur',
+                          desc: snapshot.data!.get("umur")),
+                      CardProfile(
+                          height: height,
+                          width: width,
+                          title: 'Hobi',
+                          desc: snapshot.data!.get("hobi")),
+                    ],
+                  );
+                }
+                return Text("Kosong");
+              }),
         ],
       ),
     );

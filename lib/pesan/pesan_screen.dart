@@ -67,18 +67,18 @@ class _PesanScreenState extends State<PesanScreen> {
                 child: Row(
                   children: [
                     SizedBox(
-                      width: width * 2,
+                      width: width * 3,
                     ),
                     Container(
                       height: height * 10,
-                      width: width * 20,
+                      width: width * 15,
                       decoration: const BoxDecoration(
                         color: primaryColor,
                         shape: BoxShape.circle,
                       ),
                     ),
                     SizedBox(
-                      width: width * 1,
+                      width: width * 3,
                     ),
                     Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -95,12 +95,12 @@ class _PesanScreenState extends State<PesanScreen> {
                             style: TextStyle(
                                 fontFamily: "Inter",
                                 fontSize: 12,
-                                fontWeight: FontWeight.w300,
+                                fontWeight: FontWeight.w400,
                                 color: Colors.grey)),
                       ],
                     ),
                     SizedBox(
-                      width: width * 32,
+                      width: width * 35,
                     ),
                     Row(
                       children: [Text("11:11")],
@@ -111,110 +111,8 @@ class _PesanScreenState extends State<PesanScreen> {
               SizedBox(
                 height: height * 1.5,
               ),
-              Container(
-                padding: const EdgeInsets.symmetric(vertical: 10),
-                width: screenWidth,
-                // height: height * 15,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15),
-                    color: Colors.white),
-                child: Row(
-                  children: [
-                    SizedBox(
-                      width: width * 2,
-                    ),
-                    Container(
-                      height: height * 10,
-                      width: width * 20,
-                      decoration: const BoxDecoration(
-                        color: primaryColor,
-                        shape: BoxShape.circle,
-                      ),
-                    ),
-                    SizedBox(
-                      width: width * 1,
-                    ),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: const [
-                        Text(
-                          "Rey Mysterio",
-                          style: TextStyle(
-                              fontFamily: "Inter",
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600),
-                        ),
-                        Text("Dilihat",
-                            style: TextStyle(
-                                fontFamily: "Inter",
-                                fontSize: 12,
-                                fontWeight: FontWeight.w300,
-                                color: Colors.grey)),
-                      ],
-                    ),
-                    SizedBox(
-                      width: width * 32,
-                    ),
-                    Row(
-                      children: [Text("11:11")],
-                    )
-                  ],
-                ),
-              ),
               SizedBox(
                 height: height * 1.5,
-              ),
-              Container(
-                padding: const EdgeInsets.symmetric(vertical: 10),
-                width: screenWidth,
-                // height: height * 15,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15),
-                    color: Colors.white),
-                child: Row(
-                  children: [
-                    SizedBox(
-                      width: width * 2,
-                    ),
-                    Container(
-                      height: height * 10,
-                      width: width * 20,
-                      decoration: const BoxDecoration(
-                        color: primaryColor,
-                        shape: BoxShape.circle,
-                      ),
-                    ),
-                    SizedBox(
-                      width: width * 1,
-                    ),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: const [
-                        Text(
-                          "Rey Mysterio",
-                          style: TextStyle(
-                              fontFamily: "Inter",
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600),
-                        ),
-                        Text("Dilihat",
-                            style: TextStyle(
-                                fontFamily: "Inter",
-                                fontSize: 12,
-                                fontWeight: FontWeight.w300,
-                                color: Colors.grey)),
-                      ],
-                    ),
-                    SizedBox(
-                      width: width * 32,
-                    ),
-                    Row(
-                      children: [Text("11:11")],
-                    )
-                  ],
-                ),
               ),
             ],
           ),
