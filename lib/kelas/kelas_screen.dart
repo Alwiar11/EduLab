@@ -86,7 +86,6 @@ class _KelasScreenState extends State<KelasScreen> {
                     Padding(
                       padding: const EdgeInsets.only(left: 10),
                       child: TextField(
-                        keyboardType: TextInputType.number,
                         decoration: InputDecoration(
                           hintStyle: const TextStyle(fontSize: 10),
                           hintText: '    Umumkan Sesuatu di Kelas Anda',

@@ -30,19 +30,28 @@ class _IntroScreenState extends State<IntroScreen> {
       Intro(
           height: height,
           width: screenWidth,
-          image: Image.asset("assets/images/3.png"),
+          image: Image.asset(
+            "assets/images/3.png",
+            scale: 3.5,
+          ),
           title: "Temukan Pembelajaran \nOnline Terbaik",
           desc: "Pembelajaran UI/UX Menggunakan \nFigma yang Sangat Baik"),
       Intro(
           height: height,
           width: screenWidth,
-          image: Image.asset("assets/images/2.png"),
+          image: Image.asset(
+            "assets/images/2.png",
+            scale: 2,
+          ),
           title: "Ga tau Pusing",
           desc: "desc"),
       Intro(
           height: height,
           width: screenWidth,
-          image: Image.asset("assets/images/1.png"),
+          image: Image.asset(
+            "assets/images/1.png",
+            scale: 3.2,
+          ),
           title: "title",
           desc: "desc"),
     ];

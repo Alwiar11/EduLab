@@ -26,26 +26,30 @@ class _ListSvScreenState extends State<ListSvScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Container(
-                  padding: EdgeInsets.symmetric(vertical: 5),
                   width: width * 90,
-                  height: height * 5,
+                  height: height * 10,
                   decoration: BoxDecoration(
                     color: Colors.white.withOpacity(1),
                     borderRadius: BorderRadius.circular(15),
                   ),
-                  child: const Padding(
+                  child: Padding(
                     padding: EdgeInsets.only(left: 2),
-                    child: TextField(
-                      keyboardType: TextInputType.number,
-                      decoration: InputDecoration(
-                        hintStyle: TextStyle(fontSize: 10),
-                        hintText: 'Cari...',
-                        border: InputBorder.none,
-                        prefixIcon: Icon(
-                          Icons.search,
-                          size: 20,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        TextField(
+                          keyboardType: TextInputType.number,
+                          decoration: InputDecoration(
+                            hintStyle: TextStyle(fontSize: 10),
+                            hintText: 'Cari...',
+                            border: InputBorder.none,
+                            prefixIcon: Icon(
+                              Icons.search,
+                              size: 20,
+                            ),
+                          ),
                         ),
-                      ),
+                      ],
                     ),
                   ),
                 ),

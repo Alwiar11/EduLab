@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:edulab/list_pkl/listPkl.dart';
 import 'package:edulab/list_sv/listSv.dart';
@@ -27,35 +29,40 @@ class HomePageScreen extends StatelessWidget {
               SizedBox(
                 height: height * 2,
               ),
-              Row(
-                children: [
-                  Container(
-                    width: width * 22,
-                    height: height * 10,
-                    decoration: const BoxDecoration(
-                        color: primaryColor, shape: BoxShape.circle),
-                  ),
-                  SizedBox(
-                    width: width * 2,
-                  ),
-                  FutureBuilder<DocumentSnapshot>(
-                      future: FirebaseFirestore.instance
-                          .collection('users')
-                          .doc("W3lpN3fdXfAhAXFJgy31")
-                          .get(),
-                      builder: (_, snapshot) {
-                        if (snapshot.hasData) {
-                          return Text(
+              FutureBuilder<DocumentSnapshot>(
+                  future: FirebaseFirestore.instance
+                      .collection('users')
+                      .doc("W3lpN3fdXfAhAXFJgy31")
+                      .get(),
+                  builder: (_, snapshot) {
+                    if (snapshot.hasData) {
+                      return Row(
+                        children: [
+                          Container(
+                            width: width * 22,
+                            height: height * 10,
+                            decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                image: DecorationImage(
+                                    image: NetworkImage(
+                                      snapshot.data!.get("image"),
+                                    ),
+                                    fit: BoxFit.cover)),
+                          ),
+                          SizedBox(
+                            width: width * 2,
+                          ),
+                          Text(
                             "Hi, " +
                                 snapshot.data!.get("nama") +
                                 "\nHow Are You?",
                             style: TextStyle(fontSize: 18, fontFamily: "Inter"),
-                          );
-                        }
-                        return Text("Loading");
-                      }),
-                ],
-              ),
+                          ),
+                        ],
+                      );
+                    }
+                    return Text("Loading");
+                  }),
               SizedBox(
                 height: height * 2.5,
               ),
@@ -96,23 +103,145 @@ class HomePageScreen extends StatelessWidget {
               SizedBox(
                 height: height * 2.5,
               ),
-              SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    cardList(width, height, primaryColor),
-                    const SizedBox(
-                      width: 35,
-                    ),
-                    cardList(width, height, primaryColor),
-                    const SizedBox(
-                      width: 35,
-                    ),
-                    cardList(width, height, primaryColor),
-                  ],
-                ),
-              ),
+              StreamBuilder<QuerySnapshot>(
+                  stream: FirebaseFirestore.instance
+                      .collection('users')
+                      .snapshots(),
+                  builder: (_, snapshot) {
+                    if (snapshot.hasData) {
+                      return SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          children: [
+                            ...snapshot.data!.docs.map((e) => Row(
+                                  children: [
+                                    Container(
+                                        height: height * 18,
+                                        width: width * 70,
+                                        decoration: BoxDecoration(
+                                            color: primaryColor,
+                                            borderRadius:
+                                                BorderRadius.circular(15)),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          children: [
+                                            SizedBox(
+                                              width: width * 3,
+                                            ),
+                                            Container(
+                                              height: height * 15,
+                                              width: width * 20,
+                                              decoration: BoxDecoration(
+                                                  shape: BoxShape.circle,
+                                                  image: DecorationImage(
+                                                      image: NetworkImage(
+                                                          e.get('image')),
+                                                      fit: BoxFit.cover)),
+                                            ),
+                                            SizedBox(
+                                              width: width * 2,
+                                            ),
+                                            Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                      e.get('nama'),
+                                                      style: TextStyle(
+                                                          fontSize: 16,
+                                                          color: Colors.white,
+                                                          fontWeight:
+                                                              FontWeight.w600),
+                                                    ),
+                                                  ],
+                                                ),
+                                                Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.start,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.end,
+                                                  children: [
+                                                    Text(
+                                                      e.get('role'),
+                                                      style: TextStyle(
+                                                          fontSize: 12,
+                                                          color: Colors.white,
+                                                          fontWeight:
+                                                              FontWeight.w400),
+                                                    ),
+                                                  ],
+                                                ),
+                                                SizedBox(
+                                                  height: height * 1,
+                                                ),
+                                                Column(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.end,
+                                                  children: [
+                                                    InkWell(
+                                                      onTap: () {
+                                                        Navigator.push(
+                                                          context,
+                                                          MaterialPageRoute(
+                                                              builder: (context) =>
+                                                                  const ListSv()),
+                                                        );
+                                                      },
+                                                      child: Container(
+                                                        height: height * 3,
+                                                        width: width * 20,
+                                                        decoration: BoxDecoration(
+                                                            color: Colors.white,
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        15)),
+                                                        child: Column(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .center,
+                                                          children: [
+                                                            Text(
+                                                              "Lihat",
+                                                              style: TextStyle(
+                                                                  color:
+                                                                      primaryColor,
+                                                                  fontSize: 12,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w600),
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .center,
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    )
+                                                  ],
+                                                )
+                                              ],
+                                            )
+                                          ],
+                                        )),
+                                    SizedBox(
+                                      width: width * 5,
+                                    )
+                                  ],
+                                )),
+                          ],
+                        ),
+                      );
+                    }
+                    return Text("Loading");
+                  }),
               SizedBox(
                 height: height * 2.5,
               ),
@@ -130,9 +259,21 @@ class HomePageScreen extends StatelessWidget {
               SizedBox(
                 height: height * 2.5,
               ),
-              Padding(
-                padding: const EdgeInsets.only(right: 20),
-                child: cardList(width * 100, height / 1.3, primaryColor),
+              Container(
+                margin: EdgeInsets.only(right: 20),
+                height: height * 12,
+                width: width * 100,
+                decoration: BoxDecoration(
+                    color: primaryColor,
+                    borderRadius: BorderRadius.circular(15)),
+                child: Row(
+                  children: [
+                    SizedBox(
+                      width: width * 3,
+                    ),
+                    Icon(Icons.work_outline, size: 50, color: Colors.white)
+                  ],
+                ),
               ),
               SizedBox(
                 height: height * 2.5,
@@ -174,17 +315,89 @@ class HomePageScreen extends StatelessWidget {
               SizedBox(
                 height: height * 2.5,
               ),
-              Padding(
-                padding: const EdgeInsets.only(right: 20),
-                child: cardList(width * 100, height / 1.2, primaryColor),
-              ),
-              SizedBox(
-                height: height * 2,
-              ),
-              Padding(
-                padding: const EdgeInsets.only(right: 20),
-                child: cardList(width * 100, height / 1.2, primaryColor),
-              ),
+              StreamBuilder<QuerySnapshot>(
+                  stream: FirebaseFirestore.instance
+                      .collection('users')
+                      .snapshots(),
+                  builder: (_, snapshot) {
+                    if (snapshot.hasData) {
+                      return Column(
+                        children: [
+                          ...snapshot.data!.docs.map(
+                            (e) => Column(
+                              children: [
+                                Container(
+                                  margin: EdgeInsets.only(right: 20),
+                                  height: height * 13,
+                                  width: width * 100,
+                                  decoration: BoxDecoration(
+                                      color: primaryColor,
+                                      borderRadius: BorderRadius.circular(15)),
+                                  child: Row(
+                                    children: [
+                                      SizedBox(
+                                        width: width * 3,
+                                      ),
+                                      Container(
+                                        height: height * 10,
+                                        width: width * 18,
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(15),
+                                            image: DecorationImage(
+                                                image: NetworkImage(
+                                                    e.get('image')),
+                                                fit: BoxFit.cover)),
+                                      ),
+                                      SizedBox(
+                                        width: width * 4,
+                                      ),
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                e.get('nama'),
+                                                style: TextStyle(
+                                                    fontSize: 16,
+                                                    color: Colors.white,
+                                                    fontWeight:
+                                                        FontWeight.w600),
+                                              )
+                                            ],
+                                          ),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            children: [
+                                              Text(e.get('asal sekolah'),
+                                                  style: TextStyle(
+                                                      fontSize: 12,
+                                                      color: Colors.white,
+                                                      fontWeight:
+                                                          FontWeight.w400))
+                                            ],
+                                          ),
+                                        ],
+                                      )
+                                    ],
+                                  ),
+                                ),
+                                SizedBox(height: height * 2.5)
+                              ],
+                            ),
+                          )
+                        ],
+                      );
+                    }
+                    return Text("Loading");
+                  })
             ],
           ),
         ),

@@ -28,8 +28,14 @@ class _VerifPageState extends State<VerifPage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Image.asset("assets/images/4.png"),
+                Image.asset(
+                  "assets/images/4.png",
+                  scale: 3,
+                ),
               ],
+            ),
+            SizedBox(
+              height: height * 1,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,

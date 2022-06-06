@@ -19,7 +19,12 @@ class LoginScreen extends StatelessWidget {
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: [Image.asset("assets/images/4.png")],
+            children: [
+              Image.asset(
+                "assets/images/4.png",
+                scale: 3,
+              )
+            ],
           ),
           Padding(
             padding: EdgeInsets.all(height * 0.10),

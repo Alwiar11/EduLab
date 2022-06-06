@@ -48,14 +48,29 @@ class ProfileScreen extends StatelessWidget {
                     )
                   ],
                 ),
-                Container(
-                  height: height * 26,
-                  width: width * 50,
-                  decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Colors.black,
-                      border: Border.all(width: 10, color: primaryColor)),
-                ),
+                FutureBuilder<DocumentSnapshot>(
+                    future: FirebaseFirestore.instance
+                        .collection('users')
+                        .doc("W3lpN3fdXfAhAXFJgy31")
+                        .get(),
+                    builder: (_, snapshot) {
+                      if (snapshot.hasData) {
+                        return Container(
+                          height: height * 26,
+                          width: width * 50,
+                          decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              image: DecorationImage(
+                                  image: NetworkImage(
+                                    snapshot.data!.get("image"),
+                                  ),
+                                  fit: BoxFit.fill),
+                              border:
+                                  Border.all(width: 10, color: primaryColor)),
+                        );
+                      }
+                      return Text("Loading");
+                    }),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
@@ -141,7 +156,7 @@ class ProfileScreen extends StatelessWidget {
                     ],
                   );
                 }
-                return Text("Kosong");
+                return Text("Loading");
               }),
         ],
       ),
