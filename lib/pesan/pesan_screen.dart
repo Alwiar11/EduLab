@@ -1,6 +1,8 @@
 import 'package:edulab/contents.dart';
 import 'package:flutter/material.dart';
 
+import '../shared/constant.dart';
+
 class PesanScreen extends StatefulWidget {
   const PesanScreen({Key? key}) : super(key: key);
 
@@ -11,10 +13,6 @@ class PesanScreen extends StatefulWidget {
 class _PesanScreenState extends State<PesanScreen> {
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
-    final height = screenHeight / 100;
-    final width = screenWidth / 100;
     return SafeArea(
       child: SingleChildScrollView(
         scrollDirection: Axis.vertical,
@@ -30,8 +28,8 @@ class _PesanScreenState extends State<PesanScreen> {
                 children: [
                   Container(
                     padding: EdgeInsets.symmetric(vertical: 5),
-                    width: width * 90,
-                    height: height * 5,
+                    width: Constant(context).width * 0.9,
+                    height: Constant(context).height * 0.05,
                     decoration: BoxDecoration(
                       color: Colors.white.withOpacity(1),
                       borderRadius: BorderRadius.circular(15),
@@ -55,11 +53,11 @@ class _PesanScreenState extends State<PesanScreen> {
                 ],
               ),
               SizedBox(
-                height: height * 3,
+                height: Constant(context).height * 0.03,
               ),
               Container(
                 padding: const EdgeInsets.symmetric(vertical: 10),
-                width: screenWidth,
+                width: Constant(context).width,
                 // height: height * 15,
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(15),
@@ -67,18 +65,18 @@ class _PesanScreenState extends State<PesanScreen> {
                 child: Row(
                   children: [
                     SizedBox(
-                      width: width * 3,
+                      width: Constant(context).width * 0.03,
                     ),
                     Container(
-                      height: height * 10,
-                      width: width * 15,
+                      height: Constant(context).height * 0.1,
+                      width: Constant(context).width * 0.15,
                       decoration: const BoxDecoration(
                         color: primaryColor,
                         shape: BoxShape.circle,
                       ),
                     ),
                     SizedBox(
-                      width: width * 3,
+                      width: Constant(context).width * 0.03,
                     ),
                     Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -100,7 +98,7 @@ class _PesanScreenState extends State<PesanScreen> {
                       ],
                     ),
                     SizedBox(
-                      width: width * 35,
+                      width: Constant(context).width * 0.35,
                     ),
                     Row(
                       children: [Text("11:11")],
@@ -109,10 +107,10 @@ class _PesanScreenState extends State<PesanScreen> {
                 ),
               ),
               SizedBox(
-                height: height * 1.5,
+                height: Constant(context).height * 0.015,
               ),
               SizedBox(
-                height: height * 1.5,
+                height: Constant(context).height * 0.015,
               ),
             ],
           ),

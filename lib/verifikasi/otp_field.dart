@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-Container otp(BuildContext context) {
+Container otp(BuildContext context, TextEditingController otp) {
   return Container(
     height: MediaQuery.of(context).size.shortestSide * 0.13,
     decoration: BoxDecoration(
@@ -12,6 +12,7 @@ Container otp(BuildContext context) {
     child: AspectRatio(
       aspectRatio: 1,
       child: TextField(
+        controller: otp,
         decoration: const InputDecoration(
           border: InputBorder.none,
         ),

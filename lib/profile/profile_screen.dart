@@ -3,6 +3,7 @@ import 'package:edulab/contents.dart';
 
 import 'package:flutter/material.dart';
 
+import '../shared/constant.dart';
 import 'card_profile.dart';
 
 class ProfileScreen extends StatelessWidget {
@@ -10,18 +11,14 @@ class ProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
-    final height = screenHeight / 100;
-    final width = screenWidth / 100;
     return SingleChildScrollView(
       scrollDirection: Axis.vertical,
       child: Column(
         children: [
           Container(
             padding: EdgeInsets.symmetric(horizontal: 10),
-            width: screenWidth,
-            height: height * 40,
+            width: Constant(context).width,
+            height: Constant(context).height * 0.4,
             decoration: BoxDecoration(
                 color: secondaryColor,
                 borderRadius: BorderRadius.only(
@@ -31,7 +28,7 @@ class ProfileScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 SizedBox(
-                  height: height * 3,
+                  height: Constant(context).height * 0.03,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
@@ -44,7 +41,7 @@ class ProfileScreen extends StatelessWidget {
                       ),
                     ),
                     SizedBox(
-                      width: width * 3,
+                      width: Constant(context).width * 0.03,
                     )
                   ],
                 ),
@@ -56,8 +53,8 @@ class ProfileScreen extends StatelessWidget {
                     builder: (_, snapshot) {
                       if (snapshot.hasData) {
                         return Container(
-                          height: height * 26,
-                          width: width * 50,
+                          height: Constant(context).height * 0.26,
+                          width: Constant(context).width * 0.5,
                           decoration: BoxDecoration(
                               shape: BoxShape.circle,
                               image: DecorationImage(
@@ -77,8 +74,8 @@ class ProfileScreen extends StatelessWidget {
                     InkWell(
                       onTap: () {},
                       child: Container(
-                        height: height * 4,
-                        width: width * 18,
+                        height: Constant(context).height * 0.04,
+                        width: Constant(context).width * 0.18,
                         decoration: BoxDecoration(
                             color: Color.fromARGB(255, 255, 255, 255),
                             borderRadius: BorderRadius.circular(15)),
@@ -96,7 +93,7 @@ class ProfileScreen extends StatelessWidget {
                       ),
                     ),
                     SizedBox(
-                      width: width * 3,
+                      width: Constant(context).height * 0.03,
                     )
                   ],
                 ),
@@ -113,7 +110,7 @@ class ProfileScreen extends StatelessWidget {
                   return Column(
                     children: [
                       SizedBox(
-                        height: height * 1,
+                        height: Constant(context).height * 0.01,
                       ),
                       Text(snapshot.data!.get("nama"),
                           style: TextStyle(
@@ -126,31 +123,31 @@ class ProfileScreen extends StatelessWidget {
                       Text("User Id : " + snapshot.data!.get("id"),
                           style: TextStyle(color: Colors.grey, fontSize: 14)),
                       SizedBox(
-                        height: height * 2,
+                        height: Constant(context).height * 0.02,
                       ),
                       CardProfile(
-                          height: height,
-                          width: width,
+                          height: Constant(context).height / 100,
+                          width: Constant(context).width / 100,
                           title: 'Asal Sekolah',
                           desc: snapshot.data!.get("asal sekolah")),
                       CardProfile(
-                          height: height,
-                          width: width,
+                          height: Constant(context).height / 100,
+                          width: Constant(context).width / 100,
                           title: 'Jurusan',
                           desc: snapshot.data!.get("jurusan")),
                       CardProfile(
-                          height: height,
-                          width: width,
+                          height: Constant(context).height / 100,
+                          width: Constant(context).width / 100,
                           title: 'Alamat',
                           desc: snapshot.data!.get("alamat")),
                       CardProfile(
-                          height: height,
-                          width: width,
+                          height: Constant(context).height / 100,
+                          width: Constant(context).width / 100,
                           title: 'Umur',
                           desc: snapshot.data!.get("umur")),
                       CardProfile(
-                          height: height,
-                          width: width,
+                          height: Constant(context).height / 100,
+                          width: Constant(context).width / 100,
                           title: 'Hobi',
                           desc: snapshot.data!.get("hobi")),
                     ],

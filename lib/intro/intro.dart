@@ -27,13 +27,13 @@ class Intro extends StatelessWidget {
         ClipPath(
           clipper: WaveClipperTwo(),
           child: Container(
-              width: width,
-              height: height * 50,
+              width: Constant(context).width,
+              height: Constant(context).height * 0.5,
               color: secondaryColor,
               child: image),
         ),
         SizedBox(
-          height: height * 5,
+          height: Constant(context).height * 0.05,
         ),
         Text(title,
             style: const TextStyle(
@@ -42,7 +42,7 @@ class Intro extends StatelessWidget {
                 fontWeight: FontWeight.bold),
             textAlign: TextAlign.center),
         SizedBox(
-          height: height * 4,
+          height: Constant(context).height * 0.04,
         ),
         Text(
           desc,
@@ -54,7 +54,7 @@ class Intro extends StatelessWidget {
           textAlign: TextAlign.center,
         ),
         SizedBox(
-          height: height * 10,
+          height: Constant(context).height * 0.1,
         ),
       ],
     );

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:edulab/list_pkl/listPkl.dart';
 import 'package:edulab/list_sv/listSv.dart';
+import 'package:edulab/shared/constant.dart';
 import 'package:flutter/material.dart';
 import '../contents.dart';
 import 'card.dart';
@@ -27,7 +28,7 @@ class HomePageScreen extends StatelessWidget {
           child: Column(
             children: [
               SizedBox(
-                height: height * 2,
+                height: Constant(context).height * 0.02,
               ),
               FutureBuilder<DocumentSnapshot>(
                   future: FirebaseFirestore.instance
@@ -39,8 +40,8 @@ class HomePageScreen extends StatelessWidget {
                       return Row(
                         children: [
                           Container(
-                            width: width * 22,
-                            height: height * 10,
+                            width: Constant(context).width * 0.2,
+                            height: Constant(context).height * 0.12,
                             decoration: BoxDecoration(
                                 shape: BoxShape.circle,
                                 image: DecorationImage(
@@ -50,7 +51,7 @@ class HomePageScreen extends StatelessWidget {
                                     fit: BoxFit.cover)),
                           ),
                           SizedBox(
-                            width: width * 2,
+                            width: Constant(context).width * 0.02,
                           ),
                           Text(
                             "Hi, " +
@@ -64,7 +65,7 @@ class HomePageScreen extends StatelessWidget {
                     return Text("Loading");
                   }),
               SizedBox(
-                height: height * 2.5,
+                height: Constant(context).height * 0.025,
               ),
               Padding(
                 padding: const EdgeInsets.only(right: 20),
@@ -101,7 +102,7 @@ class HomePageScreen extends StatelessWidget {
                 ),
               ),
               SizedBox(
-                height: height * 2.5,
+                height: Constant(context).height * 0.025,
               ),
               StreamBuilder<QuerySnapshot>(
                   stream: FirebaseFirestore.instance
@@ -116,8 +117,8 @@ class HomePageScreen extends StatelessWidget {
                             ...snapshot.data!.docs.map((e) => Row(
                                   children: [
                                     Container(
-                                        height: height * 18,
-                                        width: width * 70,
+                                        height: Constant(context).height * 0.18,
+                                        width: Constant(context).width * 0.7,
                                         decoration: BoxDecoration(
                                             color: primaryColor,
                                             borderRadius:
@@ -127,11 +128,14 @@ class HomePageScreen extends StatelessWidget {
                                               MainAxisAlignment.start,
                                           children: [
                                             SizedBox(
-                                              width: width * 3,
+                                              width: Constant(context).width *
+                                                  0.025,
                                             ),
                                             Container(
-                                              height: height * 15,
-                                              width: width * 20,
+                                              height: Constant(context).height *
+                                                  0.15,
+                                              width:
+                                                  Constant(context).width * 0.2,
                                               decoration: BoxDecoration(
                                                   shape: BoxShape.circle,
                                                   image: DecorationImage(
@@ -140,7 +144,8 @@ class HomePageScreen extends StatelessWidget {
                                                       fit: BoxFit.cover)),
                                             ),
                                             SizedBox(
-                                              width: width * 2,
+                                              width: Constant(context).height *
+                                                  0.02,
                                             ),
                                             Column(
                                               crossAxisAlignment:
@@ -179,7 +184,9 @@ class HomePageScreen extends StatelessWidget {
                                                   ],
                                                 ),
                                                 SizedBox(
-                                                  height: height * 1,
+                                                  height:
+                                                      Constant(context).height *
+                                                          0.01,
                                                 ),
                                                 Column(
                                                   mainAxisAlignment:
@@ -195,8 +202,13 @@ class HomePageScreen extends StatelessWidget {
                                                         );
                                                       },
                                                       child: Container(
-                                                        height: height * 3,
-                                                        width: width * 20,
+                                                        height:
+                                                            Constant(context)
+                                                                    .height *
+                                                                0.03,
+                                                        width: Constant(context)
+                                                                .width *
+                                                            0.2,
                                                         decoration: BoxDecoration(
                                                             color: Colors.white,
                                                             borderRadius:
@@ -232,7 +244,7 @@ class HomePageScreen extends StatelessWidget {
                                           ],
                                         )),
                                     SizedBox(
-                                      width: width * 5,
+                                      width: Constant(context).width * 0.05,
                                     )
                                   ],
                                 )),
@@ -243,7 +255,7 @@ class HomePageScreen extends StatelessWidget {
                     return Text("Loading");
                   }),
               SizedBox(
-                height: height * 2.5,
+                height: Constant(context).height * 0.025,
               ),
               Row(
                 children: const [
@@ -257,26 +269,26 @@ class HomePageScreen extends StatelessWidget {
                 ],
               ),
               SizedBox(
-                height: height * 2.5,
+                height: Constant(context).height * 0.025,
               ),
               Container(
                 margin: EdgeInsets.only(right: 20),
-                height: height * 12,
-                width: width * 100,
+                height: Constant(context).height * 0.12,
+                width: Constant(context).width * 1,
                 decoration: BoxDecoration(
                     color: primaryColor,
                     borderRadius: BorderRadius.circular(15)),
                 child: Row(
                   children: [
                     SizedBox(
-                      width: width * 3,
+                      width: Constant(context).width * 0.03,
                     ),
                     Icon(Icons.work_outline, size: 50, color: Colors.white)
                   ],
                 ),
               ),
               SizedBox(
-                height: height * 2.5,
+                height: Constant(context).height * 0.025,
               ),
               Padding(
                 padding: const EdgeInsets.only(right: 20),
@@ -313,7 +325,7 @@ class HomePageScreen extends StatelessWidget {
                 ),
               ),
               SizedBox(
-                height: height * 2.5,
+                height: Constant(context).height * 0.025,
               ),
               StreamBuilder<QuerySnapshot>(
                   stream: FirebaseFirestore.instance
@@ -328,19 +340,19 @@ class HomePageScreen extends StatelessWidget {
                               children: [
                                 Container(
                                   margin: EdgeInsets.only(right: 20),
-                                  height: height * 13,
-                                  width: width * 100,
+                                  height: Constant(context).height * 0.13,
+                                  width: Constant(context).width * 1,
                                   decoration: BoxDecoration(
                                       color: primaryColor,
                                       borderRadius: BorderRadius.circular(15)),
                                   child: Row(
                                     children: [
                                       SizedBox(
-                                        width: width * 3,
+                                        width: Constant(context).width * 0.025,
                                       ),
                                       Container(
-                                        height: height * 10,
-                                        width: width * 18,
+                                        height: Constant(context).height * 0.1,
+                                        width: Constant(context).width * 0.18,
                                         decoration: BoxDecoration(
                                             borderRadius:
                                                 BorderRadius.circular(15),
@@ -350,7 +362,7 @@ class HomePageScreen extends StatelessWidget {
                                                 fit: BoxFit.cover)),
                                       ),
                                       SizedBox(
-                                        width: width * 4,
+                                        width: Constant(context).width * 0.04,
                                       ),
                                       Column(
                                         crossAxisAlignment:
@@ -389,7 +401,9 @@ class HomePageScreen extends StatelessWidget {
                                     ],
                                   ),
                                 ),
-                                SizedBox(height: height * 2.5)
+                                SizedBox(
+                                  height: Constant(context).height * 0.025,
+                                )
                               ],
                             ),
                           )

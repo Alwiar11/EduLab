@@ -3,6 +3,8 @@ import 'package:edulab/intro/intro.dart';
 import 'package:edulab/login/login.dart';
 import 'package:flutter/material.dart';
 
+import '../shared/constant.dart';
+
 class IntroScreen extends StatefulWidget {
   const IntroScreen({Key? key}) : super(key: key);
 
@@ -20,16 +22,12 @@ class _IntroScreenState extends State<IntroScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
-    final height = screenHeight / 100;
-    final width = screenWidth / 100;
     PageController _controller = PageController();
 
     List<Widget> _pages = [
       Intro(
-          height: height,
-          width: screenWidth,
+          height: Constant(context).height / 100,
+          width: Constant(context).width,
           image: Image.asset(
             "assets/images/3.png",
             scale: 3.5,
@@ -37,8 +35,8 @@ class _IntroScreenState extends State<IntroScreen> {
           title: "Temukan Pembelajaran \nOnline Terbaik",
           desc: "Pembelajaran UI/UX Menggunakan \nFigma yang Sangat Baik"),
       Intro(
-          height: height,
-          width: screenWidth,
+          height: Constant(context).height / 100,
+          width: Constant(context).width,
           image: Image.asset(
             "assets/images/2.png",
             scale: 2,
@@ -46,8 +44,8 @@ class _IntroScreenState extends State<IntroScreen> {
           title: "Ga tau Pusing",
           desc: "desc"),
       Intro(
-          height: height,
-          width: screenWidth,
+          height: Constant(context).height / 100,
+          width: Constant(context).width,
           image: Image.asset(
             "assets/images/1.png",
             scale: 3.2,
@@ -76,8 +74,10 @@ class _IntroScreenState extends State<IntroScreen> {
                 children: List<Widget>.generate(_pages.length, (int index) {
                   return AnimatedContainer(
                     duration: const Duration(milliseconds: 200),
-                    height: height * 1.5,
-                    width: (index == _currentPage) ? width * 7 : width * 3,
+                    height: Constant(context).height * 0.015,
+                    width: (index == _currentPage)
+                        ? Constant(context).width * 0.07
+                        : Constant(context).width * 0.03,
                     margin:
                         const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
                     decoration: BoxDecoration(
@@ -89,7 +89,7 @@ class _IntroScreenState extends State<IntroScreen> {
                 }),
               ),
               SizedBox(
-                height: height * 6,
+                height: Constant(context).height * 0.06,
               ),
               Row(
                 mainAxisAlignment: _currentPage == (_pages.length - 1)
@@ -103,12 +103,12 @@ class _IntroScreenState extends State<IntroScreen> {
                             Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => const LoginPage()),
+                                  builder: (context) => LoginPage()),
                             );
                           },
                           child: Button(
-                              height: height,
-                              width: width,
+                              height: Constant(context).height / 100,
+                              width: Constant(context).width / 100,
                               color: Colors.white,
                               textColor: Colors.black,
                               border: Border.all(width: 1),
@@ -121,9 +121,9 @@ class _IntroScreenState extends State<IntroScreen> {
                     },
                     child: AnimatedContainer(
                       duration: const Duration(milliseconds: 300),
-                      height: height * 8,
+                      height: Constant(context).height * 0.08,
                       alignment: Alignment.center,
-                      width: width * 38,
+                      width: Constant(context).width * 0.38,
                       decoration: BoxDecoration(
                         color: primaryColor,
                         borderRadius: BorderRadius.circular(15),
@@ -134,19 +134,19 @@ class _IntroScreenState extends State<IntroScreen> {
                                 Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => const LoginPage()),
+                                      builder: (context) => LoginPage()),
                                 );
                               },
                               child: Button(
-                                  height: height,
-                                  width: width,
+                                  height: Constant(context).height / 100,
+                                  width: Constant(context).height / 100,
                                   color: primaryColor,
                                   textColor: Colors.white,
                                   text: "Login"),
                             )
                           : Button(
-                              height: height,
-                              width: width,
+                              height: Constant(context).height / 100,
+                              width: Constant(context).width / 100,
                               color: primaryColor,
                               textColor: Colors.white,
                               text: "Selanjutnya")),
@@ -155,7 +155,7 @@ class _IntroScreenState extends State<IntroScreen> {
                 ],
               ),
               SizedBox(
-                height: height * 6,
+                height: Constant(context).height * 0.06,
               ),
             ],
           ),

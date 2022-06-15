@@ -1,6 +1,8 @@
 import 'package:edulab/contents.dart';
 import 'package:flutter/material.dart';
 
+import '../shared/constant.dart';
+
 class KelasScreen extends StatefulWidget {
   const KelasScreen({Key? key}) : super(key: key);
 
@@ -11,10 +13,6 @@ class KelasScreen extends StatefulWidget {
 class _KelasScreenState extends State<KelasScreen> {
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
-    final height = screenHeight / 100;
-    final width = screenWidth / 100;
     return SafeArea(
       child: SingleChildScrollView(
         scrollDirection: Axis.vertical,
@@ -23,11 +21,11 @@ class _KelasScreenState extends State<KelasScreen> {
           child: Column(
             children: [
               SizedBox(
-                height: height * 2,
+                height: Constant(context).width * 0.02,
               ),
               Container(
                 padding: EdgeInsets.symmetric(vertical: 20),
-                width: screenWidth,
+                width: Constant(context).width,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(15),
                   color: primaryColor,
@@ -71,9 +69,7 @@ class _KelasScreenState extends State<KelasScreen> {
                   ),
                 ),
               ),
-              SizedBox(
-                height: height * 2,
-              ),
+              SizedBox(height: Constant(context).height * 0.02),
               Container(
                 padding: EdgeInsets.symmetric(vertical: 5),
                 decoration: BoxDecoration(
@@ -91,8 +87,8 @@ class _KelasScreenState extends State<KelasScreen> {
                           hintText: '    Umumkan Sesuatu di Kelas Anda',
                           border: InputBorder.none,
                           prefixIcon: Container(
-                            height: height * 5,
-                            width: width * 10,
+                            height: Constant(context).height * 0.05,
+                            width: Constant(context).width * 0.1,
                             decoration: const BoxDecoration(
                                 shape: BoxShape.circle, color: primaryColor),
                           ),
@@ -106,11 +102,11 @@ class _KelasScreenState extends State<KelasScreen> {
                 ),
               ),
               SizedBox(
-                height: height * 2,
+                height: Constant(context).height * 0.02,
               ),
               Container(
                 padding: const EdgeInsets.symmetric(vertical: 20),
-                width: screenWidth,
+                width: Constant(context).width,
                 // height: height * 15,
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(15),
@@ -118,11 +114,11 @@ class _KelasScreenState extends State<KelasScreen> {
                 child: Row(
                   children: [
                     SizedBox(
-                      width: width * 2,
+                      width: Constant(context).width * 0.02,
                     ),
                     Container(
-                      height: height * 10,
-                      width: width * 20,
+                      height: Constant(context).height * 0.1,
+                      width: Constant(context).width * 0.2,
                       decoration: const BoxDecoration(
                         color: primaryColor,
                         shape: BoxShape.circle,
@@ -134,7 +130,7 @@ class _KelasScreenState extends State<KelasScreen> {
                       ),
                     ),
                     SizedBox(
-                      width: width * 1,
+                      width: Constant(context).width * 0.01,
                     ),
                     Column(
                       mainAxisAlignment: MainAxisAlignment.center,
