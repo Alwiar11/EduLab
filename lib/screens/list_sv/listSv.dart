@@ -15,6 +15,7 @@ class _ListSvState extends State<ListSv> {
     return Scaffold(
       backgroundColor: Color.fromARGB(255, 232, 232, 232),
       appBar: AppBar(
+        toolbarHeight: 50,
         leading: new IconButton(
           icon: new Icon(Icons.arrow_back_ios,
               color: Color.fromARGB(255, 0, 0, 0)),

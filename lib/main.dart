@@ -1,6 +1,6 @@
+import 'package:edulab/screens/intro/intro_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'Intro/intro_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding();

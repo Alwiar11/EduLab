@@ -1,8 +1,9 @@
 import 'package:edulab/contents.dart';
-import 'package:edulab/home/home_page.dart';
-import 'package:edulab/kelas/kelas.dart';
-import 'package:edulab/pesan/pesan.dart';
-import 'package:edulab/profile/profile.dart';
+import 'package:edulab/screens/class/class.dart';
+import 'package:edulab/screens/home/home_page.dart';
+
+import 'package:edulab/screens/chat/chat.dart';
+import 'package:edulab/screens/profile/profile.dart';
 
 import 'package:flutter/material.dart';
 import 'package:bottom_bar/bottom_bar.dart';
@@ -39,7 +40,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       body: PageView(
         controller: _pageController,
-        children: [const HomePage(), const Kelas(), Pesan(), Profile()],
+        children: [const HomePage(), const Class(), Chat(), Profile()],
         onPageChanged: (index) {
           setState(() => _currentPage = index);
         },

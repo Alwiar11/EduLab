@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:edulab/profile/profile_screen.dart';
+import 'package:edulab/screens/profile/profile_screen.dart';
 import 'package:flutter/material.dart';
 
 class Profile extends StatefulWidget {

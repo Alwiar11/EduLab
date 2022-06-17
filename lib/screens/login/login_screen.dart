@@ -1,7 +1,6 @@
-import 'package:edulab/login/login_shared.dart';
+import 'package:edulab/screens/login/login_shared.dart';
+import 'package:edulab/shared/constant.dart';
 import 'package:flutter/material.dart';
-
-import '../shared/constant.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -53,13 +52,13 @@ class LoginScreen extends StatelessWidget {
                   hintStyle: TextStyle(fontSize: 17),
                   hintText: 'Masukkan No Hp',
                   border: InputBorder.none,
-                  // prefixIcon: Text(
-                  //   "+62      ",
-                  //   style: TextStyle(
-                  //       fontSize: 16,
-                  //       fontWeight: FontWeight.w800,
-                  //       color: Color.fromARGB(255, 76, 76, 76)),
-                  // ),
+                  prefixIcon: Text(
+                    "+62      ",
+                    style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w800,
+                        color: Color.fromARGB(255, 76, 76, 76)),
+                  ),
                   prefixIconConstraints:
                       BoxConstraints(minWidth: 0, minHeight: 0),
                   contentPadding: EdgeInsets.all(20),

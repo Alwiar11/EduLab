@@ -1,14 +1,14 @@
-import 'package:edulab/pesan/pesan_screen.dart';
+import 'package:edulab/screens/chat/chat_screen.dart';
 import 'package:flutter/material.dart';
 
-class Pesan extends StatefulWidget {
-  const Pesan({Key? key}) : super(key: key);
+class Chat extends StatefulWidget {
+  const Chat({Key? key}) : super(key: key);
 
   @override
-  State<Pesan> createState() => _PesanState();
+  State<Chat> createState() => _ChatState();
 }
 
-class _PesanState extends State<Pesan> {
+class _ChatState extends State<Chat> {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
@@ -39,7 +39,7 @@ class _PesanState extends State<Pesan> {
               ))
         ],
       ),
-      body: PesanScreen(),
+      body: ChatScreen(),
     );
   }
 }

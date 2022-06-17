@@ -1,16 +1,15 @@
 import 'package:edulab/contents.dart';
+import 'package:edulab/shared/constant.dart';
 import 'package:flutter/material.dart';
 
-import '../shared/constant.dart';
-
-class KelasScreen extends StatefulWidget {
-  const KelasScreen({Key? key}) : super(key: key);
+class ClassScreen extends StatefulWidget {
+  const ClassScreen({Key? key}) : super(key: key);
 
   @override
-  State<KelasScreen> createState() => _KelasScreenState();
+  State<ClassScreen> createState() => _ClassScreenState();
 }
 
-class _KelasScreenState extends State<KelasScreen> {
+class _ClassScreenState extends State<ClassScreen> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(

@@ -1,8 +1,7 @@
+import 'package:edulab/contents.dart';
 import 'package:edulab/shared/constant.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
-
-import '../contents.dart';
 
 class Intro extends StatelessWidget {
   final double height;
@@ -27,10 +26,11 @@ class Intro extends StatelessWidget {
         ClipPath(
           clipper: WaveClipperTwo(),
           child: Container(
-              width: Constant(context).width,
-              height: Constant(context).height * 0.5,
-              color: secondaryColor,
-              child: image),
+            width: Constant(context).width,
+            height: Constant(context).height * 0.5,
+            color: secondaryColor,
+            child: image,
+          ),
         ),
         SizedBox(
           height: Constant(context).height * 0.05,

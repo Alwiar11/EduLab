@@ -1,9 +1,8 @@
 import 'package:edulab/contents.dart';
-import 'package:edulab/intro/intro.dart';
-import 'package:edulab/login/login.dart';
+import 'package:edulab/screens/intro/intro.dart';
+import 'package:edulab/screens/login/login.dart';
+import 'package:edulab/shared/constant.dart';
 import 'package:flutter/material.dart';
-
-import '../shared/constant.dart';
 
 class IntroScreen extends StatefulWidget {
   const IntroScreen({Key? key}) : super(key: key);

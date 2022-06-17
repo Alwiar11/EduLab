@@ -1,18 +1,17 @@
-import 'package:edulab/login/login_shared.dart';
-import 'package:edulab/verifikasi/verif_shared.dart';
+import 'package:edulab/screens/login/login_shared.dart';
+import 'package:edulab/screens/verify/verify_shared.dart';
+import 'package:edulab/shared/constant.dart';
 import 'package:flutter/material.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
-import '../shared/constant.dart';
 
-class VerifPage extends StatefulWidget {
-  const VerifPage({Key? key}) : super(key: key);
+class Verify extends StatefulWidget {
+  const Verify({Key? key}) : super(key: key);
 
   @override
-  State<VerifPage> createState() => _VerifPageState();
+  State<Verify> createState() => _VerifyState();
 }
 
-class _VerifPageState extends State<VerifPage> {
-  var otpController = TextEditingController();
+class _VerifyState extends State<Verify> {
   String currentText = "";
   @override
   Widget build(BuildContext context) {
@@ -46,14 +45,21 @@ class _VerifPageState extends State<VerifPage> {
             SizedBox(
               height: Constant(context).height * 0.05,
             ),
-            Text(
-                "Silahkan cek SMS berupa kode verifikasi yang telah kami kirim ke nomor " +
-                    phonenumbercontroller.text,
-                style: TextStyle(
-                  fontFamily: 'Inter-Bold',
-                  fontSize: 14,
-                ),
-                textAlign: TextAlign.center),
+            Column(
+              children: [
+                RichText(
+                    text: TextSpan(
+                        text: "Kode OTP sudah dikirim ke Nomor ",
+                        style: TextStyle(
+                            color: Colors.black, fontWeight: FontWeight.w400),
+                        children: [
+                      TextSpan(
+                          text: "0" + phonenumbercontroller.text.toString(),
+                          style: TextStyle(
+                              color: Colors.black, fontWeight: FontWeight.w500))
+                    ])),
+              ],
+            ),
             SizedBox(
               height: Constant(context).height * 0.02,
             ),
@@ -69,26 +75,6 @@ class _VerifPageState extends State<VerifPage> {
                 });
               },
             )),
-            // Row(
-            //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            //   children: [
-            //     SizedBox(
-            //       width: Constant(context).width * 0.008,
-            //     ),
-            //     otp(context, controller1),
-            //     SizedBox(width: Constant(context).width * 0.008),
-            //     otp(context, controller2),
-            //     SizedBox(width: Constant(context).width * 0.008),
-            //     otp(context, controller3),
-            //     SizedBox(width: Constant(context).width * 0.008),
-            //     otp(context, controller4),
-            //     SizedBox(width: Constant(context).width * 0.008),
-            //     otp(context, controller5),
-            //     SizedBox(width: Constant(context).width * 0.008),
-            //     otp(context, controller6),
-            //     SizedBox(width: Constant(context).width * 0.008),
-            //   ],
-            // ),
             SizedBox(
               height: Constant(context).height * 0.01,
             ),

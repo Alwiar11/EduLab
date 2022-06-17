@@ -1,6 +1,5 @@
+import 'package:edulab/contents.dart';
 import 'package:flutter/material.dart';
-
-import '../contents.dart';
 
 class CardProfile extends StatelessWidget {
   const CardProfile({

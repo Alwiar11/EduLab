@@ -1,4 +1,4 @@
-import 'package:edulab/home/home_page_screen.dart';
+import 'package:edulab/screens/home/home_page_screen.dart';
 import 'package:edulab/shared/constant.dart';
 import 'package:flutter/material.dart';
 
