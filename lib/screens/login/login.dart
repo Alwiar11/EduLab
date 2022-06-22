@@ -16,8 +16,6 @@ class LoginPage extends StatelessWidget {
           OtpFunction(context).sendotp(
             context: context,
           );
-          // Navigator.push(
-          //     context, MaterialPageRoute(builder: (context) => VerifScreen()));
         },
         backgroundColor: primaryColor,
         child: const Icon(Icons.keyboard_arrow_right),

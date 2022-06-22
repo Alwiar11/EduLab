@@ -1,4 +1,6 @@
 import 'package:edulab/screens/chat/chat_screen.dart';
+import 'package:edulab/screens/chat/contact/contact.dart';
+
 import 'package:flutter/material.dart';
 
 class Chat extends StatefulWidget {
@@ -11,13 +13,10 @@ class Chat extends StatefulWidget {
 class _ChatState extends State<Chat> {
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
-    final height = screenHeight / 100;
-    final width = screenWidth / 100;
     return Scaffold(
       backgroundColor: Color.fromARGB(255, 232, 232, 232),
       appBar: AppBar(
+        elevation: 0,
         shadowColor: Colors.white,
         backgroundColor: Colors.white,
         title: Row(
@@ -32,7 +31,10 @@ class _ChatState extends State<Chat> {
         centerTitle: true,
         actions: [
           IconButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: ((context) => Contact())));
+              },
               icon: Icon(
                 Icons.add,
                 color: Colors.black,

@@ -1,8 +1,8 @@
 import 'package:edulab/contents.dart';
 import 'package:flutter/material.dart';
 
-class CardProfile extends StatelessWidget {
-  const CardProfile({
+class CardProfileSv extends StatelessWidget {
+  const CardProfileSv({
     Key? key,
     required this.height,
     required this.width,
@@ -35,10 +35,7 @@ class CardProfile extends StatelessWidget {
               Text(
                 desc,
                 style: TextStyle(
-                    fontFamily: "Inter",
-                    fontSize: 16,
-                    color: Colors.white,
-                    fontWeight: FontWeight.w500),
+                    fontFamily: "Inter", fontSize: 16, color: Colors.white),
                 textAlign: TextAlign.center,
               ),
             ],

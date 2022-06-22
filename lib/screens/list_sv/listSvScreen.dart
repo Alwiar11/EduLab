@@ -1,8 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:edulab/contents.dart';
-import 'package:edulab/screens/home/card.dart';
+import 'package:edulab/screens/profile_sv/profile_sv.dart';
+
 import 'package:edulab/shared/constant.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ListSvScreen extends StatefulWidget {
   const ListSvScreen({Key? key}) : super(key: key);
@@ -74,9 +76,11 @@ class _ListSvScreenState extends State<ListSvScreen> {
                         crossAxisCount: 2),
                     children: [
                       ...snapshot.data!.docs.map((e) => CardListSv(
-                          name: e.get("name"),
-                          profile: e.get("profile"),
-                          role: e.get("job")))
+                            name: e.get("name"),
+                            profile: e.get("profile"),
+                            role: e.get("job"),
+                            uid: e.id,
+                          ))
                     ],
                   ),
                 );
@@ -93,11 +97,13 @@ class CardListSv extends StatelessWidget {
   final String profile;
   final String name;
   final String role;
+  final String uid;
 
   const CardListSv({
     required this.name,
     required this.profile,
     required this.role,
+    required this.uid,
     Key? key,
   }) : super(key: key);
 
@@ -129,7 +135,8 @@ class CardListSv extends StatelessWidget {
           ),
           InkWell(
             onTap: () {
-              Navigator.pop(context);
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => ProfileSv(uid: uid)));
             },
             child: Container(
               width: Constant(context).width * 0.3,

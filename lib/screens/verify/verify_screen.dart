@@ -24,6 +24,7 @@ class VerifyScreen extends StatefulWidget {
 }
 
 class _VerifyScreenState extends State<VerifyScreen> {
+  TextEditingController otpController = TextEditingController();
   //
 
   @override
@@ -43,10 +44,8 @@ class _VerifyScreenState extends State<VerifyScreen> {
               ),
               FloatingActionButton(
                 onPressed: () {
-                  // Navigator.push(
-                  //     context, MaterialPageRoute(builder: (context) => Home()));
-                  VerifyFunction(
-                          context, widget.verificationid, widget.phoneNumber)
+                  VerifyFunction(context, widget.verificationid,
+                          widget.phoneNumber, otpController)
                       .verify();
                 },
                 backgroundColor: primaryColor,
@@ -56,6 +55,8 @@ class _VerifyScreenState extends State<VerifyScreen> {
           ),
         ),
         backgroundColor: secondaryColor,
-        body: const Verify());
+        body: Verify(
+          otpController: otpController,
+        ));
   }
 }

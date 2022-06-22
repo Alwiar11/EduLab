@@ -16,8 +16,8 @@ class _ListPklState extends State<ListPkl> {
       backgroundColor: Color.fromARGB(255, 232, 232, 232),
       appBar: AppBar(
         leading: new IconButton(
-          icon: new Icon(Icons.arrow_back_ios,
-              color: Color.fromARGB(255, 0, 0, 0)),
+          icon: new Icon(Icons.arrow_back,
+              size: 30, color: Color.fromARGB(255, 0, 0, 0)),
           onPressed: () => Navigator.of(context).pop(),
         ),
         elevation: 0,

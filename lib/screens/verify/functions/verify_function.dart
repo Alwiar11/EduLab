@@ -11,7 +11,9 @@ class VerifyFunction {
   final BuildContext context;
   final String verificationid;
   final String phoneNumber;
-  VerifyFunction(this.context, this.verificationid, this.phoneNumber);
+  final TextEditingController otpController;
+  VerifyFunction(
+      this.context, this.verificationid, this.phoneNumber, this.otpController);
 
   FirebaseAuth auth = FirebaseAuth.instance;
 
@@ -68,20 +70,18 @@ class VerifyFunction {
                   prefs.setBool('isVerified', doc.get("isVerified"));
                   // String? isVerified = prefs.getString('isVerified');
                   if (doc.get("role") == 'pkl') {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => Home(),
-                      ),
-                    );
+                    Navigator.of(context).pushAndRemoveUntil(
+                        MaterialPageRoute(builder: (context) => Home()),
+                        (Route<dynamic> route) => false);
                   } else {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => Home(),
-                        ));
+                    Navigator.of(context).pushAndRemoveUntil(
+                        MaterialPageRoute(builder: (context) => Home()),
+                        (Route<dynamic> route) => false);
                   }
                 } else {
+                  SharedPreferences prefs =
+                      await SharedPreferences.getInstance();
+                  prefs.setString('uid', userCredential.user!.uid);
                   await FirebaseFirestore.instance
                       .collection('users')
                       .doc(userCredential.user!.uid)
@@ -89,7 +89,7 @@ class VerifyFunction {
                     'phoneNumber': phoneNumber,
                   });
 
-                  Navigator.push(
+                  Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
                       builder: (_) => AddData(

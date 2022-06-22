@@ -13,6 +13,7 @@ class OtpFunction {
   Future<void> sendotp({required BuildContext context}) async {
     String phoneNumber = "+62" + phonenumbercontroller.text.toString();
     await auth.verifyPhoneNumber(
+        timeout: Duration(seconds: 60),
         phoneNumber: phoneNumber,
         verificationCompleted: (PhoneAuthCredential credential) async {
           print("Verification");

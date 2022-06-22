@@ -5,7 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
 class Verify extends StatefulWidget {
-  const Verify({Key? key}) : super(key: key);
+  final TextEditingController otpController;
+  const Verify({required this.otpController, Key? key}) : super(key: key);
 
   @override
   State<Verify> createState() => _VerifyState();
@@ -65,7 +66,7 @@ class _VerifyState extends State<Verify> {
             ),
             Form(
                 child: PinCodeTextField(
-              controller: otpController,
+              controller: widget.otpController,
               appContext: context,
               length: 6,
               onChanged: (value) {

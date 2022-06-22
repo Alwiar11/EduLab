@@ -1,6 +1,9 @@
 import 'package:edulab/contents.dart';
+
 import 'package:edulab/shared/constant.dart';
 import 'package:flutter/material.dart';
+
+import 'roomchat/roomchat.dart';
 
 class ChatScreen extends StatefulWidget {
   const ChatScreen({Key? key}) : super(key: key);
@@ -36,7 +39,6 @@ class _ChatScreenState extends State<ChatScreen> {
                     child: const Padding(
                       padding: EdgeInsets.only(left: 2),
                       child: TextField(
-                        keyboardType: TextInputType.number,
                         decoration: InputDecoration(
                           hintStyle: TextStyle(fontSize: 10),
                           hintText: 'Cari...',
@@ -54,55 +56,61 @@ class _ChatScreenState extends State<ChatScreen> {
               SizedBox(
                 height: Constant(context).height * 0.03,
               ),
-              Container(
-                padding: const EdgeInsets.symmetric(vertical: 10),
-                width: Constant(context).width,
-                // height: height * 15,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15),
-                    color: Colors.white),
-                child: Row(
-                  children: [
-                    SizedBox(
-                      width: Constant(context).width * 0.03,
-                    ),
-                    Container(
-                      height: Constant(context).height * 0.1,
-                      width: Constant(context).width * 0.15,
-                      decoration: const BoxDecoration(
-                        color: primaryColor,
-                        shape: BoxShape.circle,
+              InkWell(
+                onTap: () {
+                  // Navigator.push(context,
+                  //     MaterialPageRoute(builder: (context) => RoomChat()));
+                },
+                child: Container(
+                  padding: const EdgeInsets.symmetric(vertical: 10),
+                  width: Constant(context).width,
+                  // height: height * 15,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(15),
+                      color: Colors.white),
+                  child: Row(
+                    children: [
+                      SizedBox(
+                        width: Constant(context).width * 0.03,
                       ),
-                    ),
-                    SizedBox(
-                      width: Constant(context).width * 0.03,
-                    ),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: const [
-                        Text(
-                          "Rey Mysterio",
-                          style: TextStyle(
-                              fontFamily: "Inter",
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600),
+                      Container(
+                        height: Constant(context).height * 0.1,
+                        width: Constant(context).width * 0.15,
+                        decoration: const BoxDecoration(
+                          color: primaryColor,
+                          shape: BoxShape.circle,
                         ),
-                        Text("Dilihat",
+                      ),
+                      SizedBox(
+                        width: Constant(context).width * 0.03,
+                      ),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: const [
+                          Text(
+                            "Rey Mysterio",
                             style: TextStyle(
                                 fontFamily: "Inter",
-                                fontSize: 12,
-                                fontWeight: FontWeight.w400,
-                                color: Colors.grey)),
-                      ],
-                    ),
-                    SizedBox(
-                      width: Constant(context).width * 0.35,
-                    ),
-                    Row(
-                      children: [Text("11:11")],
-                    )
-                  ],
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600),
+                          ),
+                          Text("Dilihat",
+                              style: TextStyle(
+                                  fontFamily: "Inter",
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w400,
+                                  color: Colors.grey)),
+                        ],
+                      ),
+                      SizedBox(
+                        width: Constant(context).width * 0.35,
+                      ),
+                      Row(
+                        children: [Text("11:11")],
+                      )
+                    ],
+                  ),
                 ),
               ),
               SizedBox(
