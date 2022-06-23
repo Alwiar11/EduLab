@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:edulab/contents.dart';
 import 'package:edulab/screens/list_pkl/listPkl.dart';
 import 'package:edulab/screens/list_sv/listSv.dart';
+import 'package:edulab/screens/profile_user/profile_user.dart';
 import 'package:edulab/shared/constant.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -290,12 +291,17 @@ class _HomePageScreenState extends State<HomePageScreen> {
                                                                         mainAxisAlignment:
                                                                             MainAxisAlignment.center,
                                                                         children: [
-                                                                          Text(
-                                                                            "Lihat",
-                                                                            style:
-                                                                                TextStyle(fontWeight: FontWeight.w500),
-                                                                            textAlign:
-                                                                                TextAlign.center,
+                                                                          InkWell(
+                                                                            onTap:
+                                                                                () {
+                                                                              Navigator.push(context, MaterialPageRoute(builder: (context) => ProfileUser(uid: e.id)));
+                                                                            },
+                                                                            child:
+                                                                                Text(
+                                                                              "Lihat",
+                                                                              style: TextStyle(fontWeight: FontWeight.w500),
+                                                                              textAlign: TextAlign.center,
+                                                                            ),
                                                                           ),
                                                                         ],
                                                                       ),

@@ -2,11 +2,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:edulab/contents.dart';
 import 'package:edulab/resources/models/user_model.dart';
 import 'package:edulab/screens/edit_profile/edit_profile.dart';
+import 'package:edulab/screens/profile/signout_function.dart';
 import 'package:edulab/shared/constant.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../login/login.dart';
 import 'card_profile.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -57,7 +60,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     InkWell(
-                      onTap: () {},
+                      onTap: () {
+                        SignOut(context).signout();
+                      },
                       child: Icon(
                         Icons.logout_outlined,
                         size: 30,
@@ -89,7 +94,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       : DecorationImage(
                                           image: AssetImage(
                                               "assets/images/default.png"),
-                                          fit: BoxFit.fill),
+                                          fit: BoxFit.cover),
                                   border: Border.all(
                                       width: 10, color: primaryColor)),
                             );

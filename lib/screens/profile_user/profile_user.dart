@@ -1,25 +1,25 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:edulab/screens/profile/profile_screen.dart';
-import 'package:edulab/screens/profile_pkl/profile_pkl_screen.dart';
-import 'package:edulab/screens/profile_sv/profile_sv_screen.dart';
+import 'package:edulab/screens/profile_user/profile_user_screen.dart';
+
 import 'package:flutter/material.dart';
 
-class ProfilePkl extends StatefulWidget {
+class ProfileUser extends StatefulWidget {
   final String uid;
-  const ProfilePkl({required this.uid, Key? key}) : super(key: key);
+  const ProfileUser({required this.uid, Key? key}) : super(key: key);
 
   @override
-  State<ProfilePkl> createState() => _ProfilePklState();
+  State<ProfileUser> createState() => _ProfileUserState();
 }
 
-class _ProfilePklState extends State<ProfilePkl> {
+class _ProfileUserState extends State<ProfileUser> {
   @override
   Widget build(BuildContext context) {
     FirebaseFirestore firestore = FirebaseFirestore.instance;
     CollectionReference users = firestore.collection("users");
     return Scaffold(
       backgroundColor: Color.fromARGB(255, 232, 232, 232),
-      body: ProfilePklScreen(
+      body: ProfileUserScreen(
         uid: widget.uid,
       ),
     );

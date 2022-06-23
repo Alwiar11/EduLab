@@ -85,7 +85,8 @@ class _AddDataScreenState extends State<AddDataScreen> {
                     'age': int.tryParse(controllerAge.text) ?? "",
                     'hobby': controllerHobby.text,
                     'isVerified': false,
-                    'profile': ""
+                    'profile': "",
+                    'role': "pkl"
                   });
                   Navigator.pushReplacement(
                       context, MaterialPageRoute(builder: (context) => Home()));

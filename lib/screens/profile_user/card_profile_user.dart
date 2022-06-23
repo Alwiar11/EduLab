@@ -1,8 +1,8 @@
 import 'package:edulab/contents.dart';
 import 'package:flutter/material.dart';
 
-class CardProfilePkl extends StatelessWidget {
-  const CardProfilePkl({
+class CardProfileUser extends StatelessWidget {
+  const CardProfileUser({
     Key? key,
     required this.height,
     required this.width,

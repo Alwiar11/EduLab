@@ -2,21 +2,22 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:edulab/contents.dart';
 import 'package:edulab/resources/models/user_model.dart';
 import 'package:edulab/screens/edit_profile/edit_profile.dart';
-import 'package:edulab/screens/profile_sv/card_profile_sv.dart';
+
+import 'package:edulab/screens/profile_user/card_profile_user.dart';
 import 'package:edulab/shared/constant.dart';
 
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class ProfileSvScreen extends StatefulWidget {
+class ProfileUserScreen extends StatefulWidget {
   final String uid;
-  const ProfileSvScreen({required this.uid, Key? key}) : super(key: key);
+  const ProfileUserScreen({required this.uid, Key? key}) : super(key: key);
 
   @override
-  State<ProfileSvScreen> createState() => _ProfileSvScreenState();
+  State<ProfileUserScreen> createState() => _ProfileUserScreenState();
 }
 
-class _ProfileSvScreenState extends State<ProfileSvScreen> {
+class _ProfileUserScreenState extends State<ProfileUserScreen> {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -59,17 +60,22 @@ class _ProfileSvScreenState extends State<ProfileSvScreen> {
                         builder: (_, snapshot) {
                           if (snapshot.hasData) {
                             return Container(
+                              // margin: EdgeInsets.only(bottom: 27),
                               height: Constant(context).height * 0.26,
                               width: Constant(context).width * 0.5,
                               decoration: BoxDecoration(
                                   shape: BoxShape.circle,
-                                  image: DecorationImage(
-                                      image: NetworkImage(
-                                        snapshot.data!.get("profile"),
-                                      ),
-                                      fit: BoxFit.cover),
                                   border: Border.all(
-                                      width: 10, color: primaryColor)),
+                                      width: 10, color: primaryColor),
+                                  image: snapshot.data!.get("profile") != ""
+                                      ? DecorationImage(
+                                          image: NetworkImage(
+                                              snapshot.data!.get("profile")),
+                                          fit: BoxFit.cover)
+                                      : DecorationImage(
+                                          image: AssetImage(
+                                              "assets/images/default.png"),
+                                          fit: BoxFit.cover)),
                             );
                           }
                           return CircularProgressIndicator(
@@ -112,27 +118,27 @@ class _ProfileSvScreenState extends State<ProfileSvScreen> {
                           SizedBox(
                             height: Constant(context).height * 0.02,
                           ),
-                          CardProfileSv(
+                          CardProfileUser(
                               height: Constant(context).height / 100,
                               width: Constant(context).width / 100,
                               title: 'Asal Sekolah',
                               desc: users.school),
-                          CardProfileSv(
+                          CardProfileUser(
                               height: Constant(context).height / 100,
                               width: Constant(context).width / 100,
                               title: 'Jurusan',
                               desc: users.vacation),
-                          CardProfileSv(
+                          CardProfileUser(
                               height: Constant(context).height / 100,
                               width: Constant(context).width / 100,
                               title: 'Alamat',
                               desc: users.address),
-                          CardProfileSv(
+                          CardProfileUser(
                               height: Constant(context).height / 100,
                               width: Constant(context).width / 100,
                               title: 'Umur',
                               desc: users.age.toString()),
-                          CardProfileSv(
+                          CardProfileUser(
                               height: Constant(context).height / 100,
                               width: Constant(context).width / 100,
                               title: 'Hobi',

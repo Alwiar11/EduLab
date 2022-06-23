@@ -82,13 +82,13 @@ class _ContactScreenState extends State<ContactScreen> {
                                   padding:
                                       const EdgeInsets.symmetric(vertical: 5),
                                   child: InkWell(
-                                    onTap: () {
+                                    onTap: () async {
                                       FirebaseFirestore.instance
                                           .collection("chats")
                                           .where('participants',
                                               arrayContains: uid)
                                           .get()
-                                          .then((doc) {
+                                          .then((doc) async {
                                         print(doc.docs.length);
                                         bool ada = false;
 
@@ -104,6 +104,8 @@ class _ContactScreenState extends State<ContactScreen> {
                                                 MaterialPageRoute(
                                                     builder: (context) =>
                                                         RoomChat(
+                                                          chatRef: doc.docs[i]
+                                                              .reference,
                                                           name: e.get('name'),
                                                           profile:
                                                               e.get('profile'),
@@ -113,9 +115,11 @@ class _ContactScreenState extends State<ContactScreen> {
                                           }
                                         }
                                         if (!ada) {
-                                          FirebaseFirestore.instance
-                                              .collection("chats")
-                                              .add({
+                                          DocumentReference<
+                                                  Map<String, dynamic>> docRef =
+                                              await FirebaseFirestore.instance
+                                                  .collection("chats")
+                                                  .add({
                                             'participants':
                                                 FieldValue.arrayUnion(
                                                     [uid, e.id])
@@ -126,25 +130,12 @@ class _ContactScreenState extends State<ContactScreen> {
                                                   builder: (context) =>
                                                       RoomChat(
                                                         name: e.get('name'),
+                                                        chatRef: docRef,
                                                         profile:
                                                             e.get('profile'),
                                                         uid: e.id,
                                                       )));
                                         }
-                                        // for (var i = 0; i < doc.size; i++) {
-                                        //   if (!doc.docs[i]
-                                        //       .data()['participants']
-                                        //       .toString()
-                                        //       .contains(e.id)) {
-                                        //     FirebaseFirestore.instance
-                                        //         .collection('chats')
-                                        //         .add({
-                                        //       'participants':
-                                        //           FieldValue.arrayUnion(
-                                        //               [uid, e.id])
-                                        //     });
-                                        //   }
-                                        // }
                                       });
                                     },
                                     child: CardContact(

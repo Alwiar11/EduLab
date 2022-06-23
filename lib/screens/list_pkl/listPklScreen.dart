@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:edulab/contents.dart';
-import 'package:edulab/screens/profile_pkl/profile_pkl.dart';
+import 'package:edulab/screens/profile_user/profile_user.dart';
 
 import 'package:edulab/shared/constant.dart';
 import 'package:flutter/material.dart';
@@ -140,7 +140,7 @@ class CardListPkl extends StatelessWidget {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => ProfilePkl(uid: uid)));
+                      builder: (context) => ProfileUser(uid: uid)));
             },
             child: Container(
               width: Constant(context).width * 0.3,

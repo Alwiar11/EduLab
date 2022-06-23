@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:edulab/contents.dart';
-import 'package:edulab/screens/profile_sv/profile_sv.dart';
+
+import 'package:edulab/screens/profile_user/profile_user.dart';
 
 import 'package:edulab/shared/constant.dart';
 import 'package:flutter/material.dart';
@@ -135,8 +136,10 @@ class CardListSv extends StatelessWidget {
           ),
           InkWell(
             onTap: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => ProfileSv(uid: uid)));
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => ProfileUser(uid: uid)));
             },
             child: Container(
               width: Constant(context).width * 0.3,
