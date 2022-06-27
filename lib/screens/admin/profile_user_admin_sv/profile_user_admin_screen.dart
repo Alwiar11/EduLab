@@ -1,25 +1,27 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:edulab/contents.dart';
 import 'package:edulab/resources/models/user_model.dart';
-import 'package:edulab/screens/edit_profile/edit_profile.dart';
 
 import 'package:edulab/screens/profile_user/card_profile_user.dart';
 import 'package:edulab/shared/constant.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
-class ProfileUserScreen extends StatefulWidget {
+import '../add_supervisor.dart';
+import '../add_supervisor_2.dart';
+
+class ProfileUserAdminSvScreen extends StatefulWidget {
   final String uid;
-  final String role;
-  const ProfileUserScreen({required this.uid, required this.role, Key? key})
+  const ProfileUserAdminSvScreen({required this.uid, Key? key})
       : super(key: key);
 
   @override
-  State<ProfileUserScreen> createState() => _ProfileUserScreenState();
+  State<ProfileUserAdminSvScreen> createState() =>
+      _ProfileUserAdminSvScreenState();
 }
 
-class _ProfileUserScreenState extends State<ProfileUserScreen> {
+class _ProfileUserAdminSvScreenState extends State<ProfileUserAdminSvScreen> {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -93,11 +95,11 @@ class _ProfileUserScreenState extends State<ProfileUserScreen> {
             ),
           ),
           widget.uid != null
-              ? FutureBuilder<DocumentSnapshot<Map<String, dynamic>>>(
-                  future: FirebaseFirestore.instance
+              ? StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
+                  stream: FirebaseFirestore.instance
                       .collection('users')
                       .doc(widget.uid)
-                      .get(),
+                      .snapshots(),
                   builder: (_, snapshot) {
                     if (snapshot.hasData) {
                       UserModel users = UserModel.fromData(snapshot.data!);
@@ -115,12 +117,21 @@ class _ProfileUserScreenState extends State<ProfileUserScreen> {
                           Text(users.phoneNumber,
                               style:
                                   TextStyle(color: Colors.grey, fontSize: 14)),
+                          Text(users.id,
+                              style:
+                                  TextStyle(color: Colors.grey, fontSize: 14)),
+
                           // Text("User Id : " + snapshot.data!.get("id"),
                           //     style: TextStyle(color: Colors.grey, fontSize: 14)),
+
                           SizedBox(
                             height: Constant(context).height * 0.02,
                           ),
-
+                          CardProfileUser(
+                              height: Constant(context).height / 100,
+                              width: Constant(context).width / 100,
+                              title: 'Role',
+                              desc: users.role),
                           CardProfileUser(
                               height: Constant(context).height / 100,
                               width: Constant(context).width / 100,
@@ -171,6 +182,163 @@ class _ProfileUserScreenState extends State<ProfileUserScreen> {
                     CircularProgressIndicator()
                   ],
                 )
+        ],
+      ),
+    );
+  }
+}
+
+class CardSv extends StatelessWidget {
+  final String name;
+  final String profile;
+  final String userId;
+  const CardSv({
+    required this.name,
+    required this.profile,
+    required this.userId,
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 10),
+      margin: EdgeInsets.only(left: 20, right: 20, top: 3),
+      width: double.infinity,
+      height: 60,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(15),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          Container(
+            margin: EdgeInsets.symmetric(horizontal: 10),
+            width: 40,
+            height: 40,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: primaryColor,
+              image: profile != ""
+                  ? DecorationImage(
+                      image: NetworkImage(profile), fit: BoxFit.cover)
+                  : DecorationImage(
+                      image: AssetImage("assets/images/default.png"),
+                      fit: BoxFit.cover),
+            ),
+          ),
+          Expanded(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Text(name),
+              ],
+            ),
+          ),
+          Row(
+            children: [
+              IconButton(
+                  onPressed: () {
+                    print(userId);
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => AddPkl(userId: userId)));
+                  },
+                  icon: Icon(
+                    Icons.edit,
+                    color: primaryColor,
+                  )),
+              IconButton(
+                  onPressed: () {
+                    FirebaseFirestore.instance
+                        .collection('users')
+                        .doc(userId)
+                        .update({'pkl1': ''});
+                  },
+                  icon: Icon(
+                    Icons.delete,
+                    color: Color.fromARGB(255, 243, 44, 30),
+                  ))
+            ],
+          )
+        ],
+      ),
+    );
+  }
+}
+
+class CardSv2 extends StatelessWidget {
+  final String name;
+  final String profile;
+  final String userId;
+  const CardSv2({
+    required this.name,
+    required this.profile,
+    required this.userId,
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 10),
+      margin: EdgeInsets.only(left: 20, right: 20, top: 3),
+      width: double.infinity,
+      height: 60,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(15),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          Container(
+            margin: EdgeInsets.symmetric(horizontal: 10),
+            width: 40,
+            height: 40,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: primaryColor,
+              image: profile != ""
+                  ? DecorationImage(
+                      image: NetworkImage(profile), fit: BoxFit.cover)
+                  : DecorationImage(
+                      image: AssetImage("assets/images/default.png"),
+                      fit: BoxFit.cover),
+            ),
+          ),
+          Expanded(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Text(name),
+              ],
+            ),
+          ),
+          Row(
+            children: [
+              IconButton(
+                  onPressed: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => AddPkl2(userId: userId)));
+                  },
+                  icon: Icon(
+                    Icons.edit,
+                    color: primaryColor,
+                  )),
+              IconButton(
+                  onPressed: () {
+                    FirebaseFirestore.instance
+                        .collection('users')
+                        .doc(userId)
+                        .update({'pkl2': ''});
+                  },
+                  icon: Icon(
+                    Icons.delete,
+                    color: Color.fromARGB(255, 243, 44, 30),
+                  ))
+            ],
+          )
         ],
       ),
     );

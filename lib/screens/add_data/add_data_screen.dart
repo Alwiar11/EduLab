@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:edulab/contents.dart';
 import 'package:edulab/screens/add_data/textfield.dart';
+import 'package:edulab/waiting.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -32,6 +33,7 @@ class _AddDataScreenState extends State<AddDataScreen> {
 
   @override
   Widget build(BuildContext context) {
+    print(uid);
     DocumentReference users =
         FirebaseFirestore.instance.collection('users').doc(uid);
     var controllerName = TextEditingController();
@@ -75,8 +77,9 @@ class _AddDataScreenState extends State<AddDataScreen> {
           TextFields(controller: controllerHobby, title: "Hobby"),
           InkWell(
             onTap: () {
-              users.get().then((doc) {
+              users.get().then((doc) async {
                 if (doc.exists) {
+                  DocumentReference<Object?> docRef = users;
                   users.update({
                     'name': controllerName.text,
                     'school': controllerSchool.text,
@@ -86,10 +89,24 @@ class _AddDataScreenState extends State<AddDataScreen> {
                     'hobby': controllerHobby.text,
                     'isVerified': false,
                     'profile': "",
-                    'role': "pkl"
+                    'role': "pkl",
+                    'supervisor': '',
+                    'startFromDate': Timestamp.now(),
+                    'endFromDate': Timestamp.now(),
+                    'job': 'pelajar',
                   });
-                  Navigator.pushReplacement(
-                      context, MaterialPageRoute(builder: (context) => Home()));
+                  if (doc.get('isVerified') == true) {
+                    Navigator.of(context).pushAndRemoveUntil(
+                        MaterialPageRoute(builder: (context) => Home()),
+                        (Route<dynamic> route) => false);
+                  } else {
+                    Navigator.of(context).pushAndRemoveUntil(
+                        MaterialPageRoute(
+                            builder: (context) => Waiting(
+                                  userId: uid ?? '',
+                                )),
+                        (Route<dynamic> route) => false);
+                  }
                 }
               });
             },

@@ -6,10 +6,12 @@ class CardContact extends StatelessWidget {
   final String profile;
   final String name;
   final String uid;
+  // final String lastChat;
   const CardContact({
     required this.name,
     required this.profile,
     required this.uid,
+    // required this.lastChat,
     Key? key,
   }) : super(key: key);
 
@@ -36,14 +38,10 @@ class CardContact extends StatelessWidget {
                           fit: BoxFit.cover)),
             ),
           ),
-          Row(
-            children: [
-              Text(
-                name,
-                style: TextStyle(fontSize: 16),
-              )
-            ],
-          )
+          Text(
+            name,
+            style: TextStyle(fontSize: 16),
+          ),
         ],
       ),
     );

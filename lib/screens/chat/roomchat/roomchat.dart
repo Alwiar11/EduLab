@@ -1,21 +1,26 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:edulab/contents.dart';
-import 'package:edulab/screens/chat/chat.dart';
+
 import 'package:edulab/screens/profile_user/profile_user.dart';
 
-import 'package:edulab/shared/constant.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class RoomChat extends StatefulWidget {
-  final DocumentReference<Map<String, dynamic>> chatRef;
+  final DocumentReference<Map<String, dynamic>>? chatRef;
   final String profile;
   final String name;
   final String uid;
+  final String from;
+  final String role;
+
   RoomChat(
       {required this.name,
       required this.uid,
       required this.profile,
-      required this.chatRef,
+      this.chatRef,
+      required this.from,
+      required this.role,
       Key? key})
       : super(key: key);
 
@@ -24,6 +29,12 @@ class RoomChat extends StatefulWidget {
 }
 
 class _RoomChatState extends State<RoomChat> {
+  String formattedDate(timeStamp) {
+    var dateFromTimeStamp =
+        DateTime.fromMillisecondsSinceEpoch(timeStamp.seconds * 1000);
+    return DateFormat(' hh:mm ').format(dateFromTimeStamp);
+  }
+
   TextEditingController messageController = TextEditingController();
 
   @override
@@ -42,7 +53,13 @@ class _RoomChatState extends State<RoomChat> {
         automaticallyImplyLeading: false,
         leading: IconButton(
             onPressed: () {
-              Navigator.pop(context);
+              if (widget.from == 'contact') {
+                Navigator.of(context)
+                  ..pop()
+                  ..pop();
+              } else if (widget.from == 'chat') {
+                Navigator.of(context).pop();
+              }
             },
             icon: Icon(
               Icons.arrow_back,
@@ -78,7 +95,10 @@ class _RoomChatState extends State<RoomChat> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => ProfileUser(uid: widget.uid)));
+                          builder: (context) => ProfileUser(
+                                uid: widget.uid,
+                                role: widget.role,
+                              )));
                 },
                 icon: Icon(
                   Icons.more_vert_outlined,
@@ -90,7 +110,7 @@ class _RoomChatState extends State<RoomChat> {
       ),
       body: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
           stream: widget.chatRef
-              .collection("messages")
+              ?.collection("messages")
               .orderBy('sendAt', descending: true)
               .snapshots(),
           builder: (context, snapshot) {
@@ -106,27 +126,38 @@ class _RoomChatState extends State<RoomChat> {
                 padding: EdgeInsets.only(top: 10, bottom: 10),
                 itemBuilder: (context, index) {
                   return Container(
-                    padding: EdgeInsets.only(
-                        left: 14, right: 14, top: 10, bottom: 10),
+                    padding:
+                        EdgeInsets.only(left: 14, right: 14, top: 6, bottom: 6),
                     child: Align(
                       alignment: (snapshot.data!.docs[index]['receiverId'] ==
                               widget.uid
                           ? Alignment.topRight
                           : Alignment.topLeft),
                       child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20),
-                          color: (snapshot.data!.docs[index]['receiverId'] ==
-                                  widget.uid
-                              ? secondaryColor
-                              : Color.fromARGB(255, 255, 255, 255)),
-                        ),
-                        padding: EdgeInsets.all(16),
-                        child: Text(
-                          snapshot.data!.docs[index]['message'],
-                          style: TextStyle(fontSize: 15),
-                        ),
-                      ),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20),
+                            color: (snapshot.data!.docs[index]['receiverId'] ==
+                                    widget.uid
+                                ? secondaryColor
+                                : Color.fromARGB(255, 255, 255, 255)),
+                          ),
+                          padding: EdgeInsets.all(16),
+                          child: Text.rich(TextSpan(
+                              text: snapshot.data!.docs[index]['message']
+                                  .toString(),
+                              style: TextStyle(
+                                  fontSize: 17, fontWeight: FontWeight.w400),
+                              children: <TextSpan>[
+                                TextSpan(
+                                    text: '  ' +
+                                        formattedDate(snapshot.data!.docs[index]
+                                            ['sendAt']),
+                                    style: TextStyle(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w400,
+                                        color:
+                                            Color.fromARGB(255, 111, 111, 111)))
+                              ]))),
                     ),
                   );
                 },
@@ -173,13 +204,16 @@ class _RoomChatState extends State<RoomChat> {
               width: 15,
             ),
             FloatingActionButton(
+              mini: true,
               onPressed: () {
-                widget.chatRef.collection('messages').add({
+                widget.chatRef?.collection('messages').add({
                   'message': messageController.text,
                   'receiverId': widget.uid,
-                  'sendAt': Timestamp.now()
+                  'sendAt': Timestamp.now(),
+                  'receivername': widget.name,
                 });
                 messageController.clear();
+                widget.chatRef?.update({'lastChat': Timestamp.now()});
               },
               child: Icon(
                 Icons.send,

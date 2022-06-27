@@ -1,4 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:edulab/home_admin.dart';
+import 'package:edulab/screens/login/login_shared.dart';
+import 'package:edulab/waiting.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -69,13 +72,27 @@ class VerifyFunction {
 
                   prefs.setBool('isVerified', doc.get("isVerified"));
                   // String? isVerified = prefs.getString('isVerified');
-                  if (doc.get("role") == 'pkl') {
-                    Navigator.of(context).pushAndRemoveUntil(
-                        MaterialPageRoute(builder: (context) => Home()),
-                        (Route<dynamic> route) => false);
+                  prefs.setBool('isLoggedIn', true);
+
+                  if (doc.get("isVerified") == true) {
+                    if (doc.get("role") == 'pkl') {
+                      Navigator.of(context).pushAndRemoveUntil(
+                          MaterialPageRoute(builder: (context) => Home()),
+                          (Route<dynamic> route) => false);
+                    } else if (doc.get('role') == 'supervisor') {
+                      Navigator.of(context).pushAndRemoveUntil(
+                          MaterialPageRoute(builder: (context) => Home()),
+                          (Route<dynamic> route) => false);
+                    } else
+                      Navigator.of(context).pushAndRemoveUntil(
+                          MaterialPageRoute(builder: (context) => HomeAdmin()),
+                          (Route<dynamic> route) => false);
                   } else {
                     Navigator.of(context).pushAndRemoveUntil(
-                        MaterialPageRoute(builder: (context) => Home()),
+                        MaterialPageRoute(
+                            builder: (context) => Waiting(
+                                  userId: userCredential.user!.uid,
+                                )),
                         (Route<dynamic> route) => false);
                   }
                 } else {
@@ -114,5 +131,6 @@ class VerifyFunction {
     PhoneAuthCredential phoneAuthCredential = PhoneAuthProvider.credential(
         verificationId: verificationid, smsCode: otpController.text);
     signInWithPhoneAuthCredentail(phoneAuthCredential);
+    phonenumbercontroller.clear();
   }
 }

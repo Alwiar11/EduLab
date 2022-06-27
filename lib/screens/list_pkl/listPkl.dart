@@ -23,7 +23,7 @@ class _ListPklState extends State<ListPkl> {
         elevation: 0,
         backgroundColor: Color.fromARGB(255, 232, 232, 232),
         title: Text(
-          "List Supervisor",
+          "List PKL",
           style: TextStyle(
               color: Colors.black,
               fontSize: 20,

@@ -36,6 +36,7 @@ class _VerifyScreenState extends State<VerifyScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               FloatingActionButton(
+                heroTag: 'btnnext',
                 onPressed: () {
                   Navigator.pop(context);
                 },
@@ -43,6 +44,7 @@ class _VerifyScreenState extends State<VerifyScreen> {
                 child: const Icon(Icons.keyboard_arrow_left),
               ),
               FloatingActionButton(
+                heroTag: 'btnbck',
                 onPressed: () {
                   VerifyFunction(context, widget.verificationid,
                           widget.phoneNumber, otpController)

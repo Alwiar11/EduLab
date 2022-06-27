@@ -1,8 +1,11 @@
+import 'dart:async';
+
 import 'package:edulab/contents.dart';
 import 'package:edulab/screens/intro/intro.dart';
 import 'package:edulab/screens/login/login.dart';
 import 'package:edulab/shared/constant.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class IntroScreen extends StatefulWidget {
   const IntroScreen({Key? key}) : super(key: key);
@@ -12,6 +15,13 @@ class IntroScreen extends StatefulWidget {
 }
 
 class _IntroScreenState extends State<IntroScreen> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    startTimer();
+  }
+
   int _currentPage = 0;
   _onChanged(int index) {
     setState(() {
@@ -161,5 +171,22 @@ class _IntroScreenState extends State<IntroScreen> {
         ],
       ),
     );
+  }
+
+  void startTimer() {
+    Timer(Duration(seconds: 3), () {
+      navigateUser(); //It will redirect  after 3 seconds
+    });
+  }
+
+  void navigateUser() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var status = prefs.getBool('isLoggedIn') ?? false;
+    print(status);
+    if (status) {
+      Navigator.of(context).pushReplacementNamed('/home');
+    } else {
+      Navigator.of(context).pushReplacementNamed('/intro');
+    }
   }
 }

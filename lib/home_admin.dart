@@ -1,7 +1,10 @@
 import 'package:edulab/contents.dart';
+import 'package:edulab/screens/admin/home%20admin/home_page_admin.dart';
+import 'package:edulab/screens/admin/home%20admin/home_page_admin_pkl.dart';
+import 'package:edulab/screens/admin/home%20admin/profile_admin.dart';
 import 'package:edulab/screens/chat/contact/contact.dart';
 import 'package:edulab/screens/class/class.dart';
-import 'package:edulab/screens/class/class_sv/class_sv.dart';
+
 import 'package:edulab/screens/home/home_page.dart';
 
 import 'package:edulab/screens/chat/chat.dart';
@@ -9,16 +12,10 @@ import 'package:edulab/screens/profile/profile.dart';
 
 import 'package:flutter/material.dart';
 import 'package:bottom_bar/bottom_bar.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
-class Home extends StatefulWidget {
-  const Home({Key? key}) : super(key: key);
+class HomeAdmin extends StatelessWidget {
+  const HomeAdmin({Key? key}) : super(key: key);
 
-  @override
-  State<Home> createState() => _HomeState();
-}
-
-class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -27,36 +24,21 @@ class _HomeState extends State<Home> {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const HomeScreen(),
+      home: const HomeAdminScreen(),
     );
   }
 }
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+class HomeAdminScreen extends StatefulWidget {
+  const HomeAdminScreen({Key? key}) : super(key: key);
 
   @override
-  _HomeScreenState createState() => _HomeScreenState();
+  _HomeAdminScreenState createState() => _HomeAdminScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeAdminScreenState extends State<HomeAdminScreen> {
   int _currentPage = 0;
   final _pageController = PageController();
-
-  String? role;
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    getUid();
-  }
-
-  getUid() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    role = prefs.getString('role');
-    setState(() {});
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -64,10 +46,9 @@ class _HomeScreenState extends State<HomeScreen> {
       body: PageView(
         controller: _pageController,
         children: [
-          const HomePage(),
-          role != 'supervisor' ? Class() : ClassSv(),
-          Chat(),
-          Profile()
+          HomePageAdmin(),
+          HomePageAdminPkl(),
+          ProfileAdmin(),
         ],
         onPageChanged: (index) {
           setState(() => _currentPage = index);
@@ -82,28 +63,21 @@ class _HomeScreenState extends State<HomeScreen> {
         },
         items: const <BottomBarItem>[
           BottomBarItem(
-            icon: Icon(Icons.home_outlined),
-            title: Text('Beranda'),
+            icon: Icon(Icons.people_alt_sharp),
+            title: Text('Supervisor'),
             activeColor: primaryColor,
             activeIconColor: primaryColor,
             activeTitleColor: primaryColor,
           ),
           BottomBarItem(
-            icon: Icon(Icons.class_outlined),
-            title: Text('Kelas'),
+            icon: Icon(Icons.people_alt_sharp),
+            title: Text('PKL'),
             activeColor: primaryColor,
             activeIconColor: primaryColor,
             activeTitleColor: primaryColor,
           ),
           BottomBarItem(
-            icon: Icon(Icons.chat_outlined),
-            title: Text('Pesan'),
-            activeColor: primaryColor,
-            activeIconColor: primaryColor,
-            activeTitleColor: primaryColor,
-          ),
-          BottomBarItem(
-            icon: Icon(Icons.person_outline),
+            icon: Icon(Icons.person_pin_circle_outlined),
             title: Text('Akun Saya'),
             activeColor: primaryColor,
             activeIconColor: primaryColor,

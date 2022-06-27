@@ -15,10 +15,6 @@ class ListPklScreen extends StatefulWidget {
 class _ListPklScreenState extends State<ListPklScreen> {
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
-    final height = screenHeight / 100;
-    final width = screenWidth / 100;
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: <Widget>[
@@ -27,7 +23,7 @@ class _ListPklScreenState extends State<ListPklScreen> {
           children: [
             Container(
               height: 50,
-              width: width * 90,
+              width: Constant(context).width * 0.9,
               decoration: BoxDecoration(
                 color: Colors.white.withOpacity(1),
                 borderRadius: BorderRadius.circular(15),
@@ -67,18 +63,21 @@ class _ListPklScreenState extends State<ListPklScreen> {
               if (snapshot.hasData) {
                 return Expanded(
                   child: GridView(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 20, vertical: 30),
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                         mainAxisSpacing: 20,
                         crossAxisSpacing: 20,
-                        childAspectRatio: 0.75,
+                        childAspectRatio: 0.700,
                         crossAxisCount: 2),
                     children: [
                       ...snapshot.data!.docs.map((e) => CardListPkl(
-                          name: e.get("name"),
-                          profile: e.get("profile"),
-                          school: e.get("school"),
-                          uid: e.id))
+                            name: e.get("name"),
+                            profile: e.get("profile"),
+                            school: e.get("school"),
+                            uid: e.id,
+                            role: e.get('role'),
+                          ))
                     ],
                   ),
                 );
@@ -96,20 +95,22 @@ class CardListPkl extends StatelessWidget {
   final String name;
   final String school;
   final String uid;
+  final String role;
 
   const CardListPkl({
     required this.name,
     required this.profile,
     required this.school,
     required this.uid,
+    required this.role,
     Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: Constant(context).width * 0.4,
-      height: Constant(context).height * 0.45,
+      width: 100,
+      height: 400,
       decoration: BoxDecoration(
           color: Colors.white, borderRadius: BorderRadius.circular(15)),
       child: Column(
@@ -140,7 +141,10 @@ class CardListPkl extends StatelessWidget {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => ProfileUser(uid: uid)));
+                      builder: (context) => ProfileUser(
+                            uid: uid,
+                            role: role,
+                          )));
             },
             child: Container(
               width: Constant(context).width * 0.3,

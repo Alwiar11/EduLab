@@ -1,155 +1,198 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:edulab/contents.dart';
+import 'package:edulab/screens/chat/card_chat.dart';
 
 import 'package:edulab/screens/chat/contact/contact.dart';
-import 'package:edulab/shared/constant.dart';
+import 'package:edulab/screens/chat/roomchat/roomchat.dart';
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Chat extends StatefulWidget {
-  const Chat({Key? key}) : super(key: key);
+  final String? receiver;
+  const Chat({this.receiver, Key? key}) : super(key: key);
 
   @override
   State<Chat> createState() => _ChatState();
 }
 
 class _ChatState extends State<Chat> {
+  String formattedDate(timeStamp) {
+    var dateFromTimeStamp =
+        DateTime.fromMillisecondsSinceEpoch(timeStamp.seconds * 1000);
+    return DateFormat(' hh:mm ').format(dateFromTimeStamp);
+  }
+
+  String from = 'chat';
+  String? uid;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getUid();
+  }
+
+  getUid() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    uid = prefs.getString('uid');
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 232, 232, 232),
-      appBar: AppBar(
-        elevation: 0,
-        shadowColor: Colors.white,
-        backgroundColor: Colors.white,
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Text(
-              "Pesan",
-              style: TextStyle(color: Colors.black),
-            ),
-          ],
-        ),
-        centerTitle: true,
-        actions: [
-          IconButton(
-              onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: ((context) => Contact())));
-              },
-              icon: Icon(
-                Icons.add,
-                color: Colors.black,
-              ))
-        ],
-      ),
-      body: SingleChildScrollView(
-        scrollDirection: Axis.vertical,
-        child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 15),
-          child: Column(
+        backgroundColor: Color.fromARGB(255, 232, 232, 232),
+        appBar: AppBar(
+          elevation: 0,
+          shadowColor: Colors.white,
+          backgroundColor: Colors.white,
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              SizedBox(
-                height: 15,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    padding: EdgeInsets.symmetric(vertical: 5),
-                    width: Constant(context).width * 0.9,
-                    height: Constant(context).height * 0.05,
-                    decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(1),
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                    child: const Padding(
-                      padding: EdgeInsets.only(left: 2),
-                      child: TextField(
-                        decoration: InputDecoration(
-                          hintStyle: TextStyle(fontSize: 10),
-                          hintText: 'Cari...',
-                          border: InputBorder.none,
-                          prefixIcon: Icon(
-                            Icons.search,
-                            size: 20,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: Constant(context).height * 0.03,
-              ),
-              InkWell(
-                onTap: () {
-                  // Navigator.push(context,
-                  //     MaterialPageRoute(builder: (context) => RoomChat()));
-                },
-                child: Container(
-                  padding: const EdgeInsets.symmetric(vertical: 10),
-                  width: Constant(context).width,
-                  // height: height * 15,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(15),
-                      color: Colors.white),
-                  child: Row(
-                    children: [
-                      SizedBox(
-                        width: Constant(context).width * 0.03,
-                      ),
-                      Container(
-                        height: Constant(context).height * 0.1,
-                        width: Constant(context).width * 0.15,
-                        decoration: const BoxDecoration(
-                          color: primaryColor,
-                          shape: BoxShape.circle,
-                        ),
-                      ),
-                      SizedBox(
-                        width: Constant(context).width * 0.03,
-                      ),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: const [
-                          Text(
-                            "Rey Mysterio",
-                            style: TextStyle(
-                                fontFamily: "Inter",
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600),
-                          ),
-                          Text("Dilihat",
-                              style: TextStyle(
-                                  fontFamily: "Inter",
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w400,
-                                  color: Colors.grey)),
-                        ],
-                      ),
-                      SizedBox(
-                        width: Constant(context).width * 0.35,
-                      ),
-                      Row(
-                        children: [Text("11:11")],
-                      )
-                    ],
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: Constant(context).height * 0.015,
-              ),
-              SizedBox(
-                height: Constant(context).height * 0.015,
+              Text(
+                "Pesan",
+                style: TextStyle(color: Colors.black),
               ),
             ],
           ),
+          centerTitle: true,
+          actions: [
+            IconButton(
+                onPressed: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: ((context) => Contact())));
+                },
+                icon: Icon(
+                  Icons.add,
+                  color: Colors.black,
+                ))
+          ],
         ),
-      ),
-    );
+        body: StreamBuilder<QuerySnapshot>(
+          stream: FirebaseFirestore.instance
+              .collection('chats')
+              .where('participants', arrayContains: uid)
+              .orderBy('lastChat', descending: true)
+              .snapshots(),
+          builder: (_, snapshots) {
+            if (snapshots.hasData) {
+              return ListView.builder(
+                itemCount: snapshots.data!.size,
+                itemBuilder: (_, index) {
+                  String friendId =
+                      snapshots.data!.docs[index].get('participants')[0] == uid
+                          ? snapshots.data!.docs[index].get('participants')[1]
+                          : snapshots.data!.docs[index].get('participants')[0];
+                  return StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
+                      stream: FirebaseFirestore.instance
+                          .collection('users')
+                          .doc(friendId)
+                          .snapshots(),
+                      builder: (context, friendData) {
+                        if (!friendData.hasData) {
+                          return Container();
+                        }
+                        return StreamBuilder<
+                                QuerySnapshot<Map<String, dynamic>>>(
+                            stream: snapshots.data!.docs[index].reference
+                                .collection('messages')
+                                .orderBy('sendAt', descending: false)
+                                .snapshots(),
+                            builder: (_, chatData) {
+                              if (chatData.hasData) {
+                                if (chatData.data!.docs.length > 0) {
+                                  return Column(
+                                    children: [
+                                      InkWell(
+                                        onTap: () async {
+                                          FirebaseFirestore.instance
+                                              .collection("chats")
+                                              .where('participants',
+                                                  arrayContains: uid)
+                                              .get()
+                                              .then((doc) {
+                                            print(doc.docs.length);
+
+                                            for (var i = 0; i < doc.size; i++) {
+                                              if (doc.docs[i]
+                                                  .data()['participants']
+                                                  .toString()
+                                                  .contains(friendId)) {
+                                                Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            RoomChat(
+                                                              chatRef: doc
+                                                                  .docs[i]
+                                                                  .reference,
+                                                              name: friendData
+                                                                  .data!
+                                                                  .get('name'),
+                                                              profile: friendData
+                                                                  .data!
+                                                                  .get(
+                                                                      'profile'),
+                                                              uid: friendId,
+                                                              from: from,
+                                                              role: friendData
+                                                                  .data!
+                                                                  .get('role'),
+                                                            )));
+
+                                                break;
+                                              }
+                                            }
+                                          });
+                                        },
+                                        child: CardChat(
+                                          name: friendData.data!.get('name'),
+                                          profile:
+                                              friendData.data!.get('profile'),
+                                          lastChat: chatData.data!.docs.last
+                                              .get('message'),
+                                          lastTime: formattedDate(chatData
+                                              .data!.docs.last
+                                              .get('sendAt')),
+                                        ),
+                                      ),
+                                    ],
+                                  );
+                                } else {
+                                  return Container();
+                                }
+                              }
+                              return Center(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    CircularProgressIndicator(
+                                      color: primaryColor,
+                                      strokeWidth: 10,
+                                    ),
+                                  ],
+                                ),
+                              );
+                            });
+                      });
+                },
+              );
+            }
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  CircularProgressIndicator(
+                    color: primaryColor,
+                    strokeWidth: 10,
+                  ),
+                ],
+              ),
+            );
+          },
+        ));
   }
 }

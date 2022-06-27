@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import 'package:edulab/contents.dart';
 import 'package:edulab/screens/chat/roomchat/roomchat.dart';
 import 'package:edulab/shared/constant.dart';
 import 'package:flutter/material.dart';
@@ -17,10 +16,10 @@ class ContactScreen extends StatefulWidget {
 
 class _ContactScreenState extends State<ContactScreen> {
   String? uid;
+  String from = 'contact';
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     getUid();
   }
@@ -110,6 +109,8 @@ class _ContactScreenState extends State<ContactScreen> {
                                                           profile:
                                                               e.get('profile'),
                                                           uid: e.id,
+                                                          from: from,
+                                                          role: e.get('role'),
                                                         )));
                                             break;
                                           }
@@ -120,9 +121,14 @@ class _ContactScreenState extends State<ContactScreen> {
                                               await FirebaseFirestore.instance
                                                   .collection("chats")
                                                   .add({
+                                            'createdAt': Timestamp.now(),
+                                            'isDeleted': {
+                                              uid: false,
+                                              e.id: false,
+                                            },
                                             'participants':
                                                 FieldValue.arrayUnion(
-                                                    [uid, e.id])
+                                                    [uid, e.id]),
                                           });
                                           Navigator.push(
                                               context,
@@ -134,6 +140,8 @@ class _ContactScreenState extends State<ContactScreen> {
                                                         profile:
                                                             e.get('profile'),
                                                         uid: e.id,
+                                                        from: from,
+                                                        role: e.get('role'),
                                                       )));
                                         }
                                       });

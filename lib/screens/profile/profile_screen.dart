@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../login/login.dart';
+import '../profile_user/card_profile_user.dart';
 import 'card_profile.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -61,7 +62,41 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   children: [
                     InkWell(
                       onTap: () {
-                        SignOut(context).signout();
+                        showDialog(
+                            context: context,
+                            builder: (BuildContext context) => AlertDialog(
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20)),
+                                  title: Text(
+                                    'Peringatan!',
+                                    style: TextStyle(color: Colors.amber),
+                                  ),
+                                  content: Text("Apakah Anda Yakin?"),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () =>
+                                          Navigator.pop(context, 'Cancel'),
+                                      child: const Text(
+                                        'Kembali',
+                                        style: TextStyle(color: primaryColor),
+                                      ),
+                                    ),
+                                    TextButton(
+                                      onPressed: () {
+                                        SignOut(context).signout();
+                                        Navigator.of(context)
+                                            .pushAndRemoveUntil(
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        LoginPage()),
+                                                (route) => false);
+                                      },
+                                      child: const Text('OK',
+                                          style:
+                                              TextStyle(color: primaryColor)),
+                                    ),
+                                  ],
+                                ));
                       },
                       child: Icon(
                         Icons.logout_outlined,
@@ -177,6 +212,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           SizedBox(
                             height: Constant(context).height * 0.02,
                           ),
+
                           CardProfile(
                               height: Constant(context).height / 100,
                               width: Constant(context).width / 100,

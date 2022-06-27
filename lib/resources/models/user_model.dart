@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class UserModel {
   final String name;
+  final String id;
   final String school;
   final String address;
   final String hobby;
@@ -18,6 +19,7 @@ class UserModel {
     required this.address,
     required this.hobby,
     required this.vacation,
+    required this.id,
     required this.age,
     required this.role,
     required this.phoneNumber,
@@ -27,16 +29,17 @@ class UserModel {
 
   factory UserModel.fromData(DocumentSnapshot doc) {
     return UserModel(
-      name: doc.get('name'),
-      school: doc.get('school'),
-      address: doc.get('address'),
-      hobby: doc.get('hobby'),
-      vacation: doc.get('vacation'),
-      age: doc.get('age'),
-      role: doc.get('role'),
-      phoneNumber: doc.get('phoneNumber'),
-      profile: doc.get('profile'),
-      isVerified: doc.get('isVerified'),
+      name: doc.get('name') ?? "",
+      school: doc.get('school') ?? "",
+      address: doc.get('address') ?? "",
+      hobby: doc.get('hobby') ?? "",
+      vacation: doc.get('vacation') ?? '',
+      id: doc.id,
+      age: doc.get('age') ?? 0,
+      role: doc.get('role') ?? '',
+      phoneNumber: doc.get('phoneNumber') ?? '',
+      profile: doc.get('profile') ?? '',
+      isVerified: doc.get('isVerified') ?? false,
     );
   }
 }

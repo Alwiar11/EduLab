@@ -12,7 +12,9 @@ class Contact extends StatelessWidget {
         backgroundColor: Color.fromARGB(255, 232, 232, 232),
         appBar: AppBar(
           backgroundColor: primaryColor,
-          title: Text("Kontak"),
+          title: Text(
+            "Kontak",
+          ),
         ),
         body: ContactScreen());
   }

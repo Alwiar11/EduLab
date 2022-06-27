@@ -13,6 +13,9 @@ class Verify extends StatefulWidget {
 }
 
 class _VerifyState extends State<Verify> {
+  static const maxSeconds = 60;
+  int seconds = maxSeconds;
+
   String currentText = "";
   @override
   Widget build(BuildContext context) {
@@ -66,6 +69,7 @@ class _VerifyState extends State<Verify> {
             ),
             Form(
                 child: PinCodeTextField(
+              keyboardType: TextInputType.number,
               controller: widget.otpController,
               appContext: context,
               length: 6,
@@ -89,11 +93,28 @@ class _VerifyState extends State<Verify> {
                     size: 25,
                   ),
                   SizedBox(width: Constant(context).width * 0.01),
-                  const Text(
-                    "Kode OTP sudah dikirim, anda dapat mengirim \nulang kode dalam 1:00",
-                    style: TextStyle(fontSize: 13, fontFamily: "Inter"),
-                    textAlign: TextAlign.start,
-                  ),
+                  TweenAnimationBuilder<Duration>(
+                      duration: Duration(minutes: 1),
+                      tween: Tween(
+                          begin: Duration(minutes: 1), end: Duration.zero),
+                      onEnd: () {
+                        print('Timer ended');
+                      },
+                      builder: (BuildContext context, Duration value,
+                          Widget? child) {
+                        final minutes = value.inMinutes;
+                        final seconds = value.inSeconds % 60;
+                        return Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 5),
+                            child: Text(
+                                'Anda dapat mengirim ulang kode OTP dalam ' +
+                                    '$minutes:$seconds',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.normal,
+                                    fontSize: 14)));
+                      }),
                 ],
               ),
             ),

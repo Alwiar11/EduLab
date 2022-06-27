@@ -40,6 +40,5 @@ class OtpFunction {
           );
         },
         codeAutoRetrievalTimeout: (String verificationid) {});
-    phonenumbercontroller.clear();
   }
 }

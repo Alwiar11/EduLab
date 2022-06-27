@@ -9,17 +9,19 @@ import 'package:edulab/shared/constant.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class ProfileUserScreen extends StatefulWidget {
+import '../profile_user_admin_sv/profile_user_admin_screen.dart';
+
+class ProfileUserAdminPklScreen extends StatefulWidget {
   final String uid;
-  final String role;
-  const ProfileUserScreen({required this.uid, required this.role, Key? key})
+  const ProfileUserAdminPklScreen({required this.uid, Key? key})
       : super(key: key);
 
   @override
-  State<ProfileUserScreen> createState() => _ProfileUserScreenState();
+  State<ProfileUserAdminPklScreen> createState() =>
+      _ProfileUserAdminPklScreenState();
 }
 
-class _ProfileUserScreenState extends State<ProfileUserScreen> {
+class _ProfileUserAdminPklScreenState extends State<ProfileUserAdminPklScreen> {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -93,11 +95,11 @@ class _ProfileUserScreenState extends State<ProfileUserScreen> {
             ),
           ),
           widget.uid != null
-              ? FutureBuilder<DocumentSnapshot<Map<String, dynamic>>>(
-                  future: FirebaseFirestore.instance
+              ? StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
+                  stream: FirebaseFirestore.instance
                       .collection('users')
                       .doc(widget.uid)
-                      .get(),
+                      .snapshots(),
                   builder: (_, snapshot) {
                     if (snapshot.hasData) {
                       UserModel users = UserModel.fromData(snapshot.data!);
@@ -115,12 +117,20 @@ class _ProfileUserScreenState extends State<ProfileUserScreen> {
                           Text(users.phoneNumber,
                               style:
                                   TextStyle(color: Colors.grey, fontSize: 14)),
+                          Text(users.id,
+                              style:
+                                  TextStyle(color: Colors.grey, fontSize: 14)),
+
                           // Text("User Id : " + snapshot.data!.get("id"),
                           //     style: TextStyle(color: Colors.grey, fontSize: 14)),
                           SizedBox(
                             height: Constant(context).height * 0.02,
                           ),
-
+                          CardProfileUser(
+                              height: Constant(context).height / 100,
+                              width: Constant(context).width / 100,
+                              title: 'Role',
+                              desc: users.role),
                           CardProfileUser(
                               height: Constant(context).height / 100,
                               width: Constant(context).width / 100,
@@ -171,6 +181,55 @@ class _ProfileUserScreenState extends State<ProfileUserScreen> {
                     CircularProgressIndicator()
                   ],
                 )
+        ],
+      ),
+    );
+  }
+}
+
+class CardPkl extends StatelessWidget {
+  final String name;
+  final String profile;
+  final String userId;
+  const CardPkl({
+    required this.name,
+    required this.profile,
+    required this.userId,
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 10),
+      margin: EdgeInsets.only(left: 20, right: 20, top: 3),
+      width: double.infinity,
+      height: 60,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(15),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          Container(
+            margin: EdgeInsets.symmetric(horizontal: 10),
+            width: 40,
+            height: 40,
+            decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: primaryColor,
+                image: DecorationImage(
+                    image: NetworkImage(profile), fit: BoxFit.cover)),
+          ),
+          Expanded(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Text(name),
+              ],
+            ),
+          ),
         ],
       ),
     );

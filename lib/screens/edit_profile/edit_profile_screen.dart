@@ -79,21 +79,50 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           ),
           ElevatedButton(
               style: ElevatedButton.styleFrom(primary: primaryColor),
-              onPressed: () {
-                users.get().then((doc) {
-                  if (doc.exists) {
-                    users.update({
-                      'name': controllerName.text,
-                      'school': controllerSchool.text,
-                      'vacation': controllerVacation.text,
-                      'address': controllerAddress.text,
-                      'age': int.tryParse(controllerAge.text) ?? "",
-                      'hobby': controllerHobby.text,
-                      'isVerified': false
-                    });
-                    Navigator.pop(context, true);
-                  }
-                });
+              onPressed: () async {
+                //
+                showDialog(
+                    context: context,
+                    builder: (BuildContext _) => AlertDialog(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20)),
+                          title: Text(
+                            'Peringatan!',
+                            style: TextStyle(color: Colors.amber),
+                          ),
+                          content: Text("Apakah Anda Yakin?"),
+                          actions: [
+                            TextButton(
+                              onPressed: () => Navigator.pop(_, 'Cancel'),
+                              child: const Text(
+                                'Kembali',
+                                style: TextStyle(color: primaryColor),
+                              ),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                users.get().then((doc) {
+                                  if (doc.exists) {
+                                    users.update({
+                                      'name': controllerName.text,
+                                      'school': controllerSchool.text,
+                                      'vacation': controllerVacation.text,
+                                      'address': controllerAddress.text,
+                                      'age': int.tryParse(controllerAge.text) ??
+                                          "",
+                                      'hobby': controllerHobby.text,
+                                      'isVerified': false
+                                    });
+                                    Navigator.of(_).pop();
+                                  }
+                                  Navigator.of(context).pop(true);
+                                });
+                              },
+                              child: const Text('OK',
+                                  style: TextStyle(color: primaryColor)),
+                            ),
+                          ],
+                        ));
               },
               child: Text("Simpan"))
         ],

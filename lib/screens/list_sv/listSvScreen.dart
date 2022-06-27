@@ -17,10 +17,6 @@ class ListSvScreen extends StatefulWidget {
 class _ListSvScreenState extends State<ListSvScreen> {
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
-    final height = screenHeight / 100;
-    final width = screenWidth / 100;
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: <Widget>[
@@ -29,7 +25,7 @@ class _ListSvScreenState extends State<ListSvScreen> {
           children: [
             Container(
               height: 50,
-              width: width * 90,
+              width: Constant(context).width * 0.9,
               decoration: BoxDecoration(
                 color: Colors.white.withOpacity(1),
                 borderRadius: BorderRadius.circular(15),
@@ -63,24 +59,26 @@ class _ListSvScreenState extends State<ListSvScreen> {
         StreamBuilder<QuerySnapshot>(
             stream: FirebaseFirestore.instance
                 .collection('users')
-                .where("role", isEqualTo: "Supervisor")
+                .where("role", isEqualTo: "supervisor")
                 .snapshots(),
             builder: (_, snapshot) {
               if (snapshot.hasData) {
                 return Expanded(
                   child: GridView(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 20, vertical: 30),
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                         mainAxisSpacing: 20,
                         crossAxisSpacing: 20,
-                        childAspectRatio: 0.75,
+                        childAspectRatio: 0.700,
                         crossAxisCount: 2),
                     children: [
                       ...snapshot.data!.docs.map((e) => CardListSv(
                             name: e.get("name"),
                             profile: e.get("profile"),
-                            role: e.get("job"),
+                            job: e.get("job"),
                             uid: e.id,
+                            role: e.get('role'),
                           ))
                     ],
                   ),
@@ -97,14 +95,16 @@ class _ListSvScreenState extends State<ListSvScreen> {
 class CardListSv extends StatelessWidget {
   final String profile;
   final String name;
-  final String role;
+  final String job;
   final String uid;
+  final String role;
 
   const CardListSv({
     required this.name,
     required this.profile,
-    required this.role,
+    required this.job,
     required this.uid,
+    required this.role,
     Key? key,
   }) : super(key: key);
 
@@ -130,7 +130,7 @@ class CardListSv extends StatelessWidget {
             padding: const EdgeInsets.only(bottom: 1),
             child: Text(name),
           ),
-          Text(role),
+          Text(job),
           SizedBox(
             height: 15,
           ),
@@ -139,7 +139,10 @@ class CardListSv extends StatelessWidget {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => ProfileUser(uid: uid)));
+                      builder: (context) => ProfileUser(
+                            uid: uid,
+                            role: role,
+                          )));
             },
             child: Container(
               width: Constant(context).width * 0.3,
