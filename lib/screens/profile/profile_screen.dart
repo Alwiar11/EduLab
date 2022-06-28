@@ -1,10 +1,14 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:edulab/contents.dart';
 import 'package:edulab/resources/models/user_model.dart';
 import 'package:edulab/screens/edit_profile/edit_profile.dart';
 import 'package:edulab/screens/profile/signout_function.dart';
 import 'package:edulab/shared/constant.dart';
+import 'package:edulab/shared/image_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -116,22 +120,66 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             .get(),
                         builder: (_, snapshot) {
                           if (snapshot.hasData) {
-                            return Container(
-                              height: Constant(context).height * 0.26,
-                              width: Constant(context).width * 0.5,
-                              decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  image: snapshot.data!.get("profile") != ""
-                                      ? DecorationImage(
-                                          image: NetworkImage(
-                                              snapshot.data!.get("profile")),
-                                          fit: BoxFit.cover)
-                                      : DecorationImage(
-                                          image: AssetImage(
-                                              "assets/images/default.png"),
-                                          fit: BoxFit.cover),
-                                  border: Border.all(
-                                      width: 10, color: primaryColor)),
+                            return GestureDetector(
+                              onTap: () async {
+                                showGeneralDialog(
+                                    context: context,
+                                    barrierDismissible: false,
+                                    pageBuilder: (context, _, __) =>
+                                        Container(),
+                                    transitionBuilder:
+                                        (context, a1, a2, widget) {
+                                      return Transform.scale(
+                                        scale: a1.value,
+                                        child: Opacity(
+                                          opacity: a1.value,
+                                          child: CircularProgressIndicator(),
+                                        ),
+                                      );
+                                    });
+                                File? newProfile = await AppImagePicker(context)
+                                    .getImageGallery();
+                                if (newProfile != null) {
+                                  FirebaseStorage.instance
+                                      .ref('users/${getUid()}/pfp.png')
+                                      .putFile(newProfile)
+                                      .then((result) async {
+                                    String downloadUrl =
+                                        await result.ref.getDownloadURL();
+                                    // Simpan downloadUrl di collection user
+                                    // teapal colletiona soalna
+                                    FirebaseFirestore.instance
+                                        .doc("users/${getUid()}/profile")
+                                        .set({
+                                      "profile": downloadUrl,
+                                    }, SetOptions(merge: true)).then((value) {
+                                      print("done");
+                                      Navigator.of(context).pop();
+                                    });
+                                  });
+                                } else {
+                                  //TODO: Handle null
+                                  Navigator.of(context).pop();
+                                  print("error");
+                                }
+                              },
+                              child: Container(
+                                height: Constant(context).height * 0.26,
+                                width: Constant(context).width * 0.5,
+                                decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    image: snapshot.data!.get("profile") != ""
+                                        ? DecorationImage(
+                                            image: NetworkImage(
+                                                snapshot.data!.get("profile")),
+                                            fit: BoxFit.cover)
+                                        : DecorationImage(
+                                            image: AssetImage(
+                                                "assets/images/default.png"),
+                                            fit: BoxFit.cover),
+                                    border: Border.all(
+                                        width: 10, color: primaryColor)),
+                              ),
                             );
                           }
                           return CircularProgressIndicator(
