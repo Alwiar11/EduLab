@@ -1,8 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:edulab/contents.dart';
 import 'package:edulab/screens/class/add_class_participants.dart';
+import 'package:edulab/screens/class/add_task.dart';
+import 'package:edulab/screens/class/card_task.dart';
+import 'package:edulab/screens/class/task_room.dart';
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../shared/constant.dart';
@@ -17,8 +21,15 @@ class Class extends StatefulWidget {
 }
 
 class _ClassState extends State<Class> {
+  String formattedDate(timeStamp) {
+    var dateFromTimeStamp =
+        DateTime.fromMillisecondsSinceEpoch(timeStamp.seconds * 1000);
+    return DateFormat(' EEE d MMM ').format(dateFromTimeStamp);
+  }
+
   String? role;
   String? uid;
+  String? classIdPkl;
 
   @override
   void initState() {
@@ -36,6 +47,7 @@ class _ClassState extends State<Class> {
 
   @override
   Widget build(BuildContext context) {
+    print(widget.docRef);
     print(widget.classId);
     return Scaffold(
         appBar: role == 'supervisor'
@@ -95,29 +107,32 @@ class _ClassState extends State<Class> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  ...snapshots.data!.docs.map(((e) => Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            "Kelas",
-                                            style: TextStyle(
-                                                fontSize: 28,
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.w600),
-                                            textAlign: TextAlign.start,
-                                          ),
-                                          Text(
-                                            e.get('supervisor'),
-                                            style: TextStyle(
-                                                fontSize: 14,
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.w600),
-                                          ),
-                                        ],
-                                      ))),
+                                  ...snapshots.data!.docs.map(((e) {
+                                    classIdPkl = e.id;
+                                    return Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          "Kelas",
+                                          style: TextStyle(
+                                              fontSize: 28,
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.w600),
+                                          textAlign: TextAlign.start,
+                                        ),
+                                        Text(
+                                          e.get('supervisor'),
+                                          style: TextStyle(
+                                              fontSize: 14,
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.w600),
+                                        ),
+                                      ],
+                                    );
+                                  })),
                                   Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
@@ -132,93 +147,46 @@ class _ClassState extends State<Class> {
                             ),
                           ),
                           SizedBox(height: Constant(context).height * 0.02),
-                          Container(
-                            padding: EdgeInsets.symmetric(vertical: 5),
-                            decoration: BoxDecoration(
-                              color: Colors.white.withOpacity(1),
-                              borderRadius: BorderRadius.circular(15),
-                            ),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(left: 10),
-                                  child: TextField(
-                                    decoration: InputDecoration(
-                                      hintStyle: const TextStyle(fontSize: 10),
-                                      hintText:
-                                          '    Umumkan Sesuatu di Kelas Anda',
-                                      border: InputBorder.none,
-                                      prefixIcon: Container(
-                                        height: Constant(context).height * 0.05,
-                                        width: Constant(context).width * 0.1,
-                                        decoration: const BoxDecoration(
-                                            shape: BoxShape.circle,
-                                            color: primaryColor),
-                                      ),
-                                      prefixIconConstraints:
-                                          const BoxConstraints(
-                                              minWidth: 0, minHeight: 0),
-                                      contentPadding: const EdgeInsets.all(20),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          SizedBox(
-                            height: Constant(context).height * 0.02,
-                          ),
-                          Container(
-                            padding: const EdgeInsets.symmetric(vertical: 20),
-                            width: Constant(context).width,
-                            // height: height * 15,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(15),
-                                color: Colors.white),
-                            child: Row(
-                              children: [
-                                SizedBox(
-                                  width: Constant(context).width * 0.02,
-                                ),
-                                Container(
-                                  height: Constant(context).height * 0.1,
-                                  width: Constant(context).width * 0.2,
-                                  decoration: const BoxDecoration(
-                                    color: primaryColor,
-                                    shape: BoxShape.circle,
-                                  ),
-                                  child: const Icon(
-                                    Icons.work_outline_rounded,
-                                    color: Colors.white,
-                                    size: 40,
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: Constant(context).width * 0.01,
-                                ),
-                                Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: const [
-                                    Text(
-                                      "Tugas Membuat Row",
-                                      style: TextStyle(
-                                          fontFamily: "Inter",
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w600),
-                                    ),
-                                    Text("Diposting 2 Maret",
-                                        style: TextStyle(
-                                            fontFamily: "Inter",
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.w400,
-                                            color: Colors.grey)),
-                                  ],
-                                )
-                              ],
-                            ),
-                          )
+                          StreamBuilder<QuerySnapshot>(
+                              stream: role == 'supervisor'
+                                  ? widget.docRef == null
+                                      ? FirebaseFirestore.instance
+                                          .collection('class')
+                                          .doc(widget.classId)
+                                          .collection('task')
+                                          .snapshots()
+                                      : widget.docRef!
+                                          .collection('task')
+                                          .snapshots()
+                                  : FirebaseFirestore.instance
+                                      .collection('class')
+                                      .doc(classIdPkl)
+                                      .collection('task')
+                                      .snapshots(),
+                              builder: (context, taskSnapshot) {
+                                if (taskSnapshot.hasData) {
+                                  return Column(
+                                    children: [
+                                      ...taskSnapshot.data!.docs
+                                          .map((task) => InkWell(
+                                                onTap: () {
+                                                  Navigator.of(context).push(
+                                                      MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              TaskRoom()));
+                                                },
+                                                child: CardTask(
+                                                  title: task.get('title'),
+                                                  post: formattedDate(
+                                                      task.get('createdAt')),
+                                                  taskId: task.id,
+                                                ),
+                                              ))
+                                    ],
+                                  );
+                                }
+                                return CircularProgressIndicator();
+                              })
                         ],
                       ),
                     ),
@@ -230,7 +198,13 @@ class _ClassState extends State<Class> {
         floatingActionButton: role == 'supervisor'
             ? FloatingActionButton(
                 backgroundColor: primaryColor,
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => AddTask(
+                            docRef: widget.docRef,
+                            classId: widget.classId,
+                          )));
+                },
                 child: Icon(Icons.add),
               )
             : null);

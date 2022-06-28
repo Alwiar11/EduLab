@@ -94,6 +94,7 @@ class _AddDataScreenState extends State<AddDataScreen> {
                     'startFromDate': Timestamp.now(),
                     'endFromDate': Timestamp.now(),
                     'job': 'pelajar',
+                    'classId': ''
                   });
                   if (doc.get('isVerified') == true) {
                     Navigator.of(context).pushAndRemoveUntil(

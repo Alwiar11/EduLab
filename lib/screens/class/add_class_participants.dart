@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:edulab/contents.dart';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AddClassParticpants extends StatefulWidget {
@@ -52,25 +53,53 @@ class _AddClassParticpantsState extends State<AddClassParticpants> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      DropdownButton(
-                        focusColor: primaryColor,
-                        dropdownColor: primaryColor,
-                        value: selectedValue,
-                        items: snapshots.data!.docs
-                            .where((element) => element.reference.id != uid)
-                            .where((element) => element.get('role') != 'admin')
-                            .where((element) =>
-                                element.get('role') != 'supervisor')
-                            .map((e) => DropdownMenuItem(
-                                value: e.id, child: Text(e.get('name'))))
-                            .toList(),
-                        onChanged: (value) {
-                          setState(() {
-                            selectedValue = value as String;
-                            isSelectedValue = true;
-                            print(value);
-                          });
-                        },
+                      Container(
+                        padding:
+                            EdgeInsets.symmetric(vertical: 10, horizontal: 30),
+                        color: secondaryColor,
+                        child: Row(
+                          children: [
+                            Container(
+                              margin: EdgeInsets.only(right: 10),
+                              child: Text(
+                                'Nama Anak Bimbing',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w500, fontSize: 15),
+                              ),
+                            ),
+                            DropdownButton(
+                              focusColor: Colors.white,
+                              dropdownColor: Colors.white,
+                              value: selectedValue,
+                              items: snapshots.data!.docs
+                                  .where(
+                                      (element) => element.reference.id != uid)
+                                  .where((element) =>
+                                      element.get('role') != 'admin')
+                                  .where(
+                                      (element) => element.get('classId') == '')
+                                  .where((element) =>
+                                      element.get('role') != 'supervisor')
+                                  .map((e) => DropdownMenuItem(
+                                      value: e.id,
+                                      child: Text(
+                                        e.get(
+                                          'name',
+                                        ),
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.w500),
+                                      )))
+                                  .toList(),
+                              onChanged: (value) {
+                                setState(() {
+                                  selectedValue = value as String;
+                                  isSelectedValue = true;
+                                  print(value);
+                                });
+                              },
+                            ),
+                          ],
+                        ),
                       ),
                       isSelectedValue
                           ? ElevatedButton(
