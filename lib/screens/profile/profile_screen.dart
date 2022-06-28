@@ -152,10 +152,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         .doc("users/${getUid()}/profile")
                                         .set({
                                       "profile": downloadUrl,
-                                    }, SetOptions(merge: true));
+                                    }, SetOptions(merge: true)).then((value) {
+                                      print("done");
+                                      Navigator.of(context).pop();
+                                    });
                                   });
                                 } else {
                                   //TODO: Handle null
+                                  Navigator.of(context).pop();
                                   print("error");
                                 }
                               },
