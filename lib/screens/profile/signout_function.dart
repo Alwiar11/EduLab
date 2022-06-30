@@ -12,6 +12,7 @@ class SignOut {
   Future<void> signout() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.remove('uid');
+    prefs.remove('name');
     await FirebaseAuth.instance.signOut().then((value) => Navigator.of(context)
         .pushAndRemoveUntil(
             MaterialPageRoute(builder: (context) => LoginPage()),

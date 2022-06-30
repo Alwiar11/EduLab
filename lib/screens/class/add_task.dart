@@ -53,11 +53,13 @@ class _AddTaskState extends State<AddTask> {
               : widget.docRef!.collection('task').snapshots(),
           builder: (_, snapshots) {
             if (snapshots.hasData) {
-              return InkWell(
-                onTap: () {
-                  Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) => TaskRoom()));
-                },
+              CollectionReference<Map<String, dynamic>> collRefTaskRoom =
+                  FirebaseFirestore.instance
+                      .collection('class')
+                      .doc(widget.classId)
+                      .collection('task');
+              return SingleChildScrollView(
+                scrollDirection: Axis.vertical,
                 child: Container(
                   margin: EdgeInsets.only(top: 20),
                   child: Column(
@@ -73,13 +75,52 @@ class _AddTaskState extends State<AddTask> {
                         ),
                       ),
                       Center(
-                        child: TextFieldTask(
-                          controller: controllerSubtitle,
-                          icon: Icon(
-                            Icons.description,
-                            color: primaryColor,
+                        child: Container(
+                          margin: EdgeInsets.symmetric(vertical: 3),
+                          child: Column(
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Padding(
+                                    padding:
+                                        const EdgeInsets.symmetric(vertical: 5),
+                                    child: Container(
+                                      height: 150,
+                                      width: Constant(context).width * 0.9,
+                                      decoration: BoxDecoration(
+                                        color: Colors.white.withOpacity(1),
+                                        borderRadius: BorderRadius.circular(15),
+                                      ),
+                                      child: TextFormField(
+                                        keyboardType: TextInputType.multiline,
+                                        textInputAction:
+                                            TextInputAction.newline,
+                                        maxLines: null,
+                                        controller: controllerSubtitle,
+                                        decoration: InputDecoration(
+                                          prefixIcon: Icon(
+                                            Icons.label,
+                                            color: primaryColor,
+                                          ),
+                                          hintStyle: TextStyle(fontSize: 17),
+                                          hintText: 'Deskripsi',
+
+                                          border: InputBorder.none,
+                                          // prefixIconConstraints: BoxConstraints(minWidth: 0, minHeight: 0),
+                                          contentPadding: EdgeInsets.only(
+                                              left: 20,
+                                              right: 20,
+                                              bottom: 10,
+                                              top: 10),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
                           ),
-                          title: 'Deskripsi Tugas',
                         ),
                       ),
                       Center(
@@ -134,7 +175,7 @@ class _AddTaskState extends State<AddTask> {
                                     'title': controllerTitle.text,
                                     'subtitle': controllerSubtitle.text,
                                     'createdAt': Timestamp.now(),
-                                    'endedAt': controllerEndedAt.text
+                                    'endedAt': Timestamp.fromDate(dateTime)
                                   });
                             Navigator.of(context).pop();
                           },

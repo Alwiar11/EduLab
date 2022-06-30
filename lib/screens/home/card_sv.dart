@@ -87,32 +87,32 @@ class CardSv extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        Container(
-                          width: Constant(context).width * 0.25,
-                          height: Constant(context).height * 0.035,
-                          decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(10)),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              InkWell(
-                                onTap: () {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => ProfileUser(
-                                                uid: uid,
-                                                role: role,
-                                              )));
-                                },
-                                child: Text(
+                        InkWell(
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => ProfileUser(
+                                          uid: uid,
+                                          role: role,
+                                        )));
+                          },
+                          child: Container(
+                            width: Constant(context).width * 0.25,
+                            height: Constant(context).height * 0.035,
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(10)),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
                                   "Lihat",
                                   style: TextStyle(fontWeight: FontWeight.w500),
                                   textAlign: TextAlign.center,
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         )
                       ],

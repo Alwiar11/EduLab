@@ -154,6 +154,8 @@ class _ClassState extends State<Class> {
                                           .collection('class')
                                           .doc(widget.classId)
                                           .collection('task')
+                                          .orderBy('createdAt',
+                                              descending: true)
                                           .snapshots()
                                       : widget.docRef!
                                           .collection('task')
@@ -162,9 +164,16 @@ class _ClassState extends State<Class> {
                                       .collection('class')
                                       .doc(classIdPkl)
                                       .collection('task')
+                                      .orderBy('createdAt', descending: true)
                                       .snapshots(),
                               builder: (context, taskSnapshot) {
                                 if (taskSnapshot.hasData) {
+                                  CollectionReference<Map<String, dynamic>>
+                                      collRefTaskRoom = FirebaseFirestore
+                                          .instance
+                                          .collection('class')
+                                          .doc(classIdPkl)
+                                          .collection('task');
                                   return Column(
                                     children: [
                                       ...taskSnapshot.data!.docs
@@ -173,7 +182,12 @@ class _ClassState extends State<Class> {
                                                   Navigator.of(context).push(
                                                       MaterialPageRoute(
                                                           builder: (context) =>
-                                                              TaskRoom()));
+                                                              TaskRoom(
+                                                                collRefTaskRoom:
+                                                                    collRefTaskRoom,
+                                                                taskRoomId:
+                                                                    task.id,
+                                                              )));
                                                 },
                                                 child: CardTask(
                                                   title: task.get('title'),

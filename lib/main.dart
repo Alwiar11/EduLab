@@ -11,9 +11,9 @@ void main() async {
   WidgetsFlutterBinding();
   await Firebase.initializeApp();
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  var uid = prefs.getString('uid');
-  var role = prefs.getString('role');
-  var isVerified = prefs.getBool('isVerified');
+  var uid = await prefs.getString('uid');
+  var role = await prefs.getString('role');
+  var isVerified = await prefs.getBool('isVerified');
 
   runApp(MaterialApp(
       debugShowCheckedModeBanner: false,
@@ -21,7 +21,9 @@ void main() async {
           ? IntroScreen()
           : role == 'admin'
               ? HomeAdmin()
-              : Home()));
+              : isVerified == true
+                  ? Home()
+                  : Waiting(userId: uid)));
 }
 
 class MyApp extends StatelessWidget {

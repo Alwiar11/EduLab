@@ -70,6 +70,7 @@ class _AddClassParticpantsState extends State<AddClassParticpants> {
                             DropdownButton(
                               focusColor: Colors.white,
                               dropdownColor: Colors.white,
+                              iconEnabledColor: Colors.white,
                               value: selectedValue,
                               items: snapshots.data!.docs
                                   .where(
@@ -101,7 +102,7 @@ class _AddClassParticpantsState extends State<AddClassParticpants> {
                           ],
                         ),
                       ),
-                      isSelectedValue
+                      isSelectedValue == true
                           ? ElevatedButton(
                               style: ElevatedButton.styleFrom(
                                   primary: primaryColor),
@@ -122,9 +123,11 @@ class _AddClassParticpantsState extends State<AddClassParticpants> {
                                 FirebaseFirestore.instance
                                     .collection('users')
                                     .doc(selectedValue)
-                                    .update({'classId': widget.docRef!.id});
+                                    .set({'classId': widget.classId},
+                                        SetOptions(merge: true));
 
                                 Navigator.of(context).pop();
+                                print(selectedValue);
                               },
                               child: Text("Simpan"))
                           : ElevatedButton(

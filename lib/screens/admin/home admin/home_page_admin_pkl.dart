@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:edulab/contents.dart';
+import 'package:edulab/screens/admin/home%20admin/non_active.dart';
 import 'package:edulab/screens/admin/home%20admin/waiting_list.dart';
 
 import 'package:flutter/material.dart';
@@ -17,7 +18,10 @@ class HomePageAdminPkl extends StatelessWidget {
         backgroundColor: Color.fromARGB(255, 232, 232, 232),
         appBar: AppBar(
           leading: IconButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.of(context)
+                    .push(MaterialPageRoute(builder: (context) => NonActive()));
+              },
               icon: Icon(
                 Icons.update_disabled_rounded,
                 color: Colors.black,
@@ -46,6 +50,7 @@ class HomePageAdminPkl extends StatelessWidget {
                 .collection('users')
                 .where('role', isEqualTo: 'pkl')
                 .where('isVerified', isEqualTo: true)
+                .where('isActive', isEqualTo: true)
                 .snapshots(),
             builder: (_, snapshots) {
               if (snapshots.hasData) {

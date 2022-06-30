@@ -1,9 +1,14 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:edulab/contents.dart';
 import 'package:edulab/screens/edit_profile/textfield.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../shared/constant.dart';
+import '../../shared/image_picker.dart';
 import 'edit_profile_shared.dart';
 
 class EditProfileScreen extends StatefulWidget {
@@ -14,6 +19,8 @@ class EditProfileScreen extends StatefulWidget {
 }
 
 class _EditProfileScreenState extends State<EditProfileScreen> {
+  File? newProfile;
+  File? newProfileTemp;
   String? uid;
 
   @override
@@ -53,6 +60,72 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           SizedBox(
             height: 20,
           ),
+          uid != null
+              ? StreamBuilder<DocumentSnapshot>(
+                  stream: FirebaseFirestore.instance
+                      .collection('users')
+                      .doc(uid)
+                      .snapshots(),
+                  builder: (_, snapshot) {
+                    if (snapshot.hasData) {
+                      return Column(
+                        children: [
+                          Container(
+                            height: Constant(context).height * 0.26,
+                            width: Constant(context).width * 0.5,
+                            decoration: newProfile == null
+                                ? BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    image: snapshot.data!.get("profile") != ""
+                                        ? DecorationImage(
+                                            image: NetworkImage(
+                                                snapshot.data!.get("profile")),
+                                            fit: BoxFit.cover)
+                                        : DecorationImage(
+                                            image: AssetImage(
+                                                "assets/images/default.png"),
+                                            fit: BoxFit.cover),
+                                    border: Border.all(
+                                        width: 10, color: primaryColor))
+                                : BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    image: snapshot.data!.get("profile") != ""
+                                        ? DecorationImage(
+                                            image: FileImage(newProfileTemp!),
+                                            fit: BoxFit.cover)
+                                        : DecorationImage(
+                                            image: AssetImage(
+                                                "assets/images/default.png"),
+                                            fit: BoxFit.cover),
+                                    border: Border.all(
+                                        width: 10, color: primaryColor)),
+                          ),
+                          TextButton(
+                              onPressed: () async {
+                                newProfile = await AppImagePicker(context)
+                                    .getImageGallery();
+                                if (newProfile != null) {
+                                  newProfileTemp = await newProfile;
+                                }
+                                setState(() {});
+                                print(newProfileTemp);
+                              },
+                              child: Text(
+                                "Ganti Foto Profile",
+                                style: TextStyle(color: primaryColor),
+                              ))
+                        ],
+                      );
+                    }
+                    return CircularProgressIndicator(
+                      color: primaryColor,
+                      strokeWidth: 10,
+                    );
+                  })
+              : CircularProgressIndicator(
+                  color: primaryColor,
+                  strokeWidth: 10,
+                ),
           TextFieldEdit(
             title: "Nama",
             controller: controllerName,
@@ -101,6 +174,51 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                             ),
                             TextButton(
                               onPressed: () {
+                                if (newProfile != null) {
+                                  FirebaseStorage.instance
+                                      .ref('users/$uid/pfp.png')
+                                      .putFile(newProfile!)
+                                      .then((result) async {
+                                    String downloadUrl =
+                                        await result.ref.getDownloadURL();
+                                    // Simpan downloadUrl di collection user
+                                    // teapal colletiona soalna
+                                    FirebaseFirestore.instance
+                                        .doc("users/$uid")
+                                        .set({
+                                      "profile": downloadUrl,
+                                    }, SetOptions(merge: true)).then((value) {
+                                      print("done");
+                                    });
+                                  });
+                                } else {
+                                  //TODO: Handle null
+                                  showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) =>
+                                          AlertDialog(
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(20)),
+                                            title: Text(
+                                              'Peringatan!',
+                                              style: TextStyle(
+                                                  color: Colors.amber),
+                                            ),
+                                            content: Text("Gagal"),
+                                            actions: [
+                                              TextButton(
+                                                onPressed: () => Navigator.pop(
+                                                    context, 'Cancel'),
+                                                child: const Text(
+                                                  'Kembali',
+                                                  style: TextStyle(
+                                                      color: primaryColor),
+                                                ),
+                                              ),
+                                            ],
+                                          ));
+                                }
                                 users.get().then((doc) {
                                   if (doc.exists) {
                                     users.update({

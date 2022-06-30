@@ -115,54 +115,56 @@ class _RoomChatState extends State<RoomChat> {
               .snapshots(),
           builder: (context, snapshot) {
             if (!snapshot.hasData) {
-              return SizedBox();
+              return CircularProgressIndicator();
+            } else {
+              return Container(
+                margin: EdgeInsets.only(bottom: 70),
+                child: ListView.builder(
+                  reverse: true,
+                  itemCount: snapshot.data!.size,
+                  shrinkWrap: true,
+                  padding: EdgeInsets.only(top: 10, bottom: 10),
+                  itemBuilder: (context, index) {
+                    return Container(
+                      padding: EdgeInsets.only(
+                          left: 14, right: 14, top: 6, bottom: 6),
+                      child: Align(
+                        alignment: (snapshot.data!.docs[index]['receiverId'] ==
+                                widget.uid
+                            ? Alignment.topRight
+                            : Alignment.topLeft),
+                        child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20),
+                              color: (snapshot.data!.docs[index]
+                                          ['receiverId'] ==
+                                      widget.uid
+                                  ? secondaryColor
+                                  : Color.fromARGB(255, 255, 255, 255)),
+                            ),
+                            padding: EdgeInsets.all(16),
+                            child: Text.rich(TextSpan(
+                                text: snapshot.data!.docs[index]['message']
+                                    .toString(),
+                                style: TextStyle(
+                                    fontSize: 17, fontWeight: FontWeight.w400),
+                                children: <TextSpan>[
+                                  TextSpan(
+                                      text: '  ' +
+                                          formattedDate(snapshot
+                                              .data!.docs[index]['sendAt']),
+                                      style: TextStyle(
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w400,
+                                          color: Color.fromARGB(
+                                              255, 111, 111, 111)))
+                                ]))),
+                      ),
+                    );
+                  },
+                ),
+              );
             }
-            return Container(
-              margin: EdgeInsets.only(bottom: 70),
-              child: ListView.builder(
-                reverse: true,
-                itemCount: snapshot.data!.size,
-                shrinkWrap: true,
-                padding: EdgeInsets.only(top: 10, bottom: 10),
-                itemBuilder: (context, index) {
-                  return Container(
-                    padding:
-                        EdgeInsets.only(left: 14, right: 14, top: 6, bottom: 6),
-                    child: Align(
-                      alignment: (snapshot.data!.docs[index]['receiverId'] ==
-                              widget.uid
-                          ? Alignment.topRight
-                          : Alignment.topLeft),
-                      child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
-                            color: (snapshot.data!.docs[index]['receiverId'] ==
-                                    widget.uid
-                                ? secondaryColor
-                                : Color.fromARGB(255, 255, 255, 255)),
-                          ),
-                          padding: EdgeInsets.all(16),
-                          child: Text.rich(TextSpan(
-                              text: snapshot.data!.docs[index]['message']
-                                  .toString(),
-                              style: TextStyle(
-                                  fontSize: 17, fontWeight: FontWeight.w400),
-                              children: <TextSpan>[
-                                TextSpan(
-                                    text: '  ' +
-                                        formattedDate(snapshot.data!.docs[index]
-                                            ['sendAt']),
-                                    style: TextStyle(
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w400,
-                                        color:
-                                            Color.fromARGB(255, 111, 111, 111)))
-                              ]))),
-                    ),
-                  );
-                },
-              ),
-            );
           }),
       bottomSheet: Container(
         padding: EdgeInsets.only(left: 10, bottom: 10, top: 10, right: 10),

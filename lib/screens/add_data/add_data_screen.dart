@@ -88,6 +88,7 @@ class _AddDataScreenState extends State<AddDataScreen> {
                     'age': int.tryParse(controllerAge.text) ?? "",
                     'hobby': controllerHobby.text,
                     'isVerified': false,
+                    'isActive': true,
                     'profile': "",
                     'role': "pkl",
                     'supervisor': '',

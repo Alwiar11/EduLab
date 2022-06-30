@@ -26,7 +26,7 @@ class CardTask extends StatelessWidget {
       child: Row(
         children: [
           Container(
-            margin: EdgeInsets.symmetric(horizontal: 5),
+            margin: EdgeInsets.only(left: 15, right: 5),
             height: Constant(context).height * 0.1,
             width: Constant(context).width * 0.2,
             decoration: const BoxDecoration(

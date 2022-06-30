@@ -13,6 +13,8 @@ class ListPklScreen extends StatefulWidget {
 }
 
 class _ListPklScreenState extends State<ListPklScreen> {
+  TextEditingController controller = TextEditingController();
+  bool isSearch = true;
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -34,7 +36,21 @@ class _ListPklScreenState extends State<ListPklScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     TextField(
-                      keyboardType: TextInputType.number,
+                      controller: controller,
+                      onChanged: (e) {
+                        if (controller.text == '') {
+                          setState(() {
+                            isSearch = false;
+                          });
+                        }
+                        setState(() {
+                          isSearch = true;
+                        });
+                        if (controller.text != e) {
+                          controller.text = e;
+                        }
+                      },
+                      keyboardType: TextInputType.text,
                       decoration: InputDecoration(
                         hintStyle: TextStyle(fontSize: 10),
                         hintText: 'Cari...',
@@ -58,9 +74,26 @@ class _ListPklScreenState extends State<ListPklScreen> {
             stream: FirebaseFirestore.instance
                 .collection('users')
                 .where("role", isEqualTo: "pkl")
+                .orderBy('endFromDate', descending: true)
                 .snapshots(),
             builder: (_, snapshot) {
               if (snapshot.hasData) {
+                print(controller.text);
+                List<QueryDocumentSnapshot<Object?>> searchItem =
+                    snapshot.data!.docs;
+                searchItem.retainWhere((element) {
+                  String searchName = element.get("name");
+                  return searchName
+                      .toLowerCase()
+                      .contains(controller.text.toLowerCase());
+                });
+                List<QueryDocumentSnapshot<Object?>> items;
+                if (isSearch && searchItem.length > 0) {
+                  items = searchItem;
+                } else {
+                  items = snapshot.data!.docs;
+                }
+                print(items.first.data());
                 return Expanded(
                   child: GridView(
                     padding: const EdgeInsets.symmetric(
@@ -68,16 +101,37 @@ class _ListPklScreenState extends State<ListPklScreen> {
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                         mainAxisSpacing: 20,
                         crossAxisSpacing: 20,
-                        childAspectRatio: 0.700,
+                        childAspectRatio: 0.600,
                         crossAxisCount: 2),
                     children: [
-                      ...snapshot.data!.docs.map((e) => CardListPkl(
+                      ...items.map((e) {
+                        if (e
+                            .get('endFromDate')
+                            .toDate()
+                            .isBefore(DateTime.now())) {
+                          return ClipRRect(
+                            child: Banner(
+                              location: BannerLocation.topEnd,
+                              message: 'Tidak Aktif',
+                              child: CardListPkl(
+                                name: e.get("name"),
+                                profile: e.get("profile"),
+                                school: e.get("school"),
+                                uid: e.id,
+                                role: e.get('role'),
+                              ),
+                            ),
+                          );
+                        } else {
+                          return CardListPkl(
                             name: e.get("name"),
                             profile: e.get("profile"),
                             school: e.get("school"),
                             uid: e.id,
                             role: e.get('role'),
-                          ))
+                          );
+                        }
+                      })
                     ],
                   ),
                 );

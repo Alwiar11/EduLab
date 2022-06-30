@@ -15,6 +15,8 @@ class ListSvScreen extends StatefulWidget {
 }
 
 class _ListSvScreenState extends State<ListSvScreen> {
+  TextEditingController controller = TextEditingController();
+  bool isSearch = true;
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -36,7 +38,21 @@ class _ListSvScreenState extends State<ListSvScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     TextField(
-                      keyboardType: TextInputType.number,
+                      controller: controller,
+                      onChanged: (e) {
+                        if (controller.text == '') {
+                          setState(() {
+                            isSearch = false;
+                          });
+                        }
+                        setState(() {
+                          isSearch = true;
+                        });
+                        if (controller.text != e) {
+                          controller.text = e;
+                        }
+                      },
+                      keyboardType: TextInputType.text,
                       decoration: InputDecoration(
                         hintStyle: TextStyle(fontSize: 10),
                         hintText: 'Cari...',
@@ -60,9 +76,26 @@ class _ListSvScreenState extends State<ListSvScreen> {
             stream: FirebaseFirestore.instance
                 .collection('users')
                 .where("role", isEqualTo: "supervisor")
+                .orderBy('endFromDate', descending: true)
                 .snapshots(),
             builder: (_, snapshot) {
               if (snapshot.hasData) {
+                print(controller.text);
+                List<QueryDocumentSnapshot<Object?>> searchItem =
+                    snapshot.data!.docs;
+                searchItem.retainWhere((element) {
+                  String searchName = element.get("name");
+                  return searchName
+                      .toLowerCase()
+                      .contains(controller.text.toLowerCase());
+                });
+                List<QueryDocumentSnapshot<Object?>> items;
+                if (isSearch && searchItem.length > 0) {
+                  items = searchItem;
+                } else {
+                  items = snapshot.data!.docs;
+                }
+                print(items.first.data());
                 return Expanded(
                   child: GridView(
                     padding: const EdgeInsets.symmetric(
@@ -70,16 +103,37 @@ class _ListSvScreenState extends State<ListSvScreen> {
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                         mainAxisSpacing: 20,
                         crossAxisSpacing: 20,
-                        childAspectRatio: 0.700,
+                        childAspectRatio: 0.600,
                         crossAxisCount: 2),
                     children: [
-                      ...snapshot.data!.docs.map((e) => CardListSv(
+                      ...items.map((e) {
+                        if (e
+                            .get('endFromDate')
+                            .toDate()
+                            .isBefore(DateTime.now())) {
+                          return ClipRRect(
+                            child: Banner(
+                              location: BannerLocation.topEnd,
+                              message: 'Tidak Aktif',
+                              child: CardListPkl(
+                                name: e.get("name"),
+                                profile: e.get("profile"),
+                                school: e.get("school"),
+                                uid: e.id,
+                                role: e.get('role'),
+                              ),
+                            ),
+                          );
+                        } else {
+                          return CardListPkl(
                             name: e.get("name"),
                             profile: e.get("profile"),
-                            job: e.get("job"),
+                            school: e.get("school"),
                             uid: e.id,
                             role: e.get('role'),
-                          ))
+                          );
+                        }
+                      })
                     ],
                   ),
                 );
@@ -92,17 +146,17 @@ class _ListSvScreenState extends State<ListSvScreen> {
   }
 }
 
-class CardListSv extends StatelessWidget {
+class CardListPkl extends StatelessWidget {
   final String profile;
   final String name;
-  final String job;
+  final String school;
   final String uid;
   final String role;
 
-  const CardListSv({
+  const CardListPkl({
     required this.name,
     required this.profile,
-    required this.job,
+    required this.school,
     required this.uid,
     required this.role,
     Key? key,
@@ -111,8 +165,8 @@ class CardListSv extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: Constant(context).width * 0.4,
-      height: Constant(context).height * 0.45,
+      width: 100,
+      height: 400,
       decoration: BoxDecoration(
           color: Colors.white, borderRadius: BorderRadius.circular(15)),
       child: Column(
@@ -123,14 +177,18 @@ class CardListSv extends StatelessWidget {
             decoration: BoxDecoration(
                 color: primaryColor,
                 shape: BoxShape.circle,
-                image: DecorationImage(
-                    image: NetworkImage(profile), fit: BoxFit.cover)),
+                image: profile != ""
+                    ? DecorationImage(
+                        image: NetworkImage(profile), fit: BoxFit.cover)
+                    : DecorationImage(
+                        image: AssetImage("assets/images/default.png"),
+                        fit: BoxFit.cover)),
           ),
           Padding(
             padding: const EdgeInsets.only(bottom: 1),
             child: Text(name),
           ),
-          Text(job),
+          Text(school),
           SizedBox(
             height: 15,
           ),

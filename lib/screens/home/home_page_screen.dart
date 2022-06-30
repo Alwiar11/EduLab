@@ -191,37 +191,6 @@ class _HomePageScreenState extends State<HomePageScreen> {
                       SizedBox(
                         height: Constant(context).height * 0.025,
                       ),
-                      Row(
-                        children: const [
-                          Text(
-                            "Pengingat",
-                            style: TextStyle(
-                                fontSize: 22,
-                                fontWeight: FontWeight.w700,
-                                fontFamily: "Inter"),
-                          )
-                        ],
-                      ),
-                      SizedBox(
-                        height: Constant(context).height * 0.025,
-                      ),
-                      Container(
-                        margin: EdgeInsets.only(right: 20),
-                        height: Constant(context).height * 0.12,
-                        width: Constant(context).width * 1,
-                        decoration: BoxDecoration(
-                            color: primaryColor,
-                            borderRadius: BorderRadius.circular(15)),
-                        child: Row(
-                          children: [
-                            SizedBox(
-                              width: Constant(context).width * 0.03,
-                            ),
-                            Icon(Icons.work_outline,
-                                size: 50, color: Colors.white)
-                          ],
-                        ),
-                      ),
                       SizedBox(
                         height: Constant(context).height * 0.025,
                       ),
@@ -267,7 +236,7 @@ class _HomePageScreenState extends State<HomePageScreen> {
                               stream: FirebaseFirestore.instance
                                   .collection('users')
                                   .where("role", isEqualTo: "pkl")
-                                  .limit(1)
+                                  .limit(3)
                                   .snapshots(),
                               builder: (_, snapshot) {
                                 if (snapshot.hasData) {

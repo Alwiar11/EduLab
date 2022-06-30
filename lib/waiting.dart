@@ -26,8 +26,10 @@ class _WaitingState extends State<Waiting> {
           .doc(widget.userId)
           .snapshots(),
       builder: (context, snapshot) {
-        UserModel users = UserModel.fromData(snapshot.data!);
-        if (snapshot.hasData) {
+        if (!snapshot.hasData) {
+          return CircularProgressIndicator();
+        } else {
+          UserModel users = UserModel.fromData(snapshot.data!);
           return Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -51,7 +53,6 @@ class _WaitingState extends State<Waiting> {
             ),
           );
         }
-        return CircularProgressIndicator();
       },
     ));
   }

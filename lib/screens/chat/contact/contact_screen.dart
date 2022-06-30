@@ -73,10 +73,12 @@ class _ContactScreenState extends State<ContactScreen> {
                 builder: (_, snapshot) {
                   if (snapshot.hasData) {
                     return ListView(
+                      physics: NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
                       children: [
                         ...snapshot.data!.docs
                             .where((element) => element.reference.id != uid)
+                            .where((element) => element.get("role") != 'admin')
                             .map((e) => Padding(
                                   padding:
                                       const EdgeInsets.symmetric(vertical: 5),

@@ -73,6 +73,7 @@ class VerifyFunction {
                   prefs.setBool('isVerified', doc.get("isVerified"));
                   // String? isVerified = prefs.getString('isVerified');
                   prefs.setBool('isLoggedIn', true);
+                  prefs.setBool('isActive', true);
 
                   if (doc.get("isVerified") == true) {
                     if (doc.get("role") == 'pkl') {
