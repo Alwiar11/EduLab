@@ -121,7 +121,7 @@ class _TaskRoomState extends State<TaskRoom> {
                       ),
                     ),
                     GestureDetector(
-                      onTap: () {
+                      onVerticalDragDown: (_) {
                         role != 'supervisor'
                             ? Navigator.of(context).push(
                                 MaterialPageRoute(
@@ -138,6 +138,23 @@ class _TaskRoomState extends State<TaskRoom> {
                                 ),
                               );
                       },
+                      // onTap: () {
+                      //   role != 'supervisor'
+                      //       ? Navigator.of(context).push(
+                      //           MaterialPageRoute(
+                      //             builder: (context) => Reply(
+                      //               docRefReply: docRefReply,
+                      //             ),
+                      //           ),
+                      //         )
+                      //       : Navigator.of(context).push(
+                      //           MaterialPageRoute(
+                      //             builder: (context) => Reply(
+                      //               docRefReply: docRefReply,
+                      //             ),
+                      //           ),
+                      //         );
+                      // },
                       child: Container(
                         color: Colors.white,
                         height: 70,

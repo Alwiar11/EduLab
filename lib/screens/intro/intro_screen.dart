@@ -15,12 +15,12 @@ class IntroScreen extends StatefulWidget {
 }
 
 class _IntroScreenState extends State<IntroScreen> {
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    startTimer();
-  }
+  // @override
+  // void initState() {
+  //   // TODO: implement initState
+  //   super.initState();
+  //   startTimer();
+  // }
 
   int _currentPage = 0;
   _onChanged(int index) {
@@ -173,20 +173,20 @@ class _IntroScreenState extends State<IntroScreen> {
     );
   }
 
-  void startTimer() {
-    Timer(Duration(seconds: 3), () {
-      navigateUser(); //It will redirect  after 3 seconds
-    });
-  }
+  // void startTimer() {
+  //   Timer(Duration(seconds: 3), () {
+  //     // navigateUser(); //It will redirect  after 3 seconds
+  //   });
+  // }
 
-  void navigateUser() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    var status = prefs.getBool('isLoggedIn') ?? false;
-    print(status);
-    if (status) {
-      Navigator.of(context).pushReplacementNamed('/home');
-    } else {
-      Navigator.of(context).pushReplacementNamed('/intro');
-    }
-  }
+  // void navigateUser() async {
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   var status = prefs.getBool('isLoggedIn') ?? false;
+  //   print(status);
+  //   if (status) {
+  //     Navigator.of(context).pushReplacementNamed('/home');
+  //   } else {
+  //     Navigator.of(context).pushReplacementNamed('/intro');
+  //   }
+  // }
 }

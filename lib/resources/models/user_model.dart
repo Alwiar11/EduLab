@@ -7,6 +7,7 @@ class UserModel {
   final String address;
   final String hobby;
   final String vacation;
+  final String job;
   final int age;
   final String role;
   final String phoneNumber;
@@ -21,6 +22,7 @@ class UserModel {
     required this.vacation,
     required this.id,
     required this.age,
+    required this.job,
     required this.role,
     required this.phoneNumber,
     required this.profile,
@@ -32,6 +34,7 @@ class UserModel {
       name: doc.get('name') ?? "",
       school: doc.get('school') ?? "",
       address: doc.get('address') ?? "",
+      job: doc.get('job') ?? "",
       hobby: doc.get('hobby') ?? "",
       vacation: doc.get('vacation') ?? '',
       id: doc.id,

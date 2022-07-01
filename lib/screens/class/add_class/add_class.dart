@@ -25,6 +25,7 @@ class _AddClassState extends State<AddClass> {
   getUid() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     uid = prefs.getString('uid');
+
     setState(() {});
   }
 
@@ -61,7 +62,7 @@ class _AddClassState extends State<AddClass> {
                 decoration: InputDecoration(
                   hintStyle: TextStyle(fontSize: 17),
                   // hintText: title,
-                  labelText: 'Nama Supervisor',
+                  labelText: 'Nama Kelas',
                   labelStyle: TextStyle(color: primaryColor, fontSize: 16),
                   border: InputBorder.none,
                   // prefixIconConstraints: BoxConstraints(minWidth: 0, minHeight: 0),
@@ -77,7 +78,7 @@ class _AddClassState extends State<AddClass> {
                       await FirebaseFirestore.instance.collection('class').add({
                     'createdAt': Timestamp.now(),
                     'supervisor': controllerNameClass.text,
-                    'participants': FieldValue.arrayUnion([uid])
+                    'participants': FieldValue.arrayUnion([uid]),
                   });
                   print(docRef.id);
                   FirebaseFirestore.instance
@@ -85,10 +86,7 @@ class _AddClassState extends State<AddClass> {
                       .doc(uid)
                       .update({'classId': docRef.id});
 
-                  Navigator.of(context).pushReplacement(MaterialPageRoute(
-                      builder: (context) => Class(
-                            docRef: docRef,
-                          )));
+                  Navigator.of(context).pop();
                 },
                 child: Text('Simpan'))
           ],

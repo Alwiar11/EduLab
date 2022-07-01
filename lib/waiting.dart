@@ -37,8 +37,11 @@ class _WaitingState extends State<Waiting> {
                 Text("Silahkan Tunggu Hingga Admin Memberikan Izin"),
                 Text("Silahkan Refresh Secara Berkala"),
                 ElevatedButton(
-                  onPressed: () {
+                  onPressed: () async {
                     if (users.isVerified == true) {
+                      SharedPreferences prefs =
+                          await SharedPreferences.getInstance();
+                      prefs.setBool('isVerified', users.isVerified);
                       Navigator.of(context).pushAndRemoveUntil(
                           MaterialPageRoute(builder: (context) => Home()),
                           (Route<dynamic> route) => false);

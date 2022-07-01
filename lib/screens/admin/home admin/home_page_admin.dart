@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:edulab/contents.dart';
+import 'package:edulab/screens/admin/home%20admin/change_role.dart';
 import 'package:edulab/screens/admin/home%20admin/waiting_list.dart';
 import 'package:edulab/screens/profile/profile.dart';
 import 'package:edulab/screens/profile_user/profile_user.dart';
@@ -9,6 +10,7 @@ import 'package:edulab/screens/profile_user/profile_user.dart';
 import 'package:flutter/material.dart';
 
 import '../profile_user_admin_sv/profile_user_admin.dart';
+import 'non_active.dart';
 
 class HomePageAdmin extends StatelessWidget {
   const HomePageAdmin({Key? key}) : super(key: key);
@@ -19,7 +21,10 @@ class HomePageAdmin extends StatelessWidget {
         backgroundColor: Color.fromARGB(255, 232, 232, 232),
         appBar: AppBar(
           leading: IconButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.of(context)
+                    .push(MaterialPageRoute(builder: (context) => NonActive()));
+              },
               icon: Icon(
                 Icons.update_disabled_rounded,
                 color: Colors.black,
@@ -122,10 +127,13 @@ class CardAdmin extends StatelessWidget {
           Row(
             children: [
               IconButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => ChangeRole(classId: userId)));
+                  },
                   icon: Icon(
-                    Icons.delete,
-                    color: Color.fromARGB(255, 210, 33, 21),
+                    Icons.edit,
+                    color: Color.fromARGB(255, 140, 140, 140),
                   )),
             ],
           )

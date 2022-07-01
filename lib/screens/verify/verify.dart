@@ -108,12 +108,12 @@ class _VerifyState extends State<Verify> {
                             padding: const EdgeInsets.symmetric(vertical: 5),
                             child: Text(
                                 'Anda dapat mengirim ulang kode OTP dalam ' +
-                                    '$minutes:$seconds',
-                                textAlign: TextAlign.center,
+                                    '\n$minutes:$seconds',
+                                textAlign: TextAlign.start,
                                 style: TextStyle(
                                     color: Colors.black,
                                     fontWeight: FontWeight.normal,
-                                    fontSize: 14)));
+                                    fontSize: 12)));
                       }),
                 ],
               ),

@@ -107,32 +107,13 @@ class _ListSvScreenState extends State<ListSvScreen> {
                         crossAxisCount: 2),
                     children: [
                       ...items.map((e) {
-                        if (e
-                            .get('endFromDate')
-                            .toDate()
-                            .isBefore(DateTime.now())) {
-                          return ClipRRect(
-                            child: Banner(
-                              location: BannerLocation.topEnd,
-                              message: 'Tidak Aktif',
-                              child: CardListPkl(
-                                name: e.get("name"),
-                                profile: e.get("profile"),
-                                school: e.get("school"),
-                                uid: e.id,
-                                role: e.get('role'),
-                              ),
-                            ),
-                          );
-                        } else {
-                          return CardListPkl(
-                            name: e.get("name"),
-                            profile: e.get("profile"),
-                            school: e.get("school"),
-                            uid: e.id,
-                            role: e.get('role'),
-                          );
-                        }
+                        return CardListPkl(
+                          name: e.get("name"),
+                          profile: e.get("profile"),
+                          school: e.get("school"),
+                          uid: e.id,
+                          role: e.get('role'),
+                        );
                       })
                     ],
                   ),

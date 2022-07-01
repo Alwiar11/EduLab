@@ -38,35 +38,6 @@ class _ContactScreenState extends State<ContactScreen> {
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: Column(
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(
-                  margin: EdgeInsets.symmetric(vertical: 15),
-                  padding: EdgeInsets.symmetric(vertical: 5),
-                  width: Constant(context).width * 0.9,
-                  height: Constant(context).height * 0.05,
-                  decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(1),
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                  child: const Padding(
-                    padding: EdgeInsets.only(left: 2),
-                    child: TextField(
-                      decoration: InputDecoration(
-                        hintStyle: TextStyle(fontSize: 10),
-                        hintText: 'Cari...',
-                        border: InputBorder.none,
-                        prefixIcon: Icon(
-                          Icons.search,
-                          size: 20,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
             StreamBuilder<QuerySnapshot>(
                 stream:
                     FirebaseFirestore.instance.collection("users").snapshots(),

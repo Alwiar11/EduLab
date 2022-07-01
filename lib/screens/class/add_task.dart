@@ -162,21 +162,19 @@ class _AddTaskState extends State<AddTask> {
                           style:
                               ElevatedButton.styleFrom(primary: primaryColor),
                           onPressed: () {
-                            widget.classId!.isEmpty
-                                ? widget.docRef!.collection('task').add({
-                                    'title': controllerTitle.text,
-                                    'subtitle': controllerSubtitle.text,
-                                  })
-                                : FirebaseFirestore.instance
-                                    .collection('class')
-                                    .doc(widget.classId)
-                                    .collection('task')
-                                    .add({
-                                    'title': controllerTitle.text,
-                                    'subtitle': controllerSubtitle.text,
-                                    'createdAt': Timestamp.now(),
-                                    'endedAt': Timestamp.fromDate(dateTime)
-                                  });
+                            print(widget.classId);
+                            print(widget.docRef);
+
+                            FirebaseFirestore.instance
+                                .collection('class')
+                                .doc(widget.classId)
+                                .collection('task')
+                                .add({
+                              'title': controllerTitle.text,
+                              'subtitle': controllerSubtitle.text,
+                              'createdAt': Timestamp.now(),
+                              'endedAt': Timestamp.fromDate(dateTime)
+                            });
                             Navigator.of(context).pop();
                           },
                           child: Text("Simpan"),

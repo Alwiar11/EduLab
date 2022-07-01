@@ -153,7 +153,11 @@ class _ChatState extends State<Chat> {
                                           profile:
                                               friendData.data!.get('profile'),
                                           lastChat: chatData.data!.docs.last
-                                              .get('message'),
+                                                      .get('type') ==
+                                                  'text'
+                                              ? chatData.data!.docs.last
+                                                  .get('message')
+                                              : 'Foto',
                                           lastTime: formattedDate(chatData
                                               .data!.docs.last
                                               .get('sendAt')),

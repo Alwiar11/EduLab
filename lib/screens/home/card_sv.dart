@@ -48,7 +48,7 @@ class CardSv extends StatelessWidget {
                                 image: NetworkImage(profile), fit: BoxFit.cover)
                             : DecorationImage(
                                 image: AssetImage("assets/images/default.png"),
-                                fit: BoxFit.fill),
+                                fit: BoxFit.cover),
                       ),
                     ),
                   ],

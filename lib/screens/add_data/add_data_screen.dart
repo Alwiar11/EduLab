@@ -3,6 +3,7 @@ import 'package:edulab/contents.dart';
 import 'package:edulab/screens/add_data/textfield.dart';
 import 'package:edulab/waiting.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../home.dart';
@@ -31,17 +32,51 @@ class _AddDataScreenState extends State<AddDataScreen> {
     setState(() {});
   }
 
+  TextEditingController controllerName = TextEditingController();
+  TextEditingController controllerSchool = TextEditingController();
+  TextEditingController controllerAddress = TextEditingController();
+  TextEditingController controllerVacation = TextEditingController();
+  TextEditingController controllerAge = TextEditingController();
+  TextEditingController controllerHobby = TextEditingController();
+  TextEditingController controllerStart = TextEditingController();
+  TextEditingController controllerEnd = TextEditingController();
+  TextEditingController controllerJob = TextEditingController();
+  DateTime dateTime = DateTime.now();
+  DateTime dateTime2 = DateTime.now();
+
+  selectDate() async {
+    final DateTime? picked = await showDatePicker(
+        context: context,
+        initialDate: dateTime,
+        initialDatePickerMode: DatePickerMode.day,
+        firstDate: DateTime.now(),
+        lastDate: DateTime(2101));
+    if (picked != null) {
+      dateTime = picked;
+      //assign the chosen date to the controller
+      controllerStart.text = DateFormat('EEE d MMM y').format(dateTime);
+    }
+  }
+
+  selectDate2() async {
+    final DateTime? picked = await showDatePicker(
+        context: context,
+        initialDate: dateTime2,
+        initialDatePickerMode: DatePickerMode.day,
+        firstDate: DateTime.now(),
+        lastDate: DateTime(2101));
+    if (picked != null) {
+      dateTime2 = picked;
+      //assign the chosen date to the controller
+      controllerEnd.text = DateFormat('EEE d MMM y').format(dateTime2);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    print(uid);
     DocumentReference users =
         FirebaseFirestore.instance.collection('users').doc(uid);
-    var controllerName = TextEditingController();
-    var controllerSchool = TextEditingController();
-    var controllerAddress = TextEditingController();
-    var controllerVacation = TextEditingController();
-    var controllerAge = TextEditingController();
-    var controllerHobby = TextEditingController();
+
     return SingleChildScrollView(
       child: SafeArea(
           child: Column(
@@ -75,12 +110,79 @@ class _AddDataScreenState extends State<AddDataScreen> {
           TextFields(controller: controllerAddress, title: "Alamat"),
           TextFields(controller: controllerAge, title: "Umur"),
           TextFields(controller: controllerHobby, title: "Hobby"),
+          TextFields(controller: controllerJob, title: "Pekerjaan"),
+          Center(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 3),
+              child: Container(
+                height: 45,
+                width: Constant(context).width * 0.9,
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(1),
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                child: TextFormField(
+                  onTap: selectDate,
+                  readOnly: true,
+                  controller: controllerStart,
+                  decoration: InputDecoration(
+                    hintStyle: TextStyle(fontSize: 17),
+                    // hintText: title,
+                    labelText: 'Tanggal Masuk',
+                    prefixIcon: Icon(
+                      Icons.timer,
+                      color: primaryColor,
+                    ),
+
+                    labelStyle: TextStyle(color: primaryColor, fontSize: 16),
+                    border: InputBorder.none,
+                    // prefixIconConstraints: BoxConstraints(minWidth: 0, minHeight: 0),
+                    contentPadding:
+                        EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                  ),
+                ),
+              ),
+            ),
+          ),
+          Center(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 3),
+              child: Container(
+                height: 45,
+                width: Constant(context).width * 0.9,
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(1),
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                child: TextFormField(
+                  onTap: selectDate2,
+                  readOnly: true,
+                  controller: controllerEnd,
+                  decoration: InputDecoration(
+                    hintStyle: TextStyle(fontSize: 17),
+                    // hintText: title,
+                    labelText: 'Tanggal Keluar',
+                    prefixIcon: Icon(
+                      Icons.timer,
+                      color: primaryColor,
+                    ),
+
+                    labelStyle: TextStyle(color: primaryColor, fontSize: 16),
+                    border: InputBorder.none,
+                    // prefixIconConstraints: BoxConstraints(minWidth: 0, minHeight: 0),
+                    contentPadding:
+                        EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                  ),
+                ),
+              ),
+            ),
+          ),
           InkWell(
             onTap: () {
-              users.get().then((doc) async {
+              users.get().then((doc) {
                 if (doc.exists) {
                   DocumentReference<Object?> docRef = users;
-                  users.update({
+                  users.set({
                     'name': controllerName.text,
                     'school': controllerSchool.text,
                     'vacation': controllerVacation.text,
@@ -88,25 +190,23 @@ class _AddDataScreenState extends State<AddDataScreen> {
                     'age': int.tryParse(controllerAge.text) ?? "",
                     'hobby': controllerHobby.text,
                     'isVerified': false,
-                    'isActive': true,
                     'profile': "",
                     'role': "pkl",
-                    'supervisor': '',
-                    'startFromDate': Timestamp.now(),
-                    'endFromDate': Timestamp.now(),
-                    'job': 'pelajar',
-                    'classId': ''
-                  });
-                  if (doc.get('isVerified') == true) {
-                    Navigator.of(context).pushAndRemoveUntil(
-                        MaterialPageRoute(builder: (context) => Home()),
-                        (Route<dynamic> route) => false);
-                  } else {
+                    'startFromDate': Timestamp.fromDate(dateTime),
+                    'endFromDate': Timestamp.fromDate(dateTime2),
+                    'job': controllerJob.text,
+                    'classId': '',
+                  }, SetOptions(merge: true));
+                  if (doc.get('isVerified') != true) {
                     Navigator.of(context).pushAndRemoveUntil(
                         MaterialPageRoute(
                             builder: (context) => Waiting(
                                   userId: uid ?? '',
                                 )),
+                        (Route<dynamic> route) => false);
+                  } else {
+                    Navigator.of(context).pushAndRemoveUntil(
+                        MaterialPageRoute(builder: (context) => Home()),
                         (Route<dynamic> route) => false);
                   }
                 }

@@ -229,7 +229,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                       'age': int.tryParse(controllerAge.text) ??
                                           "",
                                       'hobby': controllerHobby.text,
-                                      'isVerified': false
                                     });
                                     Navigator.of(_).pop();
                                   }

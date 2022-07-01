@@ -270,6 +270,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               width: Constant(context).width / 100,
                               title: 'Hobi',
                               desc: users.hobby),
+                          CardProfile(
+                              height: Constant(context).height / 100,
+                              width: Constant(context).width / 100,
+                              title: 'Pekerjaan',
+                              desc: users.job),
                         ],
                       );
                     }

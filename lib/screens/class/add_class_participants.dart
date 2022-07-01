@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:edulab/contents.dart';
 
@@ -81,7 +83,10 @@ class _AddClassParticpantsState extends State<AddClassParticpants> {
                                       (element) => element.get('classId') == '')
                                   .where((element) =>
                                       element.get('role') != 'supervisor')
-                                  .map((e) => DropdownMenuItem(
+                                  .map(
+                                (e) {
+                                  String name = e.get('name');
+                                  return DropdownMenuItem(
                                       value: e.id,
                                       child: Text(
                                         e.get(
@@ -89,8 +94,9 @@ class _AddClassParticpantsState extends State<AddClassParticpants> {
                                         ),
                                         style: TextStyle(
                                             fontWeight: FontWeight.w500),
-                                      )))
-                                  .toList(),
+                                      ));
+                                },
+                              ).toList(),
                               onChanged: (value) {
                                 setState(() {
                                   selectedValue = value as String;
@@ -110,14 +116,14 @@ class _AddClassParticpantsState extends State<AddClassParticpants> {
                                 widget.classId.isEmpty
                                     ? widget.docRef!.update({
                                         'participants': FieldValue.arrayUnion(
-                                            [selectedValue])
+                                            [selectedValue]),
                                       })
                                     : FirebaseFirestore.instance
                                         .collection('class')
                                         .doc(widget.classId)
                                         .update({
                                         'participants': FieldValue.arrayUnion(
-                                            [selectedValue])
+                                            [selectedValue]),
                                       });
 
                                 FirebaseFirestore.instance

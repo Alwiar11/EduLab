@@ -1,10 +1,15 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:edulab/contents.dart';
 
 import 'package:edulab/screens/profile_user/profile_user.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+
+import '../../../shared/image_picker.dart';
 
 class RoomChat extends StatefulWidget {
   final DocumentReference<Map<String, dynamic>>? chatRef;
@@ -29,6 +34,7 @@ class RoomChat extends StatefulWidget {
 }
 
 class _RoomChatState extends State<RoomChat> {
+  Future<DocumentReference<Map<String, dynamic>>>? chatId;
   String formattedDate(timeStamp) {
     var dateFromTimeStamp =
         DateTime.fromMillisecondsSinceEpoch(timeStamp.seconds * 1000);
@@ -133,32 +139,64 @@ class _RoomChatState extends State<RoomChat> {
                                 widget.uid
                             ? Alignment.topRight
                             : Alignment.topLeft),
-                        child: Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(20),
-                              color: (snapshot.data!.docs[index]
-                                          ['receiverId'] ==
-                                      widget.uid
-                                  ? secondaryColor
-                                  : Color.fromARGB(255, 255, 255, 255)),
-                            ),
-                            padding: EdgeInsets.all(16),
-                            child: Text.rich(TextSpan(
-                                text: snapshot.data!.docs[index]['message']
-                                    .toString(),
-                                style: TextStyle(
-                                    fontSize: 17, fontWeight: FontWeight.w400),
-                                children: <TextSpan>[
-                                  TextSpan(
-                                      text: '  ' +
+                        child: snapshot.data!.docs[index]['type'] == 'text'
+                            ? Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(20),
+                                  color: (snapshot.data!.docs[index]
+                                              ['receiverId'] ==
+                                          widget.uid
+                                      ? secondaryColor
+                                      : Color.fromARGB(255, 255, 255, 255)),
+                                ),
+                                padding: EdgeInsets.all(16),
+                                child: Text.rich(TextSpan(
+                                    text: snapshot.data!.docs[index]['message']
+                                        .toString(),
+                                    style: TextStyle(
+                                        fontSize: 17,
+                                        fontWeight: FontWeight.w400),
+                                    children: <TextSpan>[
+                                      TextSpan(
+                                          text: '  ' +
+                                              formattedDate(snapshot
+                                                  .data!.docs[index]['sendAt']),
+                                          style: TextStyle(
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.w400,
+                                              color: Color.fromARGB(
+                                                  255, 111, 111, 111)))
+                                    ])))
+                            : Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(20),
+                                  color: (snapshot.data!.docs[index]
+                                              ['receiverId'] ==
+                                          widget.uid
+                                      ? secondaryColor
+                                      : Color.fromARGB(255, 255, 255, 255)),
+                                ),
+                                padding: EdgeInsets.all(16),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: [
+                                    Image.network(
+                                      snapshot.data!.docs[index]['image'],
+                                      height: 150,
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(top: 10),
+                                      child: Text(
                                           formattedDate(snapshot
                                               .data!.docs[index]['sendAt']),
-                                      style: TextStyle(
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.w400,
-                                          color: Color.fromARGB(
-                                              255, 111, 111, 111)))
-                                ]))),
+                                          style: TextStyle(
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.w400,
+                                              color: Color.fromARGB(
+                                                  255, 111, 111, 111))),
+                                    )
+                                  ],
+                                )),
                       ),
                     );
                   },
@@ -175,7 +213,28 @@ class _RoomChatState extends State<RoomChat> {
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             GestureDetector(
-              onTap: () {},
+              onTap: () async {
+                File? image = await AppImagePicker(context).getImageGallery();
+                print(image);
+                if (image != null) {
+                  FirebaseStorage.instance
+                      .ref('chat/pfp.png')
+                      .putFile(image)
+                      .then((result) async {
+                    String downloadUrl = await result.ref.getDownloadURL();
+                    // Simpan downloadUrl di collection user
+                    // teapal colletiona soalna
+                    chatId = widget.chatRef?.collection('messages').add({
+                      'image': downloadUrl,
+                      'receiverId': widget.uid,
+                      'sendAt': Timestamp.now(),
+                      'receivername': widget.name,
+                      'type': 'image',
+                      'message': ''
+                    });
+                  });
+                }
+              },
               child: Container(
                 height: 30,
                 width: 30,
@@ -208,11 +267,12 @@ class _RoomChatState extends State<RoomChat> {
             FloatingActionButton(
               mini: true,
               onPressed: () {
-                widget.chatRef?.collection('messages').add({
+                chatId = widget.chatRef?.collection('messages').add({
                   'message': messageController.text,
                   'receiverId': widget.uid,
                   'sendAt': Timestamp.now(),
                   'receivername': widget.name,
+                  'type': 'text'
                 });
                 messageController.clear();
                 widget.chatRef?.update({'lastChat': Timestamp.now()});

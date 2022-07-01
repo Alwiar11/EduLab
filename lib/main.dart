@@ -1,39 +1,27 @@
-import 'package:edulab/home_admin.dart';
-import 'package:edulab/screens/intro/intro_screen.dart';
-import 'package:edulab/waiting.dart';
+import 'package:edulab/auth_checker.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
-import 'home.dart';
 
 void main() async {
   WidgetsFlutterBinding();
   await Firebase.initializeApp();
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  var uid = await prefs.getString('uid');
-  var role = await prefs.getString('role');
-  var isVerified = await prefs.getBool('isVerified');
 
-  runApp(MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: uid == null
-          ? IntroScreen()
-          : role == 'admin'
-              ? HomeAdmin()
-              : isVerified == true
-                  ? Home()
-                  : Waiting(userId: uid)));
+  runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
 
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: IntroScreen(),
+      home: AuthChecker(),
     );
   }
 }

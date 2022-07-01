@@ -162,6 +162,7 @@ class _HomePageScreenState extends State<HomePageScreen> {
                               stream: FirebaseFirestore.instance
                                   .collection('users')
                                   .where("role", isEqualTo: "supervisor")
+                                  .limit(4)
                                   .snapshots(),
                               builder: (_, snapshot) {
                                 if (snapshot.hasData) {
@@ -287,7 +288,7 @@ class _HomePageScreenState extends State<HomePageScreen> {
                                                                     image: AssetImage(
                                                                         "assets/images/default.png"),
                                                                     fit: BoxFit
-                                                                        .fill),
+                                                                        .cover),
                                                           ),
                                                         )
                                                       : CircularProgressIndicator(),

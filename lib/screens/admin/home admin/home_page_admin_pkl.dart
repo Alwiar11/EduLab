@@ -8,6 +8,7 @@ import 'package:edulab/screens/admin/home%20admin/waiting_list.dart';
 import 'package:flutter/material.dart';
 
 import '../profile_user_admin_pkl/profile_user_admin_pkl.dart';
+import 'change_role.dart';
 
 class HomePageAdminPkl extends StatelessWidget {
   const HomePageAdminPkl({Key? key}) : super(key: key);
@@ -49,8 +50,6 @@ class HomePageAdminPkl extends StatelessWidget {
             stream: FirebaseFirestore.instance
                 .collection('users')
                 .where('role', isEqualTo: 'pkl')
-                .where('isVerified', isEqualTo: true)
-                .where('isActive', isEqualTo: true)
                 .snapshots(),
             builder: (_, snapshots) {
               if (snapshots.hasData) {
@@ -127,11 +126,12 @@ class CardAdmin extends StatelessWidget {
             children: [
               IconButton(
                   onPressed: () {
-                    // FirebaseFirestore.instance.collection('')
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => ChangeRole(classId: userId)));
                   },
                   icon: Icon(
-                    Icons.delete,
-                    color: Color.fromARGB(255, 210, 33, 21),
+                    Icons.edit,
+                    color: Color.fromARGB(255, 140, 140, 140),
                   )),
             ],
           )
