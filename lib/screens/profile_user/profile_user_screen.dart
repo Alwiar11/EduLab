@@ -63,7 +63,7 @@ class _ProfileUserScreenState extends State<ProfileUserScreen> {
                           if (snapshot.hasData) {
                             return Container(
                               // margin: EdgeInsets.only(bottom: 27),
-                              height: Constant(context).height * 0.26,
+                              height: Constant(context).height * 0.28,
                               width: Constant(context).width * 0.5,
                               decoration: BoxDecoration(
                                   shape: BoxShape.circle,
@@ -106,12 +106,15 @@ class _ProfileUserScreenState extends State<ProfileUserScreen> {
                           SizedBox(
                             height: Constant(context).height * 0.01,
                           ),
-                          Text(users.name,
-                              style: TextStyle(
-                                fontFamily: "Inter",
-                                fontSize: 22,
-                                fontWeight: FontWeight.w600,
-                              )),
+                          Container(
+                            child: Text(users.name,
+                                style: TextStyle(
+                                  overflow: TextOverflow.fade,
+                                  fontFamily: "Inter",
+                                  fontSize: 22,
+                                  fontWeight: FontWeight.w600,
+                                )),
+                          ),
                           Text(users.phoneNumber,
                               style:
                                   TextStyle(color: Colors.grey, fontSize: 14)),
@@ -146,6 +149,11 @@ class _ProfileUserScreenState extends State<ProfileUserScreen> {
                               width: Constant(context).width / 100,
                               title: 'Hobi',
                               desc: users.hobby),
+                          CardProfileUser(
+                              height: Constant(context).height / 100,
+                              width: Constant(context).width / 100,
+                              title: 'Pekerjaan',
+                              desc: users.job),
                         ],
                       );
                     }

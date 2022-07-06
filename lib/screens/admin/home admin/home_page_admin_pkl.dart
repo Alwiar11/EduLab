@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:edulab/contents.dart';
 import 'package:edulab/screens/admin/home%20admin/non_active.dart';
 import 'package:edulab/screens/admin/home%20admin/waiting_list.dart';
+import 'package:edulab/shared/constant.dart';
 
 import 'package:flutter/material.dart';
 
@@ -119,7 +120,13 @@ class CardAdmin extends StatelessWidget {
               child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Text(name),
+              SizedBox(
+                width: Constant(context).width * 0.5,
+                child: Text(
+                  name,
+                  style: TextStyle(overflow: TextOverflow.ellipsis),
+                ),
+              ),
             ],
           )),
           Row(

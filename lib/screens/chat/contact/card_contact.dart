@@ -32,15 +32,19 @@ class CardContact extends StatelessWidget {
               decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   image: profile != ""
-                      ? DecorationImage(image: NetworkImage(profile))
+                      ? DecorationImage(
+                          image: NetworkImage(profile), fit: BoxFit.fitHeight)
                       : DecorationImage(
                           image: AssetImage("assets/images/default.png"),
                           fit: BoxFit.cover)),
             ),
           ),
-          Text(
-            name,
-            style: TextStyle(fontSize: 16),
+          SizedBox(
+            width: Constant(context).width * 0.5,
+            child: Text(
+              name,
+              style: TextStyle(fontSize: 16, overflow: TextOverflow.ellipsis),
+            ),
           ),
         ],
       ),

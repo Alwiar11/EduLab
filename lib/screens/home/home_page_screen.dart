@@ -84,7 +84,7 @@ class _HomePageScreenState extends State<HomePageScreen> {
                                                 : DecorationImage(
                                                     image: AssetImage(
                                                         'assets/images/default.png'),
-                                                    fit: BoxFit.cover),
+                                                    fit: BoxFit.contain),
                                           ),
                                         )
                                       : CircularProgressIndicator(),
@@ -101,11 +101,15 @@ class _HomePageScreenState extends State<HomePageScreen> {
                                             fontSize: 20,
                                             fontWeight: FontWeight.w400),
                                       ),
-                                      Text(
-                                        users.name,
-                                        style: TextStyle(
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.w500),
+                                      SizedBox(
+                                        width: 230,
+                                        child: Text(
+                                          users.name,
+                                          style: TextStyle(
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.w500,
+                                              overflow: TextOverflow.ellipsis),
+                                        ),
                                       )
                                     ],
                                   )
@@ -244,109 +248,127 @@ class _HomePageScreenState extends State<HomePageScreen> {
                                   return Column(
                                     children: [
                                       ...snapshot.data!.docs.map(
-                                        (e) => Column(
-                                          children: [
-                                            Container(
-                                              margin:
-                                                  EdgeInsets.only(right: 20),
-                                              height: Constant(context).height *
-                                                  0.13,
-                                              width:
-                                                  Constant(context).width * 1,
-                                              decoration: BoxDecoration(
-                                                  color: primaryColor,
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          15)),
-                                              child: Row(
-                                                children: [
-                                                  SizedBox(
-                                                    width: Constant(context)
-                                                            .width *
-                                                        0.025,
-                                                  ),
-                                                  uid != null
-                                                      ? Container(
-                                                          height: 60,
-                                                          width: 60,
-                                                          decoration:
-                                                              BoxDecoration(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        10),
-                                                            image: e.get(
-                                                                        "profile") !=
-                                                                    ""
-                                                                ? DecorationImage(
-                                                                    image: NetworkImage(
-                                                                        e.get(
-                                                                            "profile")),
-                                                                    fit: BoxFit
-                                                                        .cover)
-                                                                : DecorationImage(
-                                                                    image: AssetImage(
-                                                                        "assets/images/default.png"),
-                                                                    fit: BoxFit
-                                                                        .cover),
-                                                          ),
-                                                        )
-                                                      : CircularProgressIndicator(),
-                                                  SizedBox(
-                                                    width: Constant(context)
-                                                            .width *
-                                                        0.04,
-                                                  ),
-                                                  Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .center,
-                                                    children: [
-                                                      Row(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .start,
-                                                        children: [
-                                                          Text(
-                                                            e.get('name'),
-                                                            style: TextStyle(
-                                                                fontSize: 16,
-                                                                color: Colors
-                                                                    .white,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w600),
+                                        (e) => InkWell(
+                                          onTap: () {
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        ProfileUser(
+                                                          uid: e.id,
+                                                          role: e.get('role'),
+                                                        )));
+                                          },
+                                          child: Column(
+                                            children: [
+                                              Container(
+                                                margin:
+                                                    EdgeInsets.only(right: 20),
+                                                height:
+                                                    Constant(context).height *
+                                                        0.13,
+                                                width:
+                                                    Constant(context).width * 1,
+                                                decoration: BoxDecoration(
+                                                    color: primaryColor,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            15)),
+                                                child: Row(
+                                                  children: [
+                                                    SizedBox(
+                                                      width: Constant(context)
+                                                              .width *
+                                                          0.025,
+                                                    ),
+                                                    uid != null
+                                                        ? Container(
+                                                            height: 60,
+                                                            width: 60,
+                                                            decoration:
+                                                                BoxDecoration(
+                                                              color:
+                                                                  Colors.white,
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          10),
+                                                              image: e.get(
+                                                                          "profile") !=
+                                                                      ""
+                                                                  ? DecorationImage(
+                                                                      image: NetworkImage(
+                                                                          e.get(
+                                                                              "profile")),
+                                                                      fit: BoxFit
+                                                                          .cover)
+                                                                  : DecorationImage(
+                                                                      image: AssetImage(
+                                                                          "assets/images/default.png"),
+                                                                      fit: BoxFit
+                                                                          .contain),
+                                                            ),
                                                           )
-                                                        ],
-                                                      ),
-                                                      Row(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .start,
-                                                        children: [
-                                                          Text(e.get('school'),
+                                                        : CircularProgressIndicator(),
+                                                    SizedBox(
+                                                      width: Constant(context)
+                                                              .width *
+                                                          0.04,
+                                                    ),
+                                                    Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
+                                                      children: [
+                                                        Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .start,
+                                                          children: [
+                                                            Text(
+                                                              e.get('name'),
                                                               style: TextStyle(
-                                                                  fontSize: 12,
+                                                                  fontSize: 16,
                                                                   color: Colors
                                                                       .white,
                                                                   fontWeight:
                                                                       FontWeight
-                                                                          .w400))
-                                                        ],
-                                                      ),
-                                                    ],
-                                                  )
-                                                ],
+                                                                          .w600),
+                                                            )
+                                                          ],
+                                                        ),
+                                                        Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .start,
+                                                          children: [
+                                                            Text(
+                                                                e.get('school'),
+                                                                style: TextStyle(
+                                                                    fontSize:
+                                                                        12,
+                                                                    color: Colors
+                                                                        .white,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w400))
+                                                          ],
+                                                        ),
+                                                      ],
+                                                    )
+                                                  ],
+                                                ),
                                               ),
-                                            ),
-                                            SizedBox(
-                                              height: Constant(context).height *
-                                                  0.025,
-                                            )
-                                          ],
+                                              SizedBox(
+                                                height:
+                                                    Constant(context).height *
+                                                        0.025,
+                                              )
+                                            ],
+                                          ),
                                         ),
                                       )
                                     ],

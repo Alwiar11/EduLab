@@ -41,7 +41,7 @@ class _TaskRoomState extends State<TaskRoom> {
 
   @override
   Widget build(BuildContext context) {
-    print(widget.collRefTaskRoom!.id);
+    print(widget.collRefTaskRoom);
     print(widget.taskRoomId);
     return Scaffold(
       backgroundColor: Color.fromARGB(255, 232, 232, 232),
@@ -66,6 +66,7 @@ class _TaskRoomState extends State<TaskRoom> {
           stream: widget.collRefTaskRoom!.doc(widget.taskRoomId).snapshots(),
           builder: (_, snapshots) {
             if (snapshots.hasData) {
+              print(snapshots.data!.get('endedAt'));
               DocumentReference<Map<String, dynamic>> docRefReply =
                   widget.collRefTaskRoom!.doc(widget.taskRoomId);
               return Container(

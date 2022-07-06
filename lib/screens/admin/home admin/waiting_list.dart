@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:edulab/contents.dart';
+import 'package:edulab/screens/profile_user/profile_user.dart';
 import 'package:flutter/material.dart';
 
 class WaitingList extends StatelessWidget {
@@ -24,10 +25,17 @@ class WaitingList extends StatelessWidget {
             if (snapshot.hasData) {
               return ListView(
                 children: [
-                  ...snapshot.data!.docs.map((e) => CardWaiting(
-                      name: e.get('name'),
-                      profile: e.get('profile'),
-                      userId: e.id))
+                  ...snapshot.data!.docs.map((e) => InkWell(
+                        onTap: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) =>
+                                  ProfileUser(uid: e.id, role: e.get('role'))));
+                        },
+                        child: CardWaiting(
+                            name: e.get('name'),
+                            profile: e.get('profile'),
+                            userId: e.id),
+                      ))
                 ],
               );
             }

@@ -1,4 +1,5 @@
 import 'package:edulab/contents.dart';
+import 'package:edulab/shared/constant.dart';
 import 'package:flutter/material.dart';
 
 class CardProfile extends StatelessWidget {
@@ -25,21 +26,25 @@ class CardProfile extends StatelessWidget {
               fontFamily: "Inter", fontSize: 20, fontWeight: FontWeight.w600),
         ),
         Container(
-          height: height * 6,
+          padding: EdgeInsets.symmetric(vertical: 10),
           width: width * 90,
           decoration: BoxDecoration(
               color: primaryColor, borderRadius: BorderRadius.circular(15)),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(
-                desc,
-                style: TextStyle(
-                    fontFamily: "Inter",
-                    fontSize: 16,
-                    color: Colors.white,
-                    fontWeight: FontWeight.w500),
-                textAlign: TextAlign.center,
+              SizedBox(
+                width: Constant(context).width * 0.7,
+                child: Text(
+                  desc,
+                  style: TextStyle(
+                      overflow: TextOverflow.fade,
+                      fontFamily: "Inter",
+                      fontSize: 16,
+                      color: Colors.white,
+                      fontWeight: FontWeight.w500),
+                  textAlign: TextAlign.center,
+                ),
               ),
             ],
           ),

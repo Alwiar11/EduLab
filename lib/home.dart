@@ -64,12 +64,7 @@ class _HomeScreenState extends State<HomeScreen> {
       body: PageView(
         physics: NeverScrollableScrollPhysics(),
         controller: _pageController,
-        children: [
-          const HomePage(),
-          role != 'supervisor' ? Class() : ClassSv(),
-          Chat(),
-          Profile()
-        ],
+        children: [const HomePage(), ClassSv(), Chat(), Profile()],
         onPageChanged: (index) {
           setState(() => _currentPage = index);
         },

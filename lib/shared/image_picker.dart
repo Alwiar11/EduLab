@@ -18,6 +18,17 @@ class AppImagePicker {
     }
   }
 
+  Future<XFile?> getImageGallery2() async {
+    ImagePicker _picker = ImagePicker();
+    final XFile? image =
+        await _picker.pickImage(source: ImageSource.gallery, imageQuality: 50);
+    if (image != null) {
+      return XFile(image.path);
+    } else {
+      return null;
+    }
+  }
+
   Future<List<XFile>> multiImagePicker() async {
     List<XFile>? _images = await ImagePicker().pickMultiImage();
     if (_images != null && _images.isNotEmpty) {
@@ -37,6 +48,24 @@ class AppImagePicker {
   }
 
   Future<String> uploadImage(XFile image, String uid) async {
+    print(getImageName(image));
+    Reference db =
+        FirebaseStorage.instance.ref('reply/$uid/${getImageName(image)}');
+    await db.putFile(File(image.path));
+    return await db.getDownloadURL();
+  }
+
+  Future<List<String>> multiImageUploader2(List<XFile> list, String uid) async {
+    List<String> path = [];
+    for (XFile _image in list) {
+      // path.add(await uploadImage(_image, uid));
+      path = [...path, await uploadImage(_image, uid)];
+    }
+
+    return path;
+  }
+
+  Future<String> uploadImage2(XFile image, String uid) async {
     print(getImageName(image));
     Reference db =
         FirebaseStorage.instance.ref('reply/$uid/${getImageName(image)}');

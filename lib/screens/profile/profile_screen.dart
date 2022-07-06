@@ -230,12 +230,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           SizedBox(
                             height: Constant(context).height * 0.01,
                           ),
-                          Text(users.name,
-                              style: TextStyle(
+                          Text(
+                            users.name,
+                            style: TextStyle(
                                 fontFamily: "Inter",
                                 fontSize: 22,
                                 fontWeight: FontWeight.w600,
-                              )),
+                                overflow: TextOverflow.fade),
+                            textAlign: TextAlign.center,
+                          ),
                           Text(users.phoneNumber,
                               style:
                                   TextStyle(color: Colors.grey, fontSize: 14)),

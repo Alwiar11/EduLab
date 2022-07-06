@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:another_flushbar/flushbar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:edulab/contents.dart';
 
@@ -21,6 +22,7 @@ class AddReply extends StatefulWidget {
 class _AddReplyState extends State<AddReply> {
   List<String> multipleImages = [];
   List<XFile> multipleImage = [];
+  late BuildContext dContext;
 
   String? uid;
   String? name;
@@ -30,6 +32,7 @@ class _AddReplyState extends State<AddReply> {
     // TODO: implement initState
     super.initState();
     getUid();
+    dContext = context;
   }
 
   getUid() async {
@@ -43,6 +46,7 @@ class _AddReplyState extends State<AddReply> {
   TextEditingController controller = TextEditingController();
   @override
   Widget build(BuildContext context) {
+    print(name);
     return Scaffold(
       backgroundColor: Color.fromARGB(255, 232, 232, 232),
       appBar: AppBar(
@@ -106,6 +110,27 @@ class _AddReplyState extends State<AddReply> {
                             padding: const EdgeInsets.only(right: 5),
                             child: InkWell(
                                 onTap: () async {
+                                  showGeneralDialog(
+                                    context: context,
+                                    barrierDismissible: false,
+                                    barrierLabel: '',
+                                    transitionDuration:
+                                        Duration(milliseconds: 100),
+                                    pageBuilder:
+                                        (context, animation1, animation2) {
+                                      dContext = context;
+                                      return Container();
+                                    },
+                                    transitionBuilder:
+                                        (BuildContext context, a1, a2, widget) {
+                                      dContext = context;
+                                      return WillPopScope(
+                                        onWillPop: () async => false,
+                                        child: Center(
+                                            child: CircularProgressIndicator()),
+                                      );
+                                    },
+                                  );
                                   List<XFile>? _images =
                                       await AppImagePicker(context)
                                           .multiImagePicker();
@@ -113,11 +138,39 @@ class _AddReplyState extends State<AddReply> {
                                     multipleImage += await _images;
                                     setState(() {});
                                   }
+                                  List<XFile>? _images1 = await multipleImage;
+                                  if (_images.isNotEmpty) {
+                                    multipleImages =
+                                        await AppImagePicker(context)
+                                            .multiImageUploader(
+                                                _images1, uid ?? '');
+                                    setState(() {});
+                                  }
+                                  Navigator.of(dContext).pop();
                                 },
                                 child: Icon(Icons.camera_alt_outlined)),
                           ),
                           InkWell(
                             onTap: () async {
+                              showGeneralDialog(
+                                context: context,
+                                barrierDismissible: false,
+                                barrierLabel: '',
+                                transitionDuration: Duration(milliseconds: 100),
+                                pageBuilder: (context, animation1, animation2) {
+                                  dContext = context;
+                                  return Container();
+                                },
+                                transitionBuilder:
+                                    (BuildContext context, a1, a2, widget) {
+                                  dContext = context;
+                                  return WillPopScope(
+                                    onWillPop: () async => false,
+                                    child: Center(
+                                        child: CircularProgressIndicator()),
+                                  );
+                                },
+                              );
                               List<XFile>? _images =
                                   await AppImagePicker(context)
                                       .multiImagePicker();
@@ -125,6 +178,13 @@ class _AddReplyState extends State<AddReply> {
                                 multipleImage += await _images;
                                 setState(() {});
                               }
+                              List<XFile>? _images1 = await multipleImage;
+                              if (_images.isNotEmpty) {
+                                multipleImages = await AppImagePicker(context)
+                                    .multiImageUploader(_images1, uid ?? '');
+                                setState(() {});
+                              }
+                              Navigator.of(dContext).pop();
                             },
                             child: Text(
                               'Tambahkan Foto',
@@ -179,22 +239,57 @@ class _AddReplyState extends State<AddReply> {
                     ElevatedButton(
                         style: ElevatedButton.styleFrom(primary: primaryColor),
                         onPressed: () async {
-                          List<XFile>? _images = await multipleImage;
-                          if (_images.isNotEmpty) {
-                            multipleImages = await AppImagePicker(context)
-                                .multiImageUploader(_images, uid ?? '');
-                            setState(() {});
-
-                            widget.docRefReply.collection('reply').add({
-                              'images': FieldValue.arrayUnion(multipleImages),
-                              'answer': controller.text,
-                              'senderId': uid,
-                              'senderName': name,
-                              'sendAt': Timestamp.now()
-                            });
-                          }
-                          print(multipleImages);
-                          Navigator.of(context).pop();
+                          showDialog(
+                              context: context,
+                              builder: (BuildContext ctx) => AlertDialog(
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(20)),
+                                    title: Text(
+                                      'Peringatan!',
+                                      style: TextStyle(color: Colors.amber),
+                                    ),
+                                    content: Text("Apakah Anda Yakin?"),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () =>
+                                            Navigator.pop(ctx, 'Cancel'),
+                                        child: const Text(
+                                          'Kembali',
+                                          style: TextStyle(color: primaryColor),
+                                        ),
+                                      ),
+                                      TextButton(
+                                        onPressed: () async {
+                                          Navigator.of(ctx).pop();
+                                          if (controller.text.isNotEmpty) {
+                                            widget.docRefReply
+                                                .collection('reply')
+                                                .add({
+                                              'answer': controller.text,
+                                              'images': FieldValue.arrayUnion(
+                                                  multipleImages),
+                                              'senderId': uid,
+                                              'senderName': name,
+                                              'sendAt': Timestamp.now()
+                                            });
+                                            Navigator.of(context).pop();
+                                          } else
+                                            await Flushbar(
+                                              backgroundColor: Colors.red,
+                                              title: 'Tidak Boleh Kosong',
+                                              flushbarPosition:
+                                                  FlushbarPosition.TOP,
+                                              duration: Duration(seconds: 2),
+                                              message: 'Harus Terisi Semua',
+                                            ).show(context);
+                                        },
+                                        child: const Text('OK',
+                                            style:
+                                                TextStyle(color: primaryColor)),
+                                      ),
+                                    ],
+                                  ));
                         },
                         child: Text('Simpan'))
                   ],

@@ -26,6 +26,7 @@ class _ChatState extends State<Chat> {
   }
 
   String from = 'chat';
+  late BuildContext dContext;
   String? uid;
 
   @override
@@ -33,6 +34,7 @@ class _ChatState extends State<Chat> {
     // TODO: implement initState
     super.initState();
     getUid();
+    dContext = context;
   }
 
   getUid() async {
@@ -80,7 +82,7 @@ class _ChatState extends State<Chat> {
           builder: (_, snapshots) {
             if (snapshots.hasData) {
               return ListView.builder(
-                itemCount: snapshots.data!.size,
+                itemCount: snapshots.data!.docs.length,
                 itemBuilder: (_, index) {
                   String friendId =
                       snapshots.data!.docs[index].get('participants')[0] == uid
@@ -107,7 +109,27 @@ class _ChatState extends State<Chat> {
                                   return Column(
                                     children: [
                                       InkWell(
-                                        onTap: () async {
+                                        onTap: () {
+                                          showGeneralDialog(
+                                            context: context,
+                                            barrierDismissible: false,
+                                            barrierLabel: '',
+                                            transitionDuration:
+                                                Duration(milliseconds: 100),
+                                            pageBuilder: (context, animation1,
+                                                animation2) {
+                                              dContext = context;
+                                              return Container();
+                                            },
+                                            transitionBuilder:
+                                                (BuildContext context, a1, a2,
+                                                    widget) {
+                                              dContext = context;
+                                              return Center(
+                                                  child:
+                                                      CircularProgressIndicator());
+                                            },
+                                          );
                                           FirebaseFirestore.instance
                                               .collection("chats")
                                               .where('participants',
@@ -115,6 +137,7 @@ class _ChatState extends State<Chat> {
                                               .get()
                                               .then((doc) {
                                             print(doc.docs.length);
+                                            Navigator.of(dContext).pop();
 
                                             for (var i = 0; i < doc.size; i++) {
                                               if (doc.docs[i]

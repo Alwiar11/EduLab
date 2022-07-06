@@ -50,36 +50,16 @@ class _ClassState extends State<Class> {
     print(widget.docRef);
     print(widget.classId);
     return Scaffold(
-        appBar: role == 'supervisor'
-            ? AppBar(
-                backgroundColor: primaryColor,
-                elevation: 0,
-                title: Text('Kelas'),
-                actions: [
-                  Padding(
-                    padding: const EdgeInsets.only(right: 5),
-                    child: IconButton(
-                        onPressed: () {
-                          Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => AddClassParticpants(
-                                    classId: widget.classId ?? '',
-                                    docRef: widget.docRef,
-                                  )));
-                        },
-                        icon: Icon(
-                          Icons.add,
-                          size: 25,
-                        )),
-                  )
-                ],
-              )
-            : null,
+        appBar: AppBar(
+          backgroundColor: primaryColor,
+          elevation: 0,
+          title: Text('Kelas'),
+        ),
         backgroundColor: Color.fromARGB(255, 232, 232, 232),
-        body: StreamBuilder<QuerySnapshot>(
+        body: StreamBuilder<DocumentSnapshot>(
             stream: FirebaseFirestore.instance
                 .collection('class')
-                .where('participants', arrayContains: uid)
-                .limit(1)
+                .doc(widget.classId)
                 .snapshots(),
             builder: (_, snapshots) {
               if (snapshots.hasData) {
@@ -107,38 +87,34 @@ class _ClassState extends State<Class> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  ...snapshots.data!.docs.map(((e) {
-                                    classIdPkl = e.id;
-                                    return Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          "Kelas",
-                                          style: TextStyle(
-                                              fontSize: 28,
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.w600),
-                                          textAlign: TextAlign.start,
-                                        ),
-                                        Text(
-                                          e.get('supervisor'),
-                                          style: TextStyle(
-                                              fontSize: 14,
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.w600),
-                                        ),
-                                      ],
-                                    );
-                                  })),
+                                  Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        "Kelas",
+                                        style: TextStyle(
+                                            fontSize: 28,
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.w600),
+                                        textAlign: TextAlign.start,
+                                      ),
+                                      Text(
+                                        snapshots.data!.get('className'),
+                                        style: TextStyle(
+                                            fontSize: 14,
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.w600),
+                                      ),
+                                    ],
+                                  ),
                                   Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       Image.asset(
                                         "assets/images/6.png",
-                                        scale: 0.8,
+                                        scale: 2,
                                       )
                                     ],
                                   )
@@ -148,31 +124,19 @@ class _ClassState extends State<Class> {
                           ),
                           SizedBox(height: Constant(context).height * 0.02),
                           StreamBuilder<QuerySnapshot>(
-                              stream: role == 'supervisor'
-                                  ? widget.docRef == null
-                                      ? FirebaseFirestore.instance
-                                          .collection('class')
-                                          .doc(widget.classId)
-                                          .collection('task')
-                                          .orderBy('createdAt',
-                                              descending: true)
-                                          .snapshots()
-                                      : widget.docRef!
-                                          .collection('task')
-                                          .snapshots()
-                                  : FirebaseFirestore.instance
-                                      .collection('class')
-                                      .doc(classIdPkl)
-                                      .collection('task')
-                                      .orderBy('createdAt', descending: true)
-                                      .snapshots(),
+                              stream: FirebaseFirestore.instance
+                                  .collection('class')
+                                  .doc(widget.classId)
+                                  .collection('task')
+                                  .orderBy('createdAt', descending: true)
+                                  .snapshots(),
                               builder: (context, taskSnapshot) {
                                 if (taskSnapshot.hasData) {
                                   CollectionReference<Map<String, dynamic>>
                                       collRefTaskRoom = FirebaseFirestore
                                           .instance
                                           .collection('class')
-                                          .doc(classIdPkl)
+                                          .doc(widget.classId)
                                           .collection('task');
                                   return Column(
                                     children: [
@@ -213,11 +177,60 @@ class _ClassState extends State<Class> {
             ? FloatingActionButton(
                 backgroundColor: primaryColor,
                 onPressed: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => AddTask(
-                            docRef: widget.docRef,
-                            classId: widget.classId,
-                          )));
+                  showDialog(
+                      context: context,
+                      builder: (BuildContext _) => AlertDialog(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20)),
+                            content: Container(
+                              height: 100,
+                              child: Column(
+                                children: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  AddClassParticpants(
+                                                    classId:
+                                                        widget.classId ?? '',
+                                                    docRef: widget.docRef,
+                                                  )));
+                                      Navigator.of(_).pop();
+                                    },
+                                    child: Text(
+                                      'Tambah Anggota',
+                                      style: TextStyle(color: primaryColor),
+                                    ),
+                                  ),
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context)
+                                          .push(MaterialPageRoute(
+                                              builder: (context) => AddTask(
+                                                    docRef: widget.docRef,
+                                                    classId: widget.classId,
+                                                  )));
+                                      Navigator.of(_).pop();
+                                    },
+                                    child: Text(
+                                      'Tambah Tugas',
+                                      style: TextStyle(color: primaryColor),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                            actions: [
+                              TextButton(
+                                onPressed: () => Navigator.pop(_, 'Cancel'),
+                                child: const Text(
+                                  'Kembali',
+                                  style: TextStyle(color: primaryColor),
+                                ),
+                              ),
+                            ],
+                          ));
                 },
                 child: Icon(Icons.add),
               )

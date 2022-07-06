@@ -42,6 +42,7 @@ class CardSv extends StatelessWidget {
                       height: 90,
                       width: 90,
                       decoration: BoxDecoration(
+                        color: Colors.white,
                         shape: BoxShape.circle,
                         image: profile != ""
                             ? DecorationImage(

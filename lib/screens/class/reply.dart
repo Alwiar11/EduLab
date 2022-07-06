@@ -54,8 +54,14 @@ class _ReplyState extends State<Reply> {
       ),
       body: StreamBuilder<QuerySnapshot>(
         stream: role == 'supervisor'
-            ? widget.docRefReply.collection('reply').snapshots()
-            : widget.docRefReply.collection('reply').snapshots(),
+            ? widget.docRefReply
+                .collection('reply')
+                .orderBy('sendAt', descending: true)
+                .snapshots()
+            : widget.docRefReply
+                .collection('reply')
+                .orderBy('sendAt', descending: true)
+                .snapshots(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return ListView(
@@ -68,6 +74,8 @@ class _ReplyState extends State<Reply> {
                       child: InkWell(
                         onTap: () {
                           final snackBar = SnackBar(
+                              backgroundColor: Colors.red,
+                              duration: Duration(seconds: 2),
                               content:
                                   Text('Tidak Bisa Melihat Tugas Orang Lain'));
                           role == 'supervisor' || e.get('senderId') == uid

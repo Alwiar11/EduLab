@@ -74,19 +74,30 @@ class _AddClassState extends State<AddClass> {
             ElevatedButton(
                 style: ElevatedButton.styleFrom(primary: primaryColor),
                 onPressed: () async {
-                  DocumentReference<Map<String, dynamic>> docRef =
-                      await FirebaseFirestore.instance.collection('class').add({
-                    'createdAt': Timestamp.now(),
-                    'supervisor': controllerNameClass.text,
-                    'participants': FieldValue.arrayUnion([uid]),
-                  });
-                  print(docRef.id);
-                  FirebaseFirestore.instance
-                      .collection("users")
-                      .doc(uid)
-                      .update({'classId': docRef.id});
+                  if (controllerNameClass.text.isNotEmpty) {
+                    DocumentReference<Map<String, dynamic>> docRef =
+                        await FirebaseFirestore.instance
+                            .collection('class')
+                            .add({
+                      'createdAt': Timestamp.now(),
+                      'className': controllerNameClass.text,
+                      'participants': FieldValue.arrayUnion([uid]),
+                    });
+                    print(docRef.id);
+                    FirebaseFirestore.instance
+                        .collection("users")
+                        .doc(uid)
+                        .update({'classId': docRef.id});
 
-                  Navigator.of(context).pop();
+                    Navigator.of(context).pop();
+                  } else
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Tidak Boleh Kosong'),
+                        backgroundColor: Colors.red,
+                        duration: Duration(seconds: 2),
+                      ),
+                    );
                 },
                 child: Text('Simpan'))
           ],

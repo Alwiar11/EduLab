@@ -7,6 +7,7 @@ import 'package:edulab/screens/profile_user/profile_user.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 
 import '../../../shared/image_picker.dart';
@@ -34,6 +35,10 @@ class RoomChat extends StatefulWidget {
 }
 
 class _RoomChatState extends State<RoomChat> {
+  String getImageName(XFile image) {
+    return image.path.split('/').last;
+  }
+
   Future<DocumentReference<Map<String, dynamic>>>? chatId;
   String formattedDate(timeStamp) {
     var dateFromTimeStamp =
@@ -52,6 +57,8 @@ class _RoomChatState extends State<RoomChat> {
 
   @override
   Widget build(BuildContext context) {
+    String chatRef = widget.chatRef!.id;
+
     return Scaffold(
       backgroundColor: Color.fromARGB(255, 232, 232, 232),
       appBar: AppBar(
@@ -214,12 +221,13 @@ class _RoomChatState extends State<RoomChat> {
           children: <Widget>[
             GestureDetector(
               onTap: () async {
-                File? image = await AppImagePicker(context).getImageGallery();
-                print(image);
+                XFile? image = await AppImagePicker(context).getImageGallery2();
+
                 if (image != null) {
                   FirebaseStorage.instance
-                      .ref('chat/pfp.png')
-                      .putFile(image)
+                      .ref(
+                          'chat/$chatRef/${AppImagePicker(context).getImageName(image)}')
+                      .putFile(File(image.path))
                       .then((result) async {
                     String downloadUrl = await result.ref.getDownloadURL();
                     // Simpan downloadUrl di collection user
@@ -267,15 +275,18 @@ class _RoomChatState extends State<RoomChat> {
             FloatingActionButton(
               mini: true,
               onPressed: () {
-                chatId = widget.chatRef?.collection('messages').add({
-                  'message': messageController.text,
-                  'receiverId': widget.uid,
-                  'sendAt': Timestamp.now(),
-                  'receivername': widget.name,
-                  'type': 'text'
-                });
-                messageController.clear();
-                widget.chatRef?.update({'lastChat': Timestamp.now()});
+                if (messageController.text.isNotEmpty) {
+                  chatId = widget.chatRef?.collection('messages').add({
+                    'message': messageController.text,
+                    'receiverId': widget.uid,
+                    'sendAt': Timestamp.now(),
+                    'receivername': widget.name,
+                    'type': 'text'
+                  });
+                  messageController.clear();
+                  widget.chatRef?.update({'lastChat': Timestamp.now()});
+                }
+                return null;
               },
               child: Icon(
                 Icons.send,

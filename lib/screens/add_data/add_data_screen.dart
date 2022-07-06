@@ -104,13 +104,35 @@ class _AddDataScreenState extends State<AddDataScreen> {
           SizedBox(
             height: Constant(context).height * 0.1,
           ),
-          TextFields(controller: controllerName, title: "Nama Lengkap"),
-          TextFields(controller: controllerSchool, title: "Asal Sekolah"),
-          TextFields(controller: controllerVacation, title: "Jurusan"),
-          TextFields(controller: controllerAddress, title: "Alamat"),
-          TextFields(controller: controllerAge, title: "Umur"),
-          TextFields(controller: controllerHobby, title: "Hobby"),
-          TextFields(controller: controllerJob, title: "Pekerjaan"),
+          TextFields(
+            controller: controllerName,
+            title: "Nama Lengkap",
+            type: TextInputType.name,
+          ),
+          TextFields(
+              controller: controllerSchool,
+              title: "Asal Sekolah",
+              type: TextInputType.name),
+          TextFields(
+              controller: controllerVacation,
+              title: "Jurusan",
+              type: TextInputType.name),
+          TextFields(
+              controller: controllerAddress,
+              title: "Alamat",
+              type: TextInputType.name),
+          TextFields(
+              controller: controllerAge,
+              title: "Umur",
+              type: TextInputType.number),
+          TextFields(
+              controller: controllerHobby,
+              title: "Hobby",
+              type: TextInputType.name),
+          TextFields(
+              controller: controllerJob,
+              title: "Pekerjaan",
+              type: TextInputType.name),
           Center(
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 3),
@@ -187,7 +209,7 @@ class _AddDataScreenState extends State<AddDataScreen> {
                     'school': controllerSchool.text,
                     'vacation': controllerVacation.text,
                     'address': controllerAddress.text,
-                    'age': int.tryParse(controllerAge.text) ?? "",
+                    'age': int.tryParse(controllerAge.text),
                     'hobby': controllerHobby.text,
                     'isVerified': false,
                     'profile': "",

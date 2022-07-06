@@ -17,11 +17,26 @@ class VerifyFunction {
   final TextEditingController otpController;
   VerifyFunction(
       this.context, this.verificationid, this.phoneNumber, this.otpController);
+  late BuildContext dContext;
 
   FirebaseAuth auth = FirebaseAuth.instance;
 
   void signInWithPhoneAuthCredentail(
       PhoneAuthCredential phoneAuthCredential) async {
+    showGeneralDialog(
+      context: context,
+      barrierDismissible: false,
+      barrierLabel: '',
+      transitionDuration: Duration(milliseconds: 100),
+      pageBuilder: (context, animation1, animation2) {
+        dContext = context;
+        return Container();
+      },
+      transitionBuilder: (BuildContext context, a1, a2, widget) {
+        dContext = context;
+        return Center(child: CircularProgressIndicator());
+      },
+    );
     try {
       print(otpController.text);
       print(verificationid);
@@ -72,6 +87,7 @@ class VerifyFunction {
 
                   prefs.setBool('isVerified', doc.get("isVerified"));
                   // String? isVerified = prefs.getString('isVerified');
+                  Navigator.of(dContext).pop();
 
                   if (doc.get("isVerified") == true) {
                     if (doc.get("role") == 'pkl') {
@@ -103,6 +119,19 @@ class VerifyFunction {
                       .doc(userCredential.user!.uid)
                       .set({
                     'phoneNumber': phoneNumber,
+                    'name': '',
+                    'school': '',
+                    'vacation': '',
+                    'address': '',
+                    'age': 0,
+                    'hobby': '',
+                    'isVerified': false,
+                    'profile': "",
+                    'role': "pkl",
+                    'startFromDate': Timestamp.now(),
+                    'endFromDate': Timestamp.now(),
+                    'job': '',
+                    'classId': '',
                   });
 
                   Navigator.pushReplacement(

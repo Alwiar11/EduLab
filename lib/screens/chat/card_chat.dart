@@ -52,12 +52,16 @@ class CardChat extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  name,
-                  style: TextStyle(
-                      fontFamily: "Inter",
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600),
+                SizedBox(
+                  width: Constant(context).width * 0.5,
+                  child: Text(
+                    name,
+                    style: TextStyle(
+                        overflow: TextOverflow.ellipsis,
+                        fontFamily: "Inter",
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600),
+                  ),
                 ),
                 Text(lastChat == null ? '' : lastChat.toString(),
                     style: TextStyle(

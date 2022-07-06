@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 
-var controllerName = TextEditingController();
-var controllerSchool = TextEditingController();
-var controllerAddress = TextEditingController();
-var controllerVacation = TextEditingController();
-var controllerAge = TextEditingController();
-var controllerHobby = TextEditingController();
+TextEditingController controllerName = TextEditingController();
+TextEditingController controllerSchool = TextEditingController();
+TextEditingController controllerAddress = TextEditingController();
+TextEditingController controllerVacation = TextEditingController();
+TextEditingController controllerAge = TextEditingController();
+TextEditingController controllerHobby = TextEditingController();
+TextEditingController controllerJob = TextEditingController();

@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:edulab/shared/constant.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ReplyRoom extends StatefulWidget {
@@ -15,6 +16,12 @@ class ReplyRoom extends StatefulWidget {
 
 class _ReplyRoomState extends State<ReplyRoom> {
   TextEditingController controller = TextEditingController();
+
+  String formattedDate(timeStamp) {
+    var dateFromTimeStamp =
+        DateTime.fromMillisecondsSinceEpoch(timeStamp.seconds * 1000);
+    return DateFormat(' EEE d MMM hh:mm').format(dateFromTimeStamp);
+  }
 
   String? uid;
 
@@ -88,6 +95,10 @@ class _ReplyRoomState extends State<ReplyRoom> {
                         );
                       }),
                     ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 15),
+                    child: Text(formattedDate(snapshot.data!.get('sendAt'))),
                   ),
                   Container(
                     margin: EdgeInsets.symmetric(vertical: 20),

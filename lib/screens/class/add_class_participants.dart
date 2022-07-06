@@ -79,8 +79,6 @@ class _AddClassParticpantsState extends State<AddClassParticpants> {
                                       (element) => element.reference.id != uid)
                                   .where((element) =>
                                       element.get('role') != 'admin')
-                                  .where(
-                                      (element) => element.get('classId') == '')
                                   .where((element) =>
                                       element.get('role') != 'supervisor')
                                   .map(
@@ -88,12 +86,16 @@ class _AddClassParticpantsState extends State<AddClassParticpants> {
                                   String name = e.get('name');
                                   return DropdownMenuItem(
                                       value: e.id,
-                                      child: Text(
-                                        e.get(
-                                          'name',
+                                      child: SizedBox(
+                                        width: 180,
+                                        child: Text(
+                                          e.get(
+                                            'name',
+                                          ),
+                                          style: TextStyle(
+                                              overflow: TextOverflow.ellipsis,
+                                              fontWeight: FontWeight.w500),
                                         ),
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.w500),
                                       ));
                                 },
                               ).toList(),

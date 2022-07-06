@@ -46,12 +46,16 @@ class CardTask extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                title,
-                style: TextStyle(
-                    fontFamily: "Inter",
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600),
+              SizedBox(
+                width: 200,
+                child: Text(
+                  title,
+                  overflow: TextOverflow.fade,
+                  style: TextStyle(
+                      fontFamily: "Inter",
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600),
+                ),
               ),
               Text("Diposting :" + post,
                   style: TextStyle(

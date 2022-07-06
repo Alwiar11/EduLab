@@ -4,12 +4,14 @@ import 'package:flutter/material.dart';
 import '../../shared/constant.dart';
 
 class TextFields extends StatelessWidget {
-  final controller;
+  final TextEditingController controller;
   final String title;
+  final TextInputType type;
 
   const TextFields({
     required this.controller,
     required this.title,
+    required this.type,
     Key? key,
   }) : super(key: key);
 
@@ -25,6 +27,7 @@ class TextFields extends StatelessWidget {
           borderRadius: BorderRadius.circular(15),
         ),
         child: TextFormField(
+          keyboardType: type,
           controller: controller,
           decoration: InputDecoration(
             hintStyle: TextStyle(fontSize: 17),

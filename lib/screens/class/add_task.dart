@@ -162,20 +162,28 @@ class _AddTaskState extends State<AddTask> {
                           style:
                               ElevatedButton.styleFrom(primary: primaryColor),
                           onPressed: () {
-                            print(widget.classId);
-                            print(widget.docRef);
-
-                            FirebaseFirestore.instance
-                                .collection('class')
-                                .doc(widget.classId)
-                                .collection('task')
-                                .add({
-                              'title': controllerTitle.text,
-                              'subtitle': controllerSubtitle.text,
-                              'createdAt': Timestamp.now(),
-                              'endedAt': Timestamp.fromDate(dateTime)
-                            });
-                            Navigator.of(context).pop();
+                            if (controllerTitle.text.isNotEmpty &&
+                                controllerSubtitle.text.isNotEmpty &&
+                                dateTime.toString().isNotEmpty) {
+                              FirebaseFirestore.instance
+                                  .collection('class')
+                                  .doc(widget.classId)
+                                  .collection('task')
+                                  .add({
+                                'title': controllerTitle.text,
+                                'subtitle': controllerSubtitle.text,
+                                'createdAt': Timestamp.now(),
+                                'endedAt': Timestamp.fromDate(dateTime)
+                              });
+                              Navigator.of(context).pop();
+                            } else
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text('Tidak Boleh Kosong'),
+                                  backgroundColor: Colors.red,
+                                  duration: Duration(seconds: 2),
+                                ),
+                              );
                           },
                           child: Text("Simpan"),
                         ),

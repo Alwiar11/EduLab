@@ -50,8 +50,8 @@ class _IntroScreenState extends State<IntroScreen> {
             "assets/images/2.png",
             scale: 2,
           ),
-          title: "Ga tau Pusing",
-          desc: "desc"),
+          title: "Pembelajaran Jarak Jauh",
+          desc: "Pembelajaran dengan Flexibel \nBisa Dilakukan Dimana Saja"),
       Intro(
           height: Constant(context).height / 100,
           width: Constant(context).width,
@@ -59,8 +59,8 @@ class _IntroScreenState extends State<IntroScreen> {
             "assets/images/1.png",
             scale: 3.2,
           ),
-          title: "title",
-          desc: "desc"),
+          title: "Asah Kemampuanmu dengan \nBelajar Bersama",
+          desc: "Lakukan Pembelajaran dengan \nBelajar Bersama"),
     ];
 
     return Scaffold(

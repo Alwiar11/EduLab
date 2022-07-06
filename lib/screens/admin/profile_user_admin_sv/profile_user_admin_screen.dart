@@ -8,9 +8,6 @@ import 'package:firebase_core/firebase_core.dart';
 
 import 'package:flutter/material.dart';
 
-import '../add_supervisor.dart';
-import '../add_supervisor_2.dart';
-
 class ProfileUserAdminSvScreen extends StatefulWidget {
   final String uid;
   const ProfileUserAdminSvScreen({required this.uid, Key? key})
@@ -236,31 +233,6 @@ class CardSv extends StatelessWidget {
               ],
             ),
           ),
-          Row(
-            children: [
-              IconButton(
-                  onPressed: () {
-                    print(userId);
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => AddPkl(userId: userId)));
-                  },
-                  icon: Icon(
-                    Icons.edit,
-                    color: primaryColor,
-                  )),
-              IconButton(
-                  onPressed: () {
-                    FirebaseFirestore.instance
-                        .collection('users')
-                        .doc(userId)
-                        .update({'pkl1': ''});
-                  },
-                  icon: Icon(
-                    Icons.delete,
-                    color: Color.fromARGB(255, 243, 44, 30),
-                  ))
-            ],
-          )
         ],
       ),
     );
@@ -315,30 +287,6 @@ class CardSv2 extends StatelessWidget {
               ],
             ),
           ),
-          Row(
-            children: [
-              IconButton(
-                  onPressed: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => AddPkl2(userId: userId)));
-                  },
-                  icon: Icon(
-                    Icons.edit,
-                    color: primaryColor,
-                  )),
-              IconButton(
-                  onPressed: () {
-                    FirebaseFirestore.instance
-                        .collection('users')
-                        .doc(userId)
-                        .update({'pkl2': ''});
-                  },
-                  icon: Icon(
-                    Icons.delete,
-                    color: Color.fromARGB(255, 243, 44, 30),
-                  ))
-            ],
-          )
         ],
       ),
     );

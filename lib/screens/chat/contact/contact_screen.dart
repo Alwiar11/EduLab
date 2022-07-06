@@ -17,11 +17,13 @@ class ContactScreen extends StatefulWidget {
 class _ContactScreenState extends State<ContactScreen> {
   String? uid;
   String from = 'contact';
+  late BuildContext dContext;
 
   @override
   void initState() {
     super.initState();
     getUid();
+    dContext = context;
   }
 
   getUid() async {
@@ -55,6 +57,29 @@ class _ContactScreenState extends State<ContactScreen> {
                                       const EdgeInsets.symmetric(vertical: 5),
                                   child: InkWell(
                                     onTap: () async {
+                                      showGeneralDialog(
+                                        context: context,
+                                        barrierDismissible: false,
+                                        barrierLabel: '',
+                                        transitionDuration:
+                                            Duration(milliseconds: 100),
+                                        pageBuilder:
+                                            (context, animation1, animation2) {
+                                          dContext = context;
+                                          return Container();
+                                        },
+                                        transitionBuilder:
+                                            (BuildContext context, a1, a2,
+                                                widget) {
+                                          dContext = context;
+                                          return WillPopScope(
+                                            onWillPop: () async => false,
+                                            child: Center(
+                                                child:
+                                                    CircularProgressIndicator()),
+                                          );
+                                        },
+                                      );
                                       FirebaseFirestore.instance
                                           .collection("chats")
                                           .where('participants',
@@ -70,6 +95,7 @@ class _ContactScreenState extends State<ContactScreen> {
                                               .toString()
                                               .contains(e.id)) {
                                             ada = true;
+                                            Navigator.of(dContext).pop();
 
                                             Navigator.push(
                                                 context,
@@ -103,6 +129,7 @@ class _ContactScreenState extends State<ContactScreen> {
                                                 FieldValue.arrayUnion(
                                                     [uid, e.id]),
                                           });
+                                          Navigator.of(dContext).pop();
                                           Navigator.push(
                                               context,
                                               MaterialPageRoute(

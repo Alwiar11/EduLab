@@ -7,6 +7,7 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final _formKey = GlobalKey<FormState>();
     return SingleChildScrollView(
       child: SafeArea(
           child: Column(
@@ -45,7 +46,7 @@ class LoginScreen extends StatelessWidget {
             ),
             child: Padding(
               padding: EdgeInsets.only(left: 20),
-              child: TextField(
+              child: TextFormField(
                 controller: phonenumbercontroller,
                 keyboardType: TextInputType.number,
                 decoration: const InputDecoration(

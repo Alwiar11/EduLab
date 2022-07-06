@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:another_flushbar/flushbar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:edulab/contents.dart';
 import 'package:edulab/screens/edit_profile/textfield.dart';
@@ -22,12 +23,14 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   File? newProfile;
   File? newProfileTemp;
   String? uid;
+  late BuildContext dContext;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     getUid();
+    dContext = context;
   }
 
   getUid() async {
@@ -44,9 +47,29 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       controllerAddress = TextEditingController(text: doc.get('address'));
       controllerAge = TextEditingController(text: doc.get('age').toString());
       controllerHobby = TextEditingController(text: doc.get('hobby'));
+      controllerJob = TextEditingController(text: doc.get('job'));
     });
 
     setState(() {});
+  }
+
+  showLoading({required BuildContext context}) {
+    showGeneralDialog(
+      context: context,
+      barrierDismissible: false,
+      barrierLabel: '',
+      transitionDuration: Duration(milliseconds: 100),
+      pageBuilder: (context, animation1, animation2) {
+        dContext = context;
+        return Container();
+      },
+      transitionBuilder: (BuildContext context, a1, a2, widget) {
+        dContext = context;
+        return WillPopScope(
+            onWillPop: () async => true,
+            child: Center(child: CircularProgressIndicator()));
+      },
+    );
   }
 
   @override
@@ -89,29 +112,41 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                         width: 10, color: primaryColor))
                                 : BoxDecoration(
                                     shape: BoxShape.circle,
-                                    image: snapshot.data!.get("profile") != ""
-                                        ? DecorationImage(
-                                            image: FileImage(newProfileTemp!),
-                                            fit: BoxFit.cover)
-                                        : DecorationImage(
-                                            image: AssetImage(
-                                                "assets/images/default.png"),
-                                            fit: BoxFit.cover),
-                                    border: Border.all(
-                                        width: 10, color: primaryColor)),
+                                    image: DecorationImage(
+                                        image: FileImage(newProfileTemp!),
+                                        fit: BoxFit.cover)),
                           ),
                           TextButton(
                               onPressed: () async {
-                                newProfile = await AppImagePicker(context)
-                                    .getImageGallery();
+                                newProfile = (await AppImagePicker(context)
+                                    .getImageGallery());
+                                showLoading(context: context);
+
                                 if (newProfile != null) {
                                   newProfileTemp = await newProfile;
+                                  await FirebaseStorage.instance
+                                      .ref('users/$uid/pfp.png')
+                                      .putFile(newProfile!)
+                                      .then((result) async {
+                                    // Navigator.of(_).pop();
+                                    String downloadUrl =
+                                        await result.ref.getDownloadURL();
+
+                                    // Simpan downloadUrl di collection user
+                                    // teapal colletiona soalna
+                                    await FirebaseFirestore.instance
+                                        .doc("users/$uid")
+                                        .set({
+                                      "profile": downloadUrl,
+                                    }, SetOptions(merge: true)).then((value) {
+                                      Navigator.pop(dContext);
+                                    });
+                                  });
                                 }
                                 setState(() {});
-                                print(newProfileTemp);
                               },
                               child: Text(
-                                "Ganti Foto Profile",
+                                "Ganti Foto Profil",
                                 style: TextStyle(color: primaryColor),
                               ))
                         ],
@@ -129,117 +164,102 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           TextFieldEdit(
             title: "Nama",
             controller: controllerName,
+            keyboardType: TextInputType.name,
           ),
           TextFieldEdit(
             title: "Asal Sekolah",
             controller: controllerSchool,
+            keyboardType: TextInputType.name,
           ),
           TextFieldEdit(
             title: "Jurusan",
             controller: controllerVacation,
+            keyboardType: TextInputType.name,
           ),
           TextFieldEdit(
             title: "Alamat",
             controller: controllerAddress,
+            keyboardType: TextInputType.name,
           ),
           TextFieldEdit(
             title: "Umur",
             controller: controllerAge,
+            keyboardType: TextInputType.number,
           ),
           TextFieldEdit(
             title: "Hobi",
             controller: controllerHobby,
+            keyboardType: TextInputType.name,
+          ),
+          TextFieldEdit(
+            title: "Pekerjaan",
+            controller: controllerJob,
+            keyboardType: TextInputType.name,
           ),
           ElevatedButton(
               style: ElevatedButton.styleFrom(primary: primaryColor),
               onPressed: () async {
-                //
-                showDialog(
-                    context: context,
-                    builder: (BuildContext _) => AlertDialog(
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20)),
-                          title: Text(
-                            'Peringatan!',
-                            style: TextStyle(color: Colors.amber),
-                          ),
-                          content: Text("Apakah Anda Yakin?"),
-                          actions: [
-                            TextButton(
-                              onPressed: () => Navigator.pop(_, 'Cancel'),
-                              child: const Text(
-                                'Kembali',
-                                style: TextStyle(color: primaryColor),
+                if (controllerName.text.isNotEmpty &&
+                    controllerSchool.text.isNotEmpty &&
+                    controllerAddress.text.isNotEmpty &&
+                    controllerVacation.text.isNotEmpty &&
+                    controllerAge.text.isNotEmpty &&
+                    controllerHobby.text.isNotEmpty &&
+                    controllerJob.text.isNotEmpty) {
+                  showDialog(
+                      context: context,
+                      builder: (BuildContext ctx) => WillPopScope(
+                            onWillPop: () async => false,
+                            child: AlertDialog(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20)),
+                              title: Text(
+                                'Peringatan!',
+                                style: TextStyle(color: Colors.amber),
                               ),
-                            ),
-                            TextButton(
-                              onPressed: () {
-                                if (newProfile != null) {
-                                  FirebaseStorage.instance
-                                      .ref('users/$uid/pfp.png')
-                                      .putFile(newProfile!)
-                                      .then((result) async {
-                                    String downloadUrl =
-                                        await result.ref.getDownloadURL();
-                                    // Simpan downloadUrl di collection user
-                                    // teapal colletiona soalna
-                                    FirebaseFirestore.instance
-                                        .doc("users/$uid")
-                                        .set({
-                                      "profile": downloadUrl,
-                                    }, SetOptions(merge: true)).then((value) {
-                                      print("done");
+                              content: Text("Apakah Anda Yakin?"),
+                              actions: [
+                                TextButton(
+                                  onPressed: () => Navigator.pop(ctx, 'Cancel'),
+                                  child: const Text(
+                                    'Kembali',
+                                    style: TextStyle(color: primaryColor),
+                                  ),
+                                ),
+                                TextButton(
+                                  onPressed: () async {
+                                    Navigator.pop(ctx);
+                                    await users.get().then((doc) {
+                                      if (doc.exists) {
+                                        users.update({
+                                          'name': controllerName.text,
+                                          'school': controllerSchool.text,
+                                          'job': controllerJob.text,
+                                          'vacation': controllerVacation.text,
+                                          'address': controllerAddress.text,
+                                          'age': int.tryParse(
+                                              controllerAge.text.trim()),
+                                          'hobby': controllerHobby.text,
+                                        });
+                                      }
                                     });
-                                  });
-                                } else {
-                                  //TODO: Handle null
-                                  showDialog(
-                                      context: context,
-                                      builder: (BuildContext context) =>
-                                          AlertDialog(
-                                            shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(20)),
-                                            title: Text(
-                                              'Peringatan!',
-                                              style: TextStyle(
-                                                  color: Colors.amber),
-                                            ),
-                                            content: Text("Gagal"),
-                                            actions: [
-                                              TextButton(
-                                                onPressed: () => Navigator.pop(
-                                                    context, 'Cancel'),
-                                                child: const Text(
-                                                  'Kembali',
-                                                  style: TextStyle(
-                                                      color: primaryColor),
-                                                ),
-                                              ),
-                                            ],
-                                          ));
-                                }
-                                users.get().then((doc) {
-                                  if (doc.exists) {
-                                    users.update({
-                                      'name': controllerName.text,
-                                      'school': controllerSchool.text,
-                                      'vacation': controllerVacation.text,
-                                      'address': controllerAddress.text,
-                                      'age': int.tryParse(controllerAge.text) ??
-                                          "",
-                                      'hobby': controllerHobby.text,
-                                    });
-                                    Navigator.of(_).pop();
-                                  }
-                                  Navigator.of(context).pop(true);
-                                });
-                              },
-                              child: const Text('OK',
-                                  style: TextStyle(color: primaryColor)),
+
+                                    Navigator.of(context).pop(true);
+                                  },
+                                  child: const Text('OK',
+                                      style: TextStyle(color: primaryColor)),
+                                ),
+                              ],
                             ),
-                          ],
-                        ));
+                          ));
+                } else
+                  await Flushbar(
+                    backgroundColor: Colors.red,
+                    title: 'Tidak Boleh Kosong',
+                    flushbarPosition: FlushbarPosition.TOP,
+                    duration: Duration(seconds: 2),
+                    message: 'Harus Terisi Semua',
+                  ).show(context);
               },
               child: Text("Simpan"))
         ],

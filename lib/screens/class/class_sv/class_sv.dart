@@ -16,6 +16,7 @@ class ClassSv extends StatefulWidget {
 class _ClassSvState extends State<ClassSv> {
   String? name;
   String? uid;
+  String? role;
 
   @override
   void initState() {
@@ -27,6 +28,7 @@ class _ClassSvState extends State<ClassSv> {
   getUid() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     name = prefs.getString('name');
+    role = prefs.getString('role');
     uid = prefs.getString('uid');
     setState(() {});
   }
@@ -35,24 +37,30 @@ class _ClassSvState extends State<ClassSv> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color.fromARGB(255, 232, 232, 232),
-      appBar: AppBar(
-        actions: [
-          Container(
-              margin: EdgeInsets.only(right: 5),
-              child: IconButton(
-                  onPressed: () {
-                    Navigator.of(context).push(
-                        MaterialPageRoute(builder: (context) => AddClass()));
-                  },
-                  icon: Icon(
-                    Icons.add,
-                    size: 25,
-                  )))
-        ],
-        elevation: 0,
-        backgroundColor: primaryColor,
-        title: Text("Daftar Kelas"),
-      ),
+      appBar: role == 'supervisor'
+          ? AppBar(
+              actions: [
+                Container(
+                    margin: EdgeInsets.only(right: 5),
+                    child: IconButton(
+                        onPressed: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => AddClass()));
+                        },
+                        icon: Icon(
+                          Icons.add,
+                          size: 25,
+                        )))
+              ],
+              elevation: 0,
+              backgroundColor: primaryColor,
+              title: Text("Daftar Kelas"),
+            )
+          : AppBar(
+              elevation: 0,
+              backgroundColor: primaryColor,
+              title: Text("Daftar Kelas"),
+            ),
       body: StreamBuilder<QuerySnapshot>(
           stream: FirebaseFirestore.instance
               .collection('class')
@@ -63,7 +71,7 @@ class _ClassSvState extends State<ClassSv> {
               return ListView(
                 children: [
                   ...snapshots.data!.docs.map((e) =>
-                      CardClass(classId: e.id, className: e.get('supervisor')))
+                      CardClass(classId: e.id, className: e.get('className')))
                 ],
               );
             }

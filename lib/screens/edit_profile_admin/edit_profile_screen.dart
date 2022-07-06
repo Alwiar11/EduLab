@@ -56,6 +56,7 @@ class _EditProfileAdminScreenState extends State<EditProfileAdminScreen> {
           TextFieldEdit(
             title: "Nama",
             controller: controllerName,
+            keyboardType: TextInputType.name,
           ),
           ElevatedButton(
               style: ElevatedButton.styleFrom(primary: primaryColor),
